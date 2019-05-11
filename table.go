@@ -1,9 +1,10 @@
 package text
 
 import (
-	"cli/style/termsize"
 	"fmt"
 	"strings"
+
+	"github.com/pirmd/cli/style/termsize"
 )
 
 const (
