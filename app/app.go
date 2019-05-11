@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"cli/style"
+	"github.com/pirmd/cli/style"
 )
 
 type command struct {

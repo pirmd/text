@@ -1,8 +1,8 @@
 package style
 
 import (
-	"cli/style/termsize"
-	"cli/style/text"
+	"github.com/pirmd/cli/style/termsize"
+	"github.com/pirmd/cli/style/text"
 )
 
 var (

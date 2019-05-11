@@ -3,7 +3,8 @@ package formatter
 import (
 	"errors"
 	"testing"
-	"verify"
+
+	"github.com/pirmd/verify"
 )
 
 type testStruct struct {

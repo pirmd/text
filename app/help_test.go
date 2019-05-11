@@ -3,9 +3,9 @@ package app
 import (
 	"bytes"
 	"testing"
-	"verify"
 
-	"cli/style"
+	"github.com/pirmd/verify"
+	"github.com/pirmd/cli/style"
 )
 
 func buildTestApp() *command {

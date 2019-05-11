@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"cli/style"
+	"github.com/pirmd/cli/style"
 )
 
 //ManSection identify the man section to which the command is belonging to
