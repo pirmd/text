@@ -1,0 +1,34 @@
+
+INTRODUCTION
+    
+    This small piece of text aims at demonstrating and 
+    testing my styling package 'style'.
+    
+    It is writen by a non-native English speaker, so pardon 
+    any faults
+
+AVAILABLE STYLES
+    
+    Section Introduction already demonstrates useful styles 
+    Styles, this section completes with most of the others 
+    possibilities.
+    
+    Notably, package 'style' can print in red or bold green.
+    
+    It also knows how to format lists:
+    
+    - this very long and detailed sentence is here to 
+    demonstrate that list can be formatted and wrapped 
+    because it hopefully be so long that it will not fulfill
+    the maximum number of authorized char per lines is 
+    reached.
+    
+    - It is also possible to check that paragraph inside 
+    lists are respected.
+    As you can see here in this simple example.
+    
+    It also knows how to define terms:
+    
+    style:
+        A particular procedure by which something is done; a
+        manner or way.

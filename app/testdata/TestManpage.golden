@@ -1,0 +1,81 @@
+.TH CLI.TEST 1 "CLI.TEST\-1"
+
+.SH Name
+.PP
+cli.test \- A test for my minimalist cli app building lib
+
+.SH Synopsis
+.PP
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fIstring\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBhelp\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBversion\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest\fP \fItest\_arg\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [\-\-\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [\-\-\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31\_arg\fP
+.br
+\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest4\fP \fItest4\_arg\fP ...
+
+.SH Description
+.PP
+cli.test is mainly here to test and demonstrate the set\-up of a commandline application using the small \fBcli\fP library.
+
+Like many other test involving text issuance, using the famous \\fIlorem ipsum\\fP pattern is a must.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+.SH Options
+
+.TP
+\-\-\fBbool\fP
+A boolean flag
+
+.TP
+\-\-\fBflag\fP=\fIFLAG\fP
+A string flag
+
+.TP
+\-\-\fBenum\fP=\fIgood|bad|ugly\fP
+An enum flag
+
+.SH Commands
+
+.TP
+\fBhelp\fP
+Show usage information.
+
+.TP
+\fBversion\fP
+Show version information.
+
+.TP
+\fBtest\fP \fItest\_arg\fP
+Many of you know about \\\fIlorem ipsum\\\fP but few know what it means. So this sub\-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.
+
+.TP
+\fBtest2\fP \fItest2\\\fIarg1\fP \fItest2\\\fParg2\fP
+Test a second sub\-command
+
+.TP
+\fBtest3\fP [<flags>] \fBhelp\fP|\fBtest31\fP \fItest31\_arg\fP
+Test another sub\-command that has a sub\-subcommand \fBTest31\fP
+
+.TP
+\fBtest4\fP \fItest4\_arg\fP ...
+Test another sub\-command with unlimited args
+
+.SH Arguments
+
+.TP
+\fIstring\fP
+An argument that should be a string
+
+.SH See Also
+.PP
+cli.test\-test3(1)

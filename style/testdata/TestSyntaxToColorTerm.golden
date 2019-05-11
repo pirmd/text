@@ -1,0 +1,34 @@
+
+[34mINTRODUCTION[0m
+    
+    This small piece of text aims at demonstrating and 
+    testing my styling package '[4mstyle[24m'.
+    
+    It is writen by a [1mnon-native[22m English speaker, so pardon 
+    any faults
+
+[34mAVAILABLE STYLES[0m
+    
+    Section [4mIntroduction[24m already demonstrates useful styles 
+    Styles, this section completes with most of the others 
+    possibilities.
+    
+    Notably, package '[4mstyle[24m' can print in [31mred[0m or [1m[32mbold green[0m[22m.
+    
+    It also knows how to format [3mlists[23m:
+    
+    - this very long and detailed sentence is here to 
+    demonstrate that list can be formatted and wrapped 
+    because it hopefully be so long that it will not fulfill
+    the maximum number of authorized char per lines is 
+    reached.
+    
+    - It is also possible to check that paragraph inside 
+    lists are respected.
+    As you can see here in this simple example.
+    
+    It also knows how to [3mdefine[23m terms:
+    
+    [1mstyle[22m:
+        A particular procedure by which something is done; a
+        manner or way.
