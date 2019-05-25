@@ -5,11 +5,11 @@ var Markdown = core.Extend(Styler{
 	FmtBold:   Sprintf("**%s**"),
 	FmtItalic: Sprintf("*%s*"),
 
-	FmtHeader:    Sprintf("# %s\n"),
+	FmtHeader:    Sprintf("\n# %s"),
 	FmtParagraph: Sprintf("\n%s\n"),
 	FmtNewLine:   Sprintf("%s\n"),
 	FmtList:      Sprintf("\n- %s\n"),
-	FmtDefTerm:   Sprintf("\n**%s**\n"),
+	FmtDefTerm:   Sprintf("\n%s\n"),
 	FmtDefDesc:   Sprintf(": %s\n"),
 	FmtCode:      Sprintf("`%s`"),
 })
