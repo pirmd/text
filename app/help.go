@@ -1,10 +1,11 @@
 package app
 
-//help gathers functions that generate documentation about a given app.command
+//help gathers functions that generate text documentation about a given app.command
 
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/pirmd/cli/style"
@@ -34,6 +35,29 @@ func PrintLongUsage(w io.Writer, c *command, st style.Styler) {
 	}).WithAutostyler(style.LightMarkup)
 
 	printLongUsage(w, c, stHelp)
+}
+
+//GenerateHelpFile generates a help file in the markdown format for the given
+//command. Help file is build after the LongUsage template.
+func GenerateHelpFile(c *command) error {
+	fname := fmtName(c) + ".md"
+	f, err := os.Create(fname)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	for _, cmd := range c.cmds {
+		if len(cmd.cmds) > 0 {
+			if err := GenerateHelpFile(cmd); err != nil {
+				return err
+			}
+		}
+	}
+
+	fmt.Printf("Generating readme for command '%s' to file '%s'\n", c.name, fname)
+	PrintLongUsage(f, c, style.Markdown)
+	return nil
 }
 
 func printLongUsage(w io.Writer, c *command, st style.Styler) {
