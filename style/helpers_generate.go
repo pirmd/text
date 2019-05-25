@@ -1,7 +1,7 @@
 // +build ignore
 
-//This program generates helpers.go that exposes a set of helpers to `cli/style` end users
-//It can be invoked through go generate directive
+//This program generates helpers.go that exposes a set of helpers to
+//`cli/style` end users It can be invoked through go generate directive
 package main
 
 import (

@@ -16,8 +16,8 @@ var Term = PlainText.Extend(Styler{
 	FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, termWidth) },
 })
 
-//ColorTerm extends PlainText markup with colors and text styles
-//that can be understood by terminals that supports colors
+//ColorTerm extends PlainText markup with colors and text styles that can be
+//understood by terminals that supports colors
 var ColorTerm = Term.Extend(Styler{
 	FmtBlack:     Sprintf("\x1b[30m%s\x1b[0m"),
 	FmtRed:       Sprintf("\x1b[31m%s\x1b[0m"),

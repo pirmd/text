@@ -7,28 +7,27 @@ import (
 )
 
 var (
-	//DefaultTxtWidth is the text width used to wrap text
-	//for markups that supports it (PlainText notably)
+	//DefaultTxtWidth is the text width used to wrap text for markups that
+	//supports it (PlainText notably)
 	DefaultTxtWidth int = 80
 
-	//IndentPrefix is the suit of bytes used to indent text
-	//for markups that supports it (PlainText notably)
-	//Use of '\t' is not recommended as it does not cohabite
-	//correctly with wrapping func that cannot guess a '\t' length
+	//IndentPrefix is the suit of bytes used to indent text for markups that
+	//supports it (PlainText notably) Use of '\t' is not recommended as it does
+	//not cohabite correctly with wrapping func that cannot guess a '\t' length
 	IndentPrefix = []byte("    ")
 
 	indent2Prefix []byte //IndentPrefix x2
 )
 
-//core is a minimal styler providing function that almost everybody
-//wants to have
+//core is a minimal styler providing function that almost everybody wants to
+//have
 var core = Styler{
 	FmtUpper: strings.ToUpper,
 	FmtLower: strings.ToLower,
 }
 
-//Plaintext is a Styler that provides a minimum style for plain texts
-//Wrap formatting wraps text to the maximum length of DefaultTxtWidth.
+//Plaintext is a Styler that provides a minimum style for plain texts Wrap
+//formatting wraps text to the maximum length of DefaultTxtWidth.
 //
 //Chaining multiples Wrap or Tab will in most cases void the result
 var PlainText = core.Extend(Styler{

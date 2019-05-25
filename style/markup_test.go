@@ -2,8 +2,8 @@ package style
 
 import (
 	"fmt"
-	"testing"
 	"github.com/pirmd/verify"
+	"testing"
 )
 
 func testTextSyntax() (s string) {

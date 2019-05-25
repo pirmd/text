@@ -8,14 +8,13 @@ import (
 //The transformation is usually used to apply a given style to a string
 type styleFn func(string) string
 
-//stylefFn is an extension of styleFn to provide an interface
-//similar to fmt.Sprintf
+//stylefFn is an extension of styleFn to provide an interface similar to
+//fmt.Sprintf
 type stylefFn func(format string, a ...interface{}) string
 
-//must is a wrapper to transform a function that outputs (string, error)
-//to a styleFn signature.
-//It is done by capturing the error and feedbacking it to the output string (similar
-//to fprintf principle)
+//must is a wrapper to transform a function that outputs (string, error) to a
+//styleFn signature.  It is done by capturing the error and feedbacking it to
+//the output string (similar to fprintf principle)
 func must(fn func(string) (string, error)) styleFn {
 	return func(s string) string {
 		ts, err := fn(s)
@@ -73,14 +72,14 @@ func Combine(fn ...stylefFn) styleFn {
 var CurrentStyler = Term
 
 //Styler repesent a collection of styling functions that can decorate a string
-//apply a given text format.
-//Styler usually implement a given markup idiom but are pretty flexible to
-//support things like decorating a text with ansi colors escape sequences.
+//apply a given text format.  Styler usually implements a given markup idiom
+//but are pretty flexible to support things like decorating a text with ansi
+//colors escape sequences.
 type Styler map[Format]styleFn
 
-//get retrieves a styleFn from the given format.
-//If no styleFn exists for this format, it returns a "do nothing" function
-//that returns the input string "as-is".
+//get retrieves a styleFn from the given format.  If no styleFn exists for this
+//format, it returns a "do nothing" function that returns the input string
+//"as-is".
 func (st Styler) get(f Format) styleFn {
 	if fn, ok := st[f]; ok {
 		return fn

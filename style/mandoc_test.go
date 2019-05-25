@@ -1,8 +1,8 @@
 package style
 
 import (
-	"testing"
 	"github.com/pirmd/verify"
+	"testing"
 )
 
 func TestEscaping(t *testing.T) {

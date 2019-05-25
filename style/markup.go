@@ -17,16 +17,17 @@ var (
 
 //Markup is a lightweight markup-like language to apply a style to a string.
 //It works by defining a set of rules governing the use of a style format.
-//Each rule is a regexp that identifies the pattern indicating part
-//of texts to be styled.
-//Each pattern is linked through a map to the corresponding style to apply.
+//Each rule is a regexp that identifies the pattern indicating part of texts to
+//be styled.  Each pattern is linked through a map to the corresponding style
+//to apply.
 //
-//Each regexp can feature up to two capturing groups: any non-captured char
-//are kept as is in the final text, first submatch is deleted, the 2d submatch
-//is passed to the style function whose result is incorporated in the final text.
+//Each regexp can feature up to two capturing groups: any non-captured char are
+//kept as is in the final text, first submatch is deleted, the 2d submatch is
+//passed to the style function whose result is incorporated in the final text.
 //
-//The implementation of Markup is really naive and simple, order of regexp processing
-//is not guarantied so that trying to achieve complex markup rendering is hazardous.
+//The implementation of Markup is really naive and simple, order of regexp
+//processing is not guarantied so that trying to achieve complex markup
+//rendering is hazardous.
 type Markup map[*regexp.Regexp]Format
 
 //Extend allows to complete or override a Markup
@@ -41,8 +42,8 @@ func (m Markup) Extend(madd Markup) Markup {
 	return mext
 }
 
-//Render returns a styleFn that applies the specified markup
-//with the given Styler
+//Render returns a styleFn that applies the specified markup with the given
+//Styler
 func (m Markup) Render(st Styler) styleFn {
 	return func(s string) string {
 		return m.render(st, s)
@@ -80,8 +81,8 @@ func (m Markup) render(st Styler, s string) string {
 	return s
 }
 
-//WithAutostyler creates a new Styler that automatically styles
-//text using the given markup
+//WithAutostyler creates a new Styler that automatically styles text using the
+//given markup
 func (st Styler) WithAutostyler(m Markup) Styler {
 	return st.Extend(Styler{FmtAuto: m.Render(st)})
 }
