@@ -6,7 +6,10 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 ### Added
-- add function to generate a help file in markdown format for a command 
+- cli/app: add function to generate a help file in markdown format for a
+  command 
+- cli/input: add function to fire up a tool for a user to manually merge
+  files/data
 
 ## [0.1.0] - 2019-05-11
 ### Added
