@@ -13,7 +13,7 @@ import (
 
 //PrintSimpleVersion outputs to w a command's minimal usage message
 func PrintSimpleVersion(w io.Writer, c *command, st style.Styler) {
-	fmt.Fprintf(w, st.Paragraph("%s %s - %s", fmtName(c), c.Version, c.Usage))
+	fmt.Fprintf(w, st.NewLine("%s %s - %s", fmtName(c), c.Version, c.Usage))
 }
 
 //PrintSimpleUsage outputs to w a command's minimal usage message
