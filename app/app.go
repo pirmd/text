@@ -12,6 +12,11 @@ import (
 	"github.com/pirmd/cli/style"
 )
 
+var (
+	version = "v?.?.?"    //should be set-up at compile-time through ldflags -X github.com/pirmd/cli/app.version
+	build   = "unknown"   //should be set-up at compile-time through ldflags -X github.com/pirmd/cli/app.build
+)
+
 type command struct {
 	//Usage is a short explanation of what the command does
 	Usage string
@@ -19,7 +24,10 @@ type command struct {
 	//Description is a long description of the command
 	Description string
 
-	//Version contains command's version
+    //Version contains command's version. It defaults to $VERSION ($BUILD)
+    //where $VERSION and $BUILD are set-up at compile time using ldflags
+    //directive (e.g. taking values from git describe). Provided 'go' script
+    //gives an example
 	Version string
 
 	//Execute is the function called to run the command
@@ -35,10 +43,20 @@ type command struct {
 
 func newCommand(name, usage, parent string) *command {
 	if parent == "" {
-		return &command{name: name, fullname: name, Usage: usage}
+        return &command{
+            name:     name,
+            fullname: name,
+            Version:  fmt.Sprintf("%s (build %s)", version, build),
+            Usage:    usage,
+        }
 	}
 
-	return &command{name: name, fullname: parent + " " + name, Usage: usage}
+	return &command{
+        name:     name,
+        fullname: parent + " " + name,
+        Version:  fmt.Sprintf("%s (build %s)", version, build),
+        Usage:    usage,
+    }
 }
 
 //New creates a new command line application
