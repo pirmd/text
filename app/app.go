@@ -1,6 +1,6 @@
-// This module provides simple support to build a command line application that supports
-// nested commands, flags and arguments parsing.
-// It aims not ot be a feature-complete command line app builder (spf13/cobra is way better)
+// Package app  provides simple support to build a command line application
+// that supports nested commands, flags and arguments parsing.  It aims not ot
+// be a feature-complete command line app builder (spf13/cobra is way better)
 // but something simpler and hopefully lean for simple use.
 package app
 
@@ -13,21 +13,22 @@ import (
 )
 
 var (
-	version = "v?.?.?"    //should be set-up at compile-time through ldflags -X github.com/pirmd/cli/app.version
-	build   = "unknown"   //should be set-up at compile-time through ldflags -X github.com/pirmd/cli/app.build
+	version = "v?.?.?"  //should be set-up at compile-time through ldflags -X github.com/pirmd/cli/app.version
+	build   = "unknown" //should be set-up at compile-time through ldflags -X github.com/pirmd/cli/app.build
 )
 
-type command struct {
+//Command represents an application's command
+type Command struct {
 	//Usage is a short explanation of what the command does
 	Usage string
 
 	//Description is a long description of the command
 	Description string
 
-    //Version contains command's version. It defaults to $VERSION ($BUILD)
-    //where $VERSION and $BUILD are set-up at compile time using ldflags
-    //directive (e.g. taking values from git describe). Provided 'go' script
-    //gives an example
+	//Version contains command's version. It defaults to $VERSION ($BUILD)
+	//where $VERSION and $BUILD are set-up at compile time using ldflags
+	//directive (e.g. taking values from git describe). Provided 'go' script
+	//gives an example
 	Version string
 
 	//Execute is the function called to run the command
@@ -41,31 +42,32 @@ type command struct {
 	cmdline  []string
 }
 
-func newCommand(name, usage, parent string) *command {
+func newCommand(name, usage, parent string) *Command {
 	if parent == "" {
-        return &command{
-            name:     name,
-            fullname: name,
-            Version:  fmt.Sprintf("%s (build %s)", version, build),
-            Usage:    usage,
-        }
+		return &Command{
+			name:     name,
+			fullname: name,
+			Version:  fmt.Sprintf("%s (build %s)", version, build),
+			Usage:    usage,
+		}
 	}
 
-	return &command{
-        name:     name,
-        fullname: parent + " " + name,
-        Version:  fmt.Sprintf("%s (build %s)", version, build),
-        Usage:    usage,
-    }
+	return &Command{
+		name:     name,
+		fullname: parent + " " + name,
+		Version:  fmt.Sprintf("%s (build %s)", version, build),
+		Usage:    usage,
+	}
 }
 
-//New creates a new command line application
-//An application is a tree of commands that can be nested. Each command is made of
-//a set of flags, a set of args and a set of sub-commands. Some convenient helpers are
-//provided to parse the command line or format help information.
-//An app is the 'root' command of this tree. An help and version commands are automatically created
-//Other commands - with their own sub-commands, flags and args -, flags and options can then be added.
-func New(name, usage string) *command {
+//New creates a new command line application An application is a tree of
+//commands that can be nested. Each command is made of a set of flags, a set of
+//args and a set of sub-commands. Some convenient helpers are provided to parse
+//the command line or format help information.  An app is the 'root' command of
+//this tree. An help and version commands are automatically created Other
+//commands - with their own sub-commands, flags and args -, flags and options
+//can then be added.
+func New(name, usage string) *Command {
 	a := newCommand(name, usage, "")
 
 	help := a.NewCommand("help", "Show usage information.")
@@ -82,7 +84,7 @@ func New(name, usage string) *command {
 //sub-commands pool
 //
 //It automatically creates or complete the help sub-command.
-func (c *command) NewCommand(name, usage string) *command {
+func (c *Command) NewCommand(name, usage string) *Command {
 	if h := c.cmds.Get("help"); h == nil && name != "help" {
 		help := c.NewCommand("help", "Show usage information.")
 		help.Execute = c.showHelp
@@ -92,75 +94,76 @@ func (c *command) NewCommand(name, usage string) *command {
 }
 
 //NewBoolFlag creates a new bolean flag
-func (c *command) NewBoolFlag(name, usage string) *bool {
+func (c *Command) NewBoolFlag(name, usage string) *bool {
 	return c.flags.Bool(name, usage)
 }
 
 //NewBoolFlagToVar creates a new bolean flag that is linked to the given var
-func (c *command) NewBoolFlagToVar(p *bool, name, usage string) {
+func (c *Command) NewBoolFlagToVar(p *bool, name, usage string) {
 	c.flags.BoolVar(p, name, usage)
 }
 
 //NewStringFlag creates a new string flag
-func (c *command) NewStringFlag(name, usage string) *string {
+func (c *Command) NewStringFlag(name, usage string) *string {
 	return c.flags.String(name, usage)
 }
 
-//NewStringFagToVar creates a new string flag that is linked to the given var
-func (c *command) NewStringFlagToVar(p *string, name, usage string) {
+//NewStringFlagToVar creates a new string flag that is linked to the given var
+func (c *Command) NewStringFlagToVar(p *string, name, usage string) {
 	c.flags.StringVar(p, name, usage)
 }
 
-//NewEnumFlag creates a new enum flag that only accept a specifed list of values
-func (c *command) NewEnumFlag(name, usage string, values []string) *string {
+//NewEnumFlag creates a new enum flag that only accept a specifed list of
+//values
+func (c *Command) NewEnumFlag(name, usage string, values []string) *string {
 	return c.flags.Enum(name, usage, values)
 }
 
-//NewEnumFlagToVar creates a new enum flag that only accept a specifed list of values
-//and linked it to the given var
-func (c *command) NewEnumFlagToVar(p *string, name, usage string, values []string) {
+//NewEnumFlagToVar creates a new enum flag that only accept a specifed list of
+//values and linked it to the given var
+func (c *Command) NewEnumFlagToVar(p *string, name, usage string, values []string) {
 	c.flags.EnumVar(p, name, usage, values)
 }
 
 //NewStringArg creates a new string arg
-func (c *command) NewStringArg(name, usage string) *string {
+func (c *Command) NewStringArg(name, usage string) *string {
 	return c.args.String(name, usage)
 }
 
 //NewStringArgToVar creates a new string arg that is linked to the given var
-func (c *command) NewStringArgToVar(p *string, name, usage string) {
+func (c *Command) NewStringArgToVar(p *string, name, usage string) {
 	c.args.StringVar(p, name, usage)
 }
 
-//NewStringArg creates a new strings (slice of strings) arg
-//This arg is cumulative in that it will consume all the remaining command line arguments to feed
-//a slice of strings. It shall be the last argument of teh command otherwise command line parsing
-//wil panic
-func (c *command) NewStringsArg(name, usage string) *[]string {
+//NewStringsArg creates a new strings (slice of strings) arg This arg is
+//cumulative in that it will consume all the remaining command line arguments
+//to feed a slice of strings. It shall be the last argument of the command
+//otherwise command line parsing wil panic
+func (c *Command) NewStringsArg(name, usage string) *[]string {
 	return c.args.Strings(name, usage)
 }
 
-//NewStringsArgToVar creates a new strings (slice of strings) arg that is linked to the given var
-//This arg is cumulative in that it will consume all the remaining command line arguments to feed
-//a slice of strings. It shall be the last argument of teh command otherwise command line parsing
-//wil panic
-func (c *command) NewStringsArgToVar(p *[]string, name, usage string) {
+//NewStringsArgToVar creates a new strings (slice of strings) arg that is
+//linked to the given var This arg is cumulative in that it will consume all
+//the remaining command line arguments to feed a slice of strings. It shall be
+//the last argument of teh command otherwise command line parsing wil panic
+func (c *Command) NewStringsArgToVar(p *[]string, name, usage string) {
 	c.args.StringsVar(p, name, usage)
 }
 
 //NewInt64Arg creates a new int64 arg
-func (c *command) NewInt64Arg(name, usage string) *int64 {
+func (c *Command) NewInt64Arg(name, usage string) *int64 {
 	return c.args.Int64(name, usage)
 }
 
 //NewInt64ArgToVar creates a new int64 arg that is linked to the given var
-func (c *command) NewInt64ArgToVar(p *int64, name, usage string) {
+func (c *Command) NewInt64ArgToVar(p *int64, name, usage string) {
 	c.args.Int64Var(p, name, usage)
 }
 
 //MustRun executes the command after having parsed the command line
 //In case of error, it print the error to stderr and exit with code 1.
-func (c *command) MustRun() {
+func (c *Command) MustRun() {
 	if err := c.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)
@@ -168,7 +171,7 @@ func (c *command) MustRun() {
 }
 
 //Run executes the command after having parsed the command line
-func (c *command) Run() error {
+func (c *Command) Run() error {
 	if err := c.parseFlags(); err != nil {
 		return err
 	}
@@ -195,7 +198,7 @@ func (c *command) Run() error {
 	return nil
 }
 
-func (c *command) parseFlags() error {
+func (c *Command) parseFlags() error {
 	for len(c.cmdline) > 0 {
 		if c.cmdline[0] == "--" {
 			c.cmdline = c.cmdline[1:]
@@ -230,7 +233,7 @@ func (c *command) parseFlags() error {
 	return nil
 }
 
-func (c *command) parseArgs() error {
+func (c *Command) parseArgs() error {
 	if len(c.args) > len(c.cmdline) {
 		return fmt.Errorf("Bad command or invalid number of arguments")
 	}
@@ -257,20 +260,20 @@ func (c *command) parseArgs() error {
 }
 
 //showHelp outputs help message
-func (c *command) showHelp() error {
+func (c *Command) showHelp() error {
 	PrintSimpleUsage(os.Stderr, c, style.CurrentStyler)
 	return nil
 }
 
 //showVersion outputs version information
-func (c *command) showVersion() error {
+func (c *Command) showVersion() error {
 	PrintSimpleVersion(os.Stderr, c, style.CurrentStyler)
 	return nil
 }
 
-type commands []*command
+type commands []*Command
 
-func (c *commands) Get(name string) *command {
+func (c *commands) Get(name string) *Command {
 	for _, cmd := range *c {
 		if cmd.name == name {
 			return cmd
@@ -279,7 +282,7 @@ func (c *commands) Get(name string) *command {
 	return nil
 }
 
-func (c *commands) Add(name, usage, parent string) *command {
+func (c *commands) Add(name, usage, parent string) *Command {
 	if cmd := c.Get(name); cmd != nil {
 		panic(fmt.Sprintf("command '%s' cannot be added twice", name))
 	}

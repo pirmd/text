@@ -42,9 +42,9 @@ func (m Markup) Extend(madd Markup) Markup {
 	return mext
 }
 
-//Render returns a styleFn that applies the specified markup with the given
+//Render returns a Func that applies the specified markup with the given
 //Styler
-func (m Markup) Render(st Styler) styleFn {
+func (m Markup) Render(st Styler) Func {
 	return func(s string) string {
 		return m.render(st, s)
 	}

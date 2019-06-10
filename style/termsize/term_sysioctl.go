@@ -7,6 +7,7 @@ import (
 	"unsafe"
 )
 
+//Width outputs the width of the current term
 func Width() (int, error) {
 	ws := &struct {
 		Row    uint16

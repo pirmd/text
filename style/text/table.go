@@ -8,64 +8,63 @@ import (
 )
 
 const (
-	//MaxTableWidth defines the maximum size of a table
-	//It tries to get initialized by reading the terminal width or fall-back
-	//to 80
+	//MaxTableWidth defines the maximum size of a table It tries to get
+	//initialized by reading the terminal width or fall-back to 80
 	MaxTableWidth = 80
 )
 
-type table struct {
+//Table represents a table
+type Table struct {
 	maxWidth int
 	sepV     string //TODO(pirmd): horizontal separator is not yet implemented
 
 	cells [][]string
 }
 
-//Table returns a new empty table. New tables default to no grid
-//with a maximum width being th eterminal size if it can be
-//determined or MaxTableWidth
-func Table() *table {
+//NewTable returns a new empty table. New tables default to no grid with a
+//maximum width being th eterminal size if it can be determined or
+//MaxTableWidth
+func NewTable() *Table {
 	if w, err := termsize.Width(); err == nil {
-		return &table{
+		return &Table{
 			maxWidth: w,
 			sepV:     " ",
 		}
 	}
 
-	return &table{
+	return &Table{
 		maxWidth: MaxTableWidth,
 		sepV:     " ",
 	}
 }
 
 //SetMaxWidth manully set the table maximum width
-func (t *table) SetMaxWidth(w int) *table {
+func (t *Table) SetMaxWidth(w int) *Table {
 	t.maxWidth = w
 	return t
 }
 
 //SetGrid manually defines the grid separators
-func (t *table) SetGrid(sepV string) *table {
+func (t *Table) SetGrid(sepV string) *Table {
 	t.sepV = sepV
 	return t
 }
 
 //Rows add a list of rows to the table
-func (t *table) Rows(rows ...[]string) *table {
+func (t *Table) Rows(rows ...[]string) *Table {
 	t.cells = append(t.cells, rows...)
 	return t
 }
 
-//Col add a list of columns to the table
-//Col add col content at the end of existing rows, meaning
-//that if rows are not of the same size or if col add more
-//rows, results will not be an 'aligned' column
-func (t *table) Col(col ...[]string) *table {
+//Col adds a list of columns to the table Col add col content at the end of
+//existing rows, meaning that if rows are not of the same size or if col add
+//more rows, results will not be an 'aligned' column
+func (t *Table) Col(col ...[]string) *Table {
 	for _, column := range col {
 		for i, cell := range column {
 			for row := len(t.cells); row <= i; row++ {
-				//columns features more rows than actually available in the table
-				//we complete by adding an empty row
+				//columns features more rows than actually available in the
+				//table we complete by adding an empty row
 				t.cells = append(t.cells, []string{})
 			}
 			t.cells[i] = append(t.cells[i], cell)
@@ -75,17 +74,17 @@ func (t *table) Col(col ...[]string) *table {
 }
 
 //Title sets the titles of the table
-func (t *table) Title(row ...string) *table {
+func (t *Table) Title(row ...string) *Table {
 	t.cells = append([][]string{row}, t.cells...)
 	return t
 }
 
-//Draw draws the table.
-//Columns length are determined in order to maximize the use of the table maximum width
-//Text is automatically wrapped to fit into the columns size.
-//This algorithm to define colums' size has limitation and will provide unreadable output
-//if available table's width is too short compared to content length.
-func (t *table) Draw() string {
+//Draw draws the table.  Columns length are determined in order to maximize the
+//use of the table maximum width Text is automatically wrapped to fit into the
+//columns size.  This algorithm to define colums' size has limitation and will
+//provide unreadable output if available table's width is too short compared to
+//content length.
+func (t *Table) Draw() string {
 	colLen := colMaxLen(t.maxWidth, visualLen(t.sepV), t.cells)
 
 	rows := []string{}
@@ -102,7 +101,7 @@ func (t *table) Draw() string {
 }
 
 //String returns a string representation of the table
-func (t *table) String() string {
+func (t *Table) String() string {
 	return t.Draw()
 }
 

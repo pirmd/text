@@ -55,7 +55,7 @@ func TestDiff(t *testing.T) {
 func TestDiffFullExample(t *testing.T) {
 	dT1, dL1, dR1 := ColorDiff.Bylines(testA, testB)
 	dT2, dL2, dR2 := ColorDiff.Bylines(testB, testA)
-	matchGolden(t, Table().SetMaxWidth(180).Col(dL1, dT1, dR1).String()+"\n\n"+Table().SetMaxWidth(180).Col(dL2, dT2, dR2).String(), "Incorrect diff output")
+	matchGolden(t, NewTable().SetMaxWidth(180).Col(dL1, dT1, dR1).String()+"\n\n"+NewTable().SetMaxWidth(180).Col(dL2, dT2, dR2).String(), "Incorrect diff output")
 }
 
 var (

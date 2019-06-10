@@ -1,14 +1,12 @@
-package formatter
-
-//formatter provides a register of formatting functions.  This register
-//selects the proper formatting function according to the "type" of the
-//object to format to string.
-//Type is guessed (in that order): by the TypeOf function if the object
-//implement the Classfier interface, the FormatterTypeField (default to
-//Type) if the object is a map or a struct or the golang object's type.
+// Package formatter provides a register of formatting functions.  This
+// register selects the proper formatting function according to the "type" of
+// the object to format to string.  Type is guessed (in that order): by the
+// TypeOf function if the object implement the Classfier interface, the
+// FormatterTypeField (default to Type) if the object is a map or a struct or
+// the golang object's type.
 //
-//Such a register of functions is helpful to quickly define a pretty
-//printer.
+// Such a register of functions is helpful to quickly define a pretty printer.
+package formatter
 
 import (
 	"bytes"
@@ -18,29 +16,29 @@ import (
 )
 
 const (
-	//DefaultFormatter is the name of default formatter that is used
-	//if the provided attribute's type is not present in the register
+	//DefaultFormatter is the name of default formatter that is used if the
+	//provided attribute's type is not present in the register
 	DefaultFormatter = "_default"
 )
 
 var (
-	//ErrUnknownType error is raised if no formating function
-	//was found in the formatters register
+	//ErrNoFormatterFound error is raised if no formating function was found in
+	//the formatters register
 	ErrNoFormatterFound = fmt.Errorf("formatter: no formatter found for the given type")
 )
 
-//FormatterFunc represents a formating function
-type FormatterFunc func(v interface{}) (string, error)
+//Func represents a formating function
+type Func func(v interface{}) (string, error)
 
 //Formatters associates formating functions to a type
-type Formatters map[string]FormatterFunc
+type Formatters map[string]Func
 
 //Get retrieves the formating function corresponding to the given type.
 //Should no formatter exists in the register for this type, the formatter
 //registered for the DefaultFormatter is returned.
 //
 //ErrUnknownType is returned if no default formatter has been defined
-func (f Formatters) Get(typ string) (FormatterFunc, error) {
+func (f Formatters) Get(typ string) (Func, error) {
 	if typ != "" {
 		if fmtFn, exists := f[typ]; exists {
 			return fmtFn, nil
@@ -106,7 +104,7 @@ func (f Formatters) MustFormatUsingType(typ string, v interface{}) string {
 
 //Register registers a new formatter in the formatters register
 //It replaces any pre-existing formatter for the same type.
-func (f Formatters) Register(forType string, fmtFn FormatterFunc) {
+func (f Formatters) Register(forType string, fmtFn Func) {
 	f[forType] = fmtFn
 }
 
@@ -120,10 +118,10 @@ func JSONFormatter(v interface{}) (string, error) {
 	return string(b), nil
 }
 
-//TemplateFormatter returns a FormatterFunc based on a text/Template
+//TemplateFormatter returns a Func based on a text/Template
 //
 //If provided text cannot be parsed as a text/template, the function panics
-func TemplateFormatter(tmpl *template.Template, text string) FormatterFunc {
+func TemplateFormatter(tmpl *template.Template, text string) Func {
 	if _, err := tmpl.Parse(text); err != nil {
 		panic(err)
 	}
@@ -137,7 +135,7 @@ func TemplateFormatter(tmpl *template.Template, text string) FormatterFunc {
 	}
 }
 
-//TemplateNewFormatter is an helper to quickly set-up a FormatterFunc from a text/template string
-func TemplateNewFormatter(text string) FormatterFunc {
+//TemplateNewFormatter is an helper to quickly set-up a Func from a text/template string
+func TemplateNewFormatter(text string) Func {
 	return TemplateFormatter(new(template.Template), text)
 }

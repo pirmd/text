@@ -1,9 +1,8 @@
 package text
 
-//diff proposes simple and naive functions to visualize differences
-//between strings. It probably is only working to have some
-//eyecandies when loking at test results or to support some command
-//line interactions.
+//diff proposes simple and naive functions to visualize differences between
+//strings. It probably is only working to have some eyecandies when loking at
+//test results or to support some command line interactions.
 
 import (
 	"encoding/json"
@@ -81,9 +80,8 @@ var (
 		LackR: func(s string) string { //Underlined space
 			if len(s) > 0 {
 				return fmt.Sprintf("\x1b[31;4m%s\x1b[0m", strings.Repeat(" ", len(s)-1))
-			} else {
-				return ""
 			}
+			return ""
 		},
 		ExcessR: func(s string) string { return fmt.Sprintf("\x1b[31;9m%s\x1b[0m", s) }, //Red + Strikeout
 
@@ -91,20 +89,20 @@ var (
 	}
 )
 
-//DiffHighlighter gathers styling functions to highlight differences between strings
-//All functions have to be defined otherwise diff will panic
+//DiffHighlighter gathers styling functions to highlight differences between
+//strings All functions have to be defined otherwise diff will panic
 type DiffHighlighter struct {
 	SameL, DiffL, LackL, ExcessL func(s string) string
 	SameR, DiffR, LackR, ExcessR func(s string) string
 	Symbols                      [4]string //Same order than diffType constants
 }
 
-//Slices returns the differences between two slices of strings
-//Differences are looked at line by line, then word by word and finally rune by rune
+//Slices returns the differences between two slices of strings Differences are
+//looked at line by line, then word by word and finally rune by rune
 func (h *DiffHighlighter) Slices(left, right []string) (dT []string, dL []string, dR []string) {
 	d := findDiffAndInsertion(left, right)
 
-	for i, _ := range d.T {
+	for i := range d.T {
 		switch d.T[i] {
 		case isDiff:
 			_, lwords, rwords := h.Bywords(d.L[i], d.R[i])
@@ -119,11 +117,12 @@ func (h *DiffHighlighter) Slices(left, right []string) (dT []string, dL []string
 	return
 }
 
-//Anything returns a visualisation of the differences between two objects of unknown types.
-//It 'stringifies' these interface{} using a human friendly Json representation (or if not possible golang
-//internal string (Gostring) then proced to a string diff
-func (s *DiffHighlighter) Anything(l, r interface{}) (diffType []string, diffLeft []string, diffRight []string) {
-	return s.Bylines(stringify(l), stringify(r))
+//Anything returns a visualisation of the differences between two objects of
+//unknown types.  It 'stringifies' these interface{} using a human friendly
+//Json representation (or if not possible golang internal string (Gostring)
+//then proced to a string diff
+func (h *DiffHighlighter) Anything(l, r interface{}) (diffType []string, diffLeft []string, diffRight []string) {
+	return h.Bylines(stringify(l), stringify(r))
 }
 
 //Bylines returns the differences between 'left' and 'right' strings. Differences are looked at
@@ -133,8 +132,8 @@ func (h *DiffHighlighter) Bylines(left, right string) (dT []string, dL []string,
 	return h.Slices(Llines, Rlines)
 }
 
-//Bylines returns the differences between 'left' and 'right' strings. Differences are looked at
-//word by word, then rune by rune.
+//Bywords returns the differences between 'left' and 'right' strings.
+//Differences are looked at word by word, then rune by rune.
 func (h *DiffHighlighter) Bywords(left, right string) (dT []string, dL []string, dR []string) {
 	Lwords, Rwords := splitInWords(left), splitInWords(right)
 	d := findDiffAndInsertion(Lwords, Rwords).Compact()
@@ -144,7 +143,7 @@ func (h *DiffHighlighter) Bywords(left, right string) (dT []string, dL []string,
 		return append(dT, ht), append(dL, hl), append(dR, hr)
 	}
 
-	for i, _ := range d.T {
+	for i := range d.T {
 		switch d.T[i] {
 		case isDiff:
 			_, lrunes, rrunes := h.Byrunes(d.L[i], d.R[i])
@@ -159,7 +158,8 @@ func (h *DiffHighlighter) Bywords(left, right string) (dT []string, dL []string,
 	return
 }
 
-//Byrunes returns the differences between 'left' and 'right'. Differences are looked at rune by rune
+//Byrunes returns the differences between 'left' and 'right'. Differences are
+//looked at rune by rune
 func (h *DiffHighlighter) Byrunes(left, right string) (dT []string, dL []string, dR []string) {
 	Lrunes, Rrunes := strings.Split(left, ""), strings.Split(right, "")
 	d := findDiff(Lrunes, Rrunes).Compact()
@@ -169,7 +169,7 @@ func (h *DiffHighlighter) Byrunes(left, right string) (dT []string, dL []string,
 		return append(dT, ht), append(dL, hl), append(dR, hr)
 	}
 
-	for i, _ := range d.T {
+	for i := range d.T {
 		ht, hl, hr := h.highlights(d.T[i], d.L[i], d.R[i])
 		dT, dL, dR = append(dT, ht), append(dL, hl), append(dR, hr)
 	}
@@ -312,7 +312,7 @@ func (d *diff) SimilarityLevel() int {
 	same := 0
 	for _, t := range d.T {
 		if t == isSame {
-			same += 1
+			same++
 		}
 	}
 	return int(100.0 * same / len(d.T))
@@ -324,7 +324,7 @@ func (d *diff) Compact() *diff {
 	var curT diffType
 	var curL, curR string
 
-	for i, _ := range d.T {
+	for i := range d.T {
 		if i > 0 && d.T[i] != curT {
 			t, l, r = append(t, curT), append(l, curL), append(r, curR)
 			curT, curL, curR = d.T[i], "", ""

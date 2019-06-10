@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	termWidth int = DefaultTxtWidth
+	termWidth = DefaultTxtWidth
 )
 
 //Term extends PlainText markup to display texts on terminals

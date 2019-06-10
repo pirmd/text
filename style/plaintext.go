@@ -9,7 +9,7 @@ import (
 var (
 	//DefaultTxtWidth is the text width used to wrap text for markups that
 	//supports it (PlainText notably)
-	DefaultTxtWidth int = 80
+	DefaultTxtWidth = 80
 
 	//IndentPrefix is the suit of bytes used to indent text for markups that
 	//supports it (PlainText notably) Use of '\t' is not recommended as it does
@@ -26,7 +26,7 @@ var core = Styler{
 	FmtLower: strings.ToLower,
 }
 
-//Plaintext is a Styler that provides a minimum style for plain texts Wrap
+//PlainText is a Styler that provides a minimum style for plain texts Wrap
 //formatting wraps text to the maximum length of DefaultTxtWidth.
 //
 //Chaining multiples Wrap or Tab will in most cases void the result

@@ -46,9 +46,9 @@ func Edit(data []byte, cmdEditor []string) ([]byte, error) {
 	return body, nil
 }
 
-//EditAsJson fires-up an editor to modify the provided interface using its JSON
+//EditAsJSON fires-up an editor to modify the provided interface using its JSON
 //form.
-func EditAsJson(v interface{}, cmdEditor []string) (interface{}, error) {
+func EditAsJSON(v interface{}, cmdEditor []string) (interface{}, error) {
 	j, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		return nil, err
@@ -64,29 +64,29 @@ func EditAsJson(v interface{}, cmdEditor []string) (interface{}, error) {
 		return nil, err
 	}
 
-    //I'm not that sure that v needs to be reurned as for most of the cases the
-    //Unmashal directive should have already propagated the mods. It happen,
-    //that it is not working at least for map (that should nee to be
-    //reallocated), so result is also returned to the user.
+	//I'm not that sure that v needs to be reurned as for most of the cases the
+	//Unmashal directive should have already propagated the mods. It happen,
+	//that it is not working at least for map (that should nee to be
+	//reallocated), so result is also returned to the user.
 	//
-    //TODO(pirmd): it is probably not the right way to do, try harder to find a
-    //correct approach
+	//TODO(pirmd): it is probably not the right way to do, try harder to find a
+	//correct approach
 	return v, nil
 }
 
 //Merge spans an editor to merge the input texts and feedbacks the result.
 func Merge(left, right []byte, cmdMerger []string) ([]byte, []byte, error) {
-	tmpfile_left, err := data2file(left)
+	tmpfileL, err := data2file(left)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	tmpfile_right, err := data2file(right)
+	tmpfileR, err := data2file(right)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	cmdArgs := append(cmdMerger, tmpfile_left, tmpfile_right)
+	cmdArgs := append(cmdMerger, tmpfileL, tmpfileR)
 	ed := exec.Command(cmdArgs[0], cmdArgs[1:]...)
 	ed.Stdout = os.Stdout
 	ed.Stdin = os.Stdin
@@ -96,22 +96,22 @@ func Merge(left, right []byte, cmdMerger []string) ([]byte, []byte, error) {
 		return nil, nil, err
 	}
 
-	body_left, err := file2data(tmpfile_left)
+	bodyL, err := file2data(tmpfileL)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	body_right, err := file2data(tmpfile_right)
+	bodyR, err := file2data(tmpfileR)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	return body_left, body_right, nil
+	return bodyL, bodyR, nil
 }
 
-//MergeAsJson fires-up an editor to merge the provided interfaces using its
+//MergeAsJSON fires-up an editor to merge the provided interfaces using its
 //JSON form.
-func MergeAsJson(left, right interface{}, cmdMerger []string) (interface{}, interface{}, error) {
+func MergeAsJSON(left, right interface{}, cmdMerger []string) (interface{}, interface{}, error) {
 	l, err := json.MarshalIndent(left, "", "  ")
 	if err != nil {
 		return nil, nil, err
@@ -137,8 +137,8 @@ func MergeAsJson(left, right interface{}, cmdMerger []string) (interface{}, inte
 		return nil, nil, err
 	}
 
-    //TODO(pirmd): like for EditAsJson, it is probably not the right way to do,
-    //try harder to find a correct approach
+	//TODO(pirmd): like for EditAsJson, it is probably not the right way to do,
+	//try harder to find a correct approach
 	return left, right, nil
 }
 
@@ -162,17 +162,17 @@ func data2file(data []byte) (string, error) {
 		return "", io.ErrShortWrite
 	}
 
-    return tmpfile.Name(), nil
+	return tmpfile.Name(), nil
 }
 
 //file2data read back the content of a temp file and delete it whatever happen
 func file2data(name string) ([]byte, error) {
-    defer func() { os.Remove(name) }()
+	defer func() { os.Remove(name) }()
 
 	body, err := ioutil.ReadFile(name)
 	if err != nil {
 		return nil, err
 	}
 
-    return body, nil
+	return body, nil
 }

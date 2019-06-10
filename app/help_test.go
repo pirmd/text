@@ -8,7 +8,7 @@ import (
 	"github.com/pirmd/verify"
 )
 
-func buildTestApp() *command {
+func buildTestApp() *Command {
 	testApp := New("cli.test", "A test for my minimalist cli app building lib")
 
 	testApp.Version = "3.14159"

@@ -32,7 +32,7 @@ func TestTable(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Table().SetGrid("|").SetMaxWidth(24).Rows(tc.in...).String()
+		got := NewTable().SetGrid("|").SetMaxWidth(24).Rows(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -50,7 +50,7 @@ func TestTableByCol(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Table().SetGrid("|").SetMaxWidth(24).Col(tc.in...).String()
+		got := NewTable().SetGrid("|").SetMaxWidth(24).Col(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
