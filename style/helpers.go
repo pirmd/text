@@ -253,16 +253,16 @@ func Paragraph(format string, a ...interface{}) string {
 	return CurrentStyler.Paragraph(format, a...)
 }
 
-//NewLine applies the style 'NewLine' to the formatted string directive.
+//Line applies the style 'Line' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) NewLine(format string, a ...interface{}) string {
-	return st.stylef(FmtNewLine)(format, a...)
+func (st Styler) Line(format string, a ...interface{}) string {
+	return st.stylef(FmtLine)(format, a...)
 }
 
-//NewLine applies the style 'NewLine' using current Styler.
+//Line applies the style 'Line' using current Styler.
 //The given format and arguments follow fmt.Sprintf format
-func NewLine(format string, a ...interface{}) string {
-	return CurrentStyler.NewLine(format, a...)
+func Line(format string, a ...interface{}) string {
+	return CurrentStyler.Line(format, a...)
 }
 
 //List applies the style 'List' to the formatted string directive.
@@ -362,7 +362,7 @@ func (st Styler) FuncMap() map[string]interface{} {
 		"DocHeader": st.DocHeader,
 		"Header":    st.Header,
 		"Paragraph": st.Paragraph,
-		"NewLine":   st.NewLine,
+		"Line":      st.Line,
 		"List":      st.List,
 		"DefTerm":   st.DefTerm,
 		"DefDesc":   st.DefDesc,
@@ -397,7 +397,7 @@ func FuncMap() map[string]interface{} {
 		"DocHeader": DocHeader,
 		"Header":    Header,
 		"Paragraph": Paragraph,
-		"NewLine":   NewLine,
+		"Line":      Line,
 		"List":      List,
 		"DefTerm":   DefTerm,
 		"DefDesc":   DefDesc,

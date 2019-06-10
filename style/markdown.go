@@ -7,7 +7,7 @@ var Markdown = core.Extend(Styler{
 
 	FmtHeader:    Sprintf("\n# %s"),
 	FmtParagraph: Sprintf("\n%s\n"),
-	FmtNewLine:   Sprintf("%s\n"),
+	FmtLine:      Sprintf("%s\n"),
 	FmtList:      Sprintf("\n- %s\n"),
 	FmtDefTerm:   Sprintf("\n%s\n"),
 	FmtDefDesc:   Sprintf(": %s\n"),

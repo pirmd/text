@@ -13,7 +13,7 @@ import (
 
 //PrintSimpleVersion outputs to w a command's minimal usage message
 func PrintSimpleVersion(w io.Writer, c *Command, st style.Styler) {
-	fmt.Fprintf(w, st.NewLine("%s %s - %s", fmtName(c), c.Version, c.Usage))
+	fmt.Fprintf(w, st.Line("%s %s - %s", fmtName(c), c.Version, c.Usage))
 }
 
 //PrintSimpleUsage outputs to w a command's minimal usage message
@@ -31,7 +31,7 @@ func PrintLongUsage(w io.Writer, c *Command, st style.Styler) {
 	stHelp := st.Extend(style.Styler{
 		style.FmtHeader:    style.Combine(st.Upper, st.Header),
 		style.FmtParagraph: style.Combine(st.Tab, st.Paragraph),
-		style.FmtNewLine:   style.Combine(st.Tab, st.NewLine),
+		style.FmtLine:      style.Combine(st.Tab, st.Line),
 	}).WithAutostyler(style.LightMarkup)
 
 	printLongUsage(w, c, stHelp)
@@ -69,7 +69,7 @@ func printLongUsage(w io.Writer, c *Command, st style.Styler) {
 		if i == 0 {
 			fmt.Fprintf(w, st.Paragraph(s))
 		} else {
-			fmt.Fprintf(w, st.NewLine(s))
+			fmt.Fprintf(w, st.Line(s))
 		}
 	}
 

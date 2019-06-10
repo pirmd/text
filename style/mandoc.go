@@ -9,7 +9,7 @@ var Mandoc = core.Extend(Styler{
 	FmtDocHeader: Sprintf(".TH %s\n"),
 	FmtHeader:    Sprintf("\n.SH %s\n"),
 	FmtParagraph: Sprintf(".PP\n%s\n"),
-	FmtNewLine:   Sprintf(".br\n%s\n"),
+	FmtLine:      Sprintf(".br\n%s\n"),
 	FmtList:      Sprintf(".RS\n%s\n.RE\n"),
 	FmtDefTerm:   Sprintf("\n.TP\n%s\n"),
 	FmtDefDesc:   Sprintf("%s\n"),

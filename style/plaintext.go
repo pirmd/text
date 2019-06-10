@@ -34,7 +34,7 @@ var PlainText = core.Extend(Styler{
 	FmtDocHeader: Sprintf("%s\n"),
 	FmtHeader:    Sprintf("\n%s\n"),
 	FmtParagraph: Sprintf("\n%s\n"),
-	FmtNewLine:   Sprintf("%s\n"),
+	FmtLine:      Sprintf("%s\n"),
 	FmtList:      Sprintf("\n- %s\n"),
 	FmtDefTerm:   Sprintf("\n%s:\n"),
 	FmtDefDesc:   Sprintf("%s\n"),
