@@ -4,6 +4,7 @@ package style
 var Markdown = core.Extend(Styler{
 	FmtBold:   Sprintf("**%s**"),
 	FmtItalic: Sprintf("*%s*"),
+	FmtStrike: Sprintf("~~%s~~"),
 
 	FmtHeader:    Sprintf("\n# %s"),
 	FmtParagraph: Sprintf("\n%s\n"),
