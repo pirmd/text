@@ -10,14 +10,14 @@ INTRODUCTION
 AVAILABLE STYLES
     
     Section Introduction already demonstrates useful styles 
-    Styles, this section completes with most of the others 
-    possibilities.
+    from package 'styles', this section completes with most 
+    of the others possibilities.
     
     Notably, package 'style' can print in red or bold green.
     
     It also knows how to format lists:
     
-    - this very long and detailed sentence is here to 
+    - This very long and detailed sentence is here to 
     demonstrate that list can be formatted and wrapped 
     because it hopefully be so long that it will not fulfill
     the maximum number of authorized char per lines is 

@@ -14,10 +14,10 @@ func testText() (s string) {
 	s += P("This small piece of text aims at demonstrating and testing my styling package '%s'.", Underline("style"))
 	s += P("It is writen by a %s English speaker, so pardon any faults", Bold("non-native"))
 	s += S("Available styles")
-	s += P("Section %s already demonstrates useful styles Styles, this section completes with most of the others possibilities.", Underline("Introduction"))
+	s += P("Section %s already demonstrates useful styles from package 'styles', this section completes with most of the others possibilities.", Underline("Introduction"))
 	s += P("Notably, package '%s' can print in %s or %s.", Underline("style"), Red("red"), Bold(Green("bold green")))
 	s += P("It also knows how to format %s:", Italic("lists"))
-	s += L("this very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.")
+	s += L("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.")
 	s += L("It is also possible to check that paragraph inside lists are respected.\nAs you can see here in this simple example.")
 	s += P("It also knows how to %s terms:", Italic("define"))
 	s += Tab(DefTerm("style"))
@@ -51,4 +51,10 @@ func TestStyleMandoc(t *testing.T) {
 	CurrentStyler = Mandoc
 	out := testText()
 	verify.MatchGolden(t, out, "Styling with 'Mandoc' Markup failed")
+}
+
+func TestStyleMarkdown(t *testing.T) {
+	CurrentStyler = Markdown
+	out := testText()
+	verify.MatchGolden(t, out, "Styling with 'Markdown' Markup failed")
 }

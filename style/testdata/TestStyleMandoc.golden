@@ -7,13 +7,13 @@ It is writen by a \fBnon\-native\fP English speaker, so pardon any faults
 
 .SH AVAILABLE STYLES
 .PP
-Section Introduction already demonstrates useful styles Styles, this section completes with most of the others possibilities.
+Section Introduction already demonstrates useful styles from package 'styles', this section completes with most of the others possibilities.
 .PP
 Notably, package 'style' can print in red or \fBbold green\fP.
 .PP
 It also knows how to format \fIlists\fP:
 .RS
-this very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.
+This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.
 .RE
 .RS
 It is also possible to check that paragraph inside lists are respected.
