@@ -10,7 +10,7 @@ func testText() (s string) {
 	P := New(Paragraph, Tab)
 	L := New(List, Tab)
 
-	s = S("Introduction")
+	s = TrimSpaceLeft(S("Introduction"))
 	s += P("This small piece of text aims at demonstrating and testing my styling package '%s'.", Underline("style"))
 	s += P("It is writen by a %s English speaker, so pardon any faults", Bold("non-native"))
 	s += S("Available styles")

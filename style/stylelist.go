@@ -59,6 +59,8 @@ const (
 	FmtDefDesc
 	//FmtCode displays text as a code block
 	FmtCode
+	//FmtTrimSpaceLeft removes any leading space
+	FmtTrimSpaceLeft
 	//FmtEscape escapes the input text. FmtEscape is automatically applied and
 	//does not usually needed to be called manually
 	FmtEscape

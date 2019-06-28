@@ -2,6 +2,7 @@ package style
 
 import (
 	"strings"
+	"unicode"
 
 	"github.com/pirmd/cli/style/text"
 )
@@ -42,6 +43,8 @@ var PlainText = core.Extend(Styler{
 	FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
 	FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },
 	FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, DefaultTxtWidth) },
+
+	FmtTrimSpaceLeft: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
 })
 
 func init() {

@@ -314,6 +314,18 @@ func Code(format string, a ...interface{}) string {
 	return CurrentStyler.Code(format, a...)
 }
 
+//TrimSpaceLeft applies the style 'TrimSpaceLeft' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st Styler) TrimSpaceLeft(format string, a ...interface{}) string {
+	return st.stylef(FmtTrimSpaceLeft)(format, a...)
+}
+
+//TrimSpaceLeft applies the style 'TrimSpaceLeft' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func TrimSpaceLeft(format string, a ...interface{}) string {
+	return CurrentStyler.TrimSpaceLeft(format, a...)
+}
+
 //Escape applies the style 'Escape' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st Styler) Escape(format string, a ...interface{}) string {
@@ -342,34 +354,35 @@ func Auto(format string, a ...interface{}) string {
 //to use 'style' functions within templates
 func (st Styler) FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Upper":     st.Upper,
-		"Lower":     st.Lower,
-		"Black":     st.Black,
-		"Red":       st.Red,
-		"Green":     st.Green,
-		"Yellow":    st.Yellow,
-		"Blue":      st.Blue,
-		"Magenta":   st.Magenta,
-		"Cyan":      st.Cyan,
-		"White":     st.White,
-		"Bold":      st.Bold,
-		"Italic":    st.Italic,
-		"Underline": st.Underline,
-		"Inverse":   st.Inverse,
-		"Strike":    st.Strike,
-		"Wrap":      st.Wrap,
-		"Tab":       st.Tab,
-		"Tab2":      st.Tab2,
-		"DocHeader": st.DocHeader,
-		"Header":    st.Header,
-		"Paragraph": st.Paragraph,
-		"Line":      st.Line,
-		"List":      st.List,
-		"DefTerm":   st.DefTerm,
-		"DefDesc":   st.DefDesc,
-		"Code":      st.Code,
-		"Escape":    st.Escape,
-		"Auto":      st.Auto,
+		"Upper":         st.Upper,
+		"Lower":         st.Lower,
+		"Black":         st.Black,
+		"Red":           st.Red,
+		"Green":         st.Green,
+		"Yellow":        st.Yellow,
+		"Blue":          st.Blue,
+		"Magenta":       st.Magenta,
+		"Cyan":          st.Cyan,
+		"White":         st.White,
+		"Bold":          st.Bold,
+		"Italic":        st.Italic,
+		"Underline":     st.Underline,
+		"Inverse":       st.Inverse,
+		"Strike":        st.Strike,
+		"Wrap":          st.Wrap,
+		"Tab":           st.Tab,
+		"Tab2":          st.Tab2,
+		"DocHeader":     st.DocHeader,
+		"Header":        st.Header,
+		"Paragraph":     st.Paragraph,
+		"Line":          st.Line,
+		"List":          st.List,
+		"DefTerm":       st.DefTerm,
+		"DefDesc":       st.DefDesc,
+		"Code":          st.Code,
+		"TrimSpaceLeft": st.TrimSpaceLeft,
+		"Escape":        st.Escape,
+		"Auto":          st.Auto,
 	}
 }
 
@@ -377,33 +390,34 @@ func (st Styler) FuncMap() map[string]interface{} {
 //to use 'style' CurrentStyler's functions within templates
 func FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Upper":     Upper,
-		"Lower":     Lower,
-		"Black":     Black,
-		"Red":       Red,
-		"Green":     Green,
-		"Yellow":    Yellow,
-		"Blue":      Blue,
-		"Magenta":   Magenta,
-		"Cyan":      Cyan,
-		"White":     White,
-		"Bold":      Bold,
-		"Italic":    Italic,
-		"Underline": Underline,
-		"Inverse":   Inverse,
-		"Strike":    Strike,
-		"Wrap":      Wrap,
-		"Tab":       Tab,
-		"Tab2":      Tab2,
-		"DocHeader": DocHeader,
-		"Header":    Header,
-		"Paragraph": Paragraph,
-		"Line":      Line,
-		"List":      List,
-		"DefTerm":   DefTerm,
-		"DefDesc":   DefDesc,
-		"Code":      Code,
-		"Escape":    Escape,
-		"Auto":      Auto,
+		"Upper":         Upper,
+		"Lower":         Lower,
+		"Black":         Black,
+		"Red":           Red,
+		"Green":         Green,
+		"Yellow":        Yellow,
+		"Blue":          Blue,
+		"Magenta":       Magenta,
+		"Cyan":          Cyan,
+		"White":         White,
+		"Bold":          Bold,
+		"Italic":        Italic,
+		"Underline":     Underline,
+		"Inverse":       Inverse,
+		"Strike":        Strike,
+		"Wrap":          Wrap,
+		"Tab":           Tab,
+		"Tab2":          Tab2,
+		"DocHeader":     DocHeader,
+		"Header":        Header,
+		"Paragraph":     Paragraph,
+		"Line":          Line,
+		"List":          List,
+		"DefTerm":       DefTerm,
+		"DefDesc":       DefDesc,
+		"Code":          Code,
+		"TrimSpaceLeft": TrimSpaceLeft,
+		"Escape":        Escape,
+		"Auto":          Auto,
 	}
 }
