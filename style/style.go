@@ -4,18 +4,18 @@ import (
 	"fmt"
 )
 
-//Func represents a function that can transform a string to another one
+//FormatFn represents a function that can transform a string to another one
 //The transformation is usually used to apply a given style to a string
-type Func func(string) string
+type FormatFn func(string) string
 
-//Funcf is an extension of Func to provide an interface similar to
+//FormatfFn is an extension of FormatFn to provide an interface similar to
 //fmt.Sprintf
-type Funcf func(format string, a ...interface{}) string
+type FormatfFn func(format string, a ...interface{}) string
 
 //must is a wrapper to transform a function that outputs (string, error) to a
-//Func signature.  It is done by capturing the error and feedbacking it to
+//FormatFn signature.  It is done by capturing the error and feedbacking it to
 //the output string (similar to fprintf principle)
-func must(fn func(string) (string, error)) Func {
+func must(fn func(string) (string, error)) FormatFn {
 	return func(s string) string {
 		ts, err := fn(s)
 		if err != nil {
@@ -25,16 +25,16 @@ func must(fn func(string) (string, error)) Func {
 	}
 }
 
-//Sprintf is a wrapper around fmt.Sprintf that builds a Func for a given
+//Sprintf is a wrapper around fmt.Sprintf that builds a FormatFn for a given
 //format directive
-func Sprintf(format string) Func {
+func Sprintf(format string) FormatFn {
 	return func(s string) string {
 		return fmt.Sprintf(format, s)
 	}
 }
 
-//Chain combines several Func into one
-func Chain(fn ...Func) Func {
+//Chain combines several FormatFn into one
+func Chain(fn ...FormatFn) FormatFn {
 	return func(src string) string {
 		s := src
 		for _, f := range fn {
@@ -44,8 +44,8 @@ func Chain(fn ...Func) Func {
 	}
 }
 
-//New creates a new Funcf styling function by combining existing styles
-func New(fn ...Funcf) Funcf {
+//New creates a new FormatfFn styling function by combining existing styles
+func New(fn ...FormatfFn) FormatfFn {
 	//TODO(pirmd): figure out how to prevent escape function to be applied each time 'f' is call
 	return func(format string, a ...interface{}) string {
 		s := fmt.Sprintf(format, a...)
@@ -56,8 +56,8 @@ func New(fn ...Funcf) Funcf {
 	}
 }
 
-//Combine combines several Funcf into one Func
-func Combine(fn ...Funcf) Func {
+//Combine combines several FormatfFn into one FormatFn
+func Combine(fn ...FormatfFn) FormatFn {
 	return func(src string) string {
 		s := src
 		for _, f := range fn {
@@ -75,21 +75,21 @@ var CurrentStyler = Term
 //apply a given text format.  Styler usually implements a given markup idiom
 //but are pretty flexible to support things like decorating a text with ansi
 //colors escape sequences.
-type Styler map[Format]Func
+type Styler map[Format]FormatFn
 
-//get retrieves a Func from the given format.  If no Func exists for this
+//get retrieves a FormatFn from the given format.  If no FormatFn exists for this
 //format, it returns a "do nothing" function that returns the input string
 //"as-is".
-func (st Styler) get(f Format) Func {
+func (st Styler) get(f Format) FormatFn {
 	if fn, ok := st[f]; ok {
 		return fn
 	}
 	return func(s string) string { return s }
 }
 
-//style retrieves a Func from the markup definition and ensures that
+//style retrieves a FormatFn from the markup definition and ensures that
 //escaping and auto-styling functions are applied to input text, if any.
-func (st Styler) style(f Format) Func {
+func (st Styler) style(f Format) FormatFn {
 	fn := st.get(f)
 	return func(s string) string {
 		s = st.get(FmtEscape)(s)
@@ -99,7 +99,7 @@ func (st Styler) style(f Format) Func {
 }
 
 //stylef wraps style to offer an interface similar to fmt.Sprintf
-func (st Styler) stylef(f Format) Funcf {
+func (st Styler) stylef(f Format) FormatfFn {
 	return func(format string, a ...interface{}) string {
 		return st.style(f)(fmt.Sprintf(format, a...))
 	}
