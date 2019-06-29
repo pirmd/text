@@ -57,7 +57,27 @@ func TestVisualPad(t *testing.T) {
 	for _, tc := range testCases {
 		got := visualPad(tc.in, tc.sz, ' ')
 		if got != tc.out {
-			t.Errorf("visual Padding failed for '%s'.\nWanted: %s\nGot   : %s\n", tc.in, tc.out, got)
+			t.Errorf("visual Padding failed for '%s' (max %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
+		}
+	}
+}
+
+func TestVisualRepeat(t *testing.T) {
+	testCases := []struct {
+		in  string
+		sz  int
+		out string
+	}{
+		{"Cou", 6, "CouCou"},
+		{"\x1b[34mCou\x1b[0m", 6, "\x1b[34mCou\x1b[0m\x1b[34mCou\x1b[0m"},
+		{"Cou", 4, "CouC"},
+		{"\x1b[34mCou\x1b[0m", 4, "\x1b[34mCou\x1b[0m\x1b[34mC\x1b[0m"},
+	}
+
+	for _, tc := range testCases {
+		got := visualRepeat(tc.in, tc.sz)
+		if got != tc.out {
+			t.Errorf("visual repeating failed for '%s' (up to %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
 		}
 	}
 }

@@ -17,6 +17,7 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
 - cli/style: rename NewLine to Line
 - cli/style: clean api and (hopefully) propose better names (style.Func -> style.FormatFn)
 - cli/style: add new styling functions: TrimSpaceLeft
+- cli/style/text: add support for table's horizontal separators
 
 ## [0.1.0] - 2019-05-11
 ### Added
