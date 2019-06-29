@@ -15,8 +15,13 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
 - cli/input: add function to fire up a tool for a user to manually merge
   files/data
 - cli/style: rename NewLine to Line
-- cli/style: clean api and (hopefully) propose better names (style.Func -> style.FormatFn)
-- cli/style: add new styling functions: TrimSpaceLeft
+- cli/style: clean api and (hopefully) propose better names
+  (style.Func -> style.FormatFn, style.New -> style.Chainf)
+- cli/style: add new styling functions: TrimLeadingSpace and TrimSpace
+- cli/style: rewrite style internals to support more complex formatting
+  functions like table
+  Introduce new functions/type to manage Styler (FormatMap, New() and newer
+  Extend() api)
 - cli/style/text: add support for table's horizontal separators
 - cli/style/text: rename Table.Title() to Table.Captions(), which
   should hopefully be less misleading

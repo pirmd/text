@@ -4,7 +4,7 @@ package style
 
 //Upper applies the style 'Upper' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Upper(format string, a ...interface{}) string {
+func (st *Styler) Upper(format string, a ...interface{}) string {
 	return st.stylef(FmtUpper)(format, a...)
 }
 
@@ -16,7 +16,7 @@ func Upper(format string, a ...interface{}) string {
 
 //Lower applies the style 'Lower' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Lower(format string, a ...interface{}) string {
+func (st *Styler) Lower(format string, a ...interface{}) string {
 	return st.stylef(FmtLower)(format, a...)
 }
 
@@ -26,9 +26,33 @@ func Lower(format string, a ...interface{}) string {
 	return CurrentStyler.Lower(format, a...)
 }
 
+//TrimSpace applies the style 'TrimSpace' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) TrimSpace(format string, a ...interface{}) string {
+	return st.stylef(FmtTrimSpace)(format, a...)
+}
+
+//TrimSpace applies the style 'TrimSpace' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func TrimSpace(format string, a ...interface{}) string {
+	return CurrentStyler.TrimSpace(format, a...)
+}
+
+//TrimLeadingSpace applies the style 'TrimLeadingSpace' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) TrimLeadingSpace(format string, a ...interface{}) string {
+	return st.stylef(FmtTrimLeadingSpace)(format, a...)
+}
+
+//TrimLeadingSpace applies the style 'TrimLeadingSpace' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func TrimLeadingSpace(format string, a ...interface{}) string {
+	return CurrentStyler.TrimLeadingSpace(format, a...)
+}
+
 //Black applies the style 'Black' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Black(format string, a ...interface{}) string {
+func (st *Styler) Black(format string, a ...interface{}) string {
 	return st.stylef(FmtBlack)(format, a...)
 }
 
@@ -40,7 +64,7 @@ func Black(format string, a ...interface{}) string {
 
 //Red applies the style 'Red' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Red(format string, a ...interface{}) string {
+func (st *Styler) Red(format string, a ...interface{}) string {
 	return st.stylef(FmtRed)(format, a...)
 }
 
@@ -52,7 +76,7 @@ func Red(format string, a ...interface{}) string {
 
 //Green applies the style 'Green' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Green(format string, a ...interface{}) string {
+func (st *Styler) Green(format string, a ...interface{}) string {
 	return st.stylef(FmtGreen)(format, a...)
 }
 
@@ -64,7 +88,7 @@ func Green(format string, a ...interface{}) string {
 
 //Yellow applies the style 'Yellow' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Yellow(format string, a ...interface{}) string {
+func (st *Styler) Yellow(format string, a ...interface{}) string {
 	return st.stylef(FmtYellow)(format, a...)
 }
 
@@ -76,7 +100,7 @@ func Yellow(format string, a ...interface{}) string {
 
 //Blue applies the style 'Blue' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Blue(format string, a ...interface{}) string {
+func (st *Styler) Blue(format string, a ...interface{}) string {
 	return st.stylef(FmtBlue)(format, a...)
 }
 
@@ -88,7 +112,7 @@ func Blue(format string, a ...interface{}) string {
 
 //Magenta applies the style 'Magenta' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Magenta(format string, a ...interface{}) string {
+func (st *Styler) Magenta(format string, a ...interface{}) string {
 	return st.stylef(FmtMagenta)(format, a...)
 }
 
@@ -100,7 +124,7 @@ func Magenta(format string, a ...interface{}) string {
 
 //Cyan applies the style 'Cyan' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Cyan(format string, a ...interface{}) string {
+func (st *Styler) Cyan(format string, a ...interface{}) string {
 	return st.stylef(FmtCyan)(format, a...)
 }
 
@@ -112,7 +136,7 @@ func Cyan(format string, a ...interface{}) string {
 
 //White applies the style 'White' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) White(format string, a ...interface{}) string {
+func (st *Styler) White(format string, a ...interface{}) string {
 	return st.stylef(FmtWhite)(format, a...)
 }
 
@@ -124,7 +148,7 @@ func White(format string, a ...interface{}) string {
 
 //Bold applies the style 'Bold' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Bold(format string, a ...interface{}) string {
+func (st *Styler) Bold(format string, a ...interface{}) string {
 	return st.stylef(FmtBold)(format, a...)
 }
 
@@ -136,7 +160,7 @@ func Bold(format string, a ...interface{}) string {
 
 //Italic applies the style 'Italic' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Italic(format string, a ...interface{}) string {
+func (st *Styler) Italic(format string, a ...interface{}) string {
 	return st.stylef(FmtItalic)(format, a...)
 }
 
@@ -148,7 +172,7 @@ func Italic(format string, a ...interface{}) string {
 
 //Underline applies the style 'Underline' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Underline(format string, a ...interface{}) string {
+func (st *Styler) Underline(format string, a ...interface{}) string {
 	return st.stylef(FmtUnderline)(format, a...)
 }
 
@@ -160,7 +184,7 @@ func Underline(format string, a ...interface{}) string {
 
 //Inverse applies the style 'Inverse' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Inverse(format string, a ...interface{}) string {
+func (st *Styler) Inverse(format string, a ...interface{}) string {
 	return st.stylef(FmtInverse)(format, a...)
 }
 
@@ -172,7 +196,7 @@ func Inverse(format string, a ...interface{}) string {
 
 //Strike applies the style 'Strike' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Strike(format string, a ...interface{}) string {
+func (st *Styler) Strike(format string, a ...interface{}) string {
 	return st.stylef(FmtStrike)(format, a...)
 }
 
@@ -184,7 +208,7 @@ func Strike(format string, a ...interface{}) string {
 
 //Wrap applies the style 'Wrap' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Wrap(format string, a ...interface{}) string {
+func (st *Styler) Wrap(format string, a ...interface{}) string {
 	return st.stylef(FmtWrap)(format, a...)
 }
 
@@ -196,7 +220,7 @@ func Wrap(format string, a ...interface{}) string {
 
 //Tab applies the style 'Tab' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Tab(format string, a ...interface{}) string {
+func (st *Styler) Tab(format string, a ...interface{}) string {
 	return st.stylef(FmtTab)(format, a...)
 }
 
@@ -208,7 +232,7 @@ func Tab(format string, a ...interface{}) string {
 
 //Tab2 applies the style 'Tab2' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Tab2(format string, a ...interface{}) string {
+func (st *Styler) Tab2(format string, a ...interface{}) string {
 	return st.stylef(FmtTab2)(format, a...)
 }
 
@@ -220,7 +244,7 @@ func Tab2(format string, a ...interface{}) string {
 
 //DocHeader applies the style 'DocHeader' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) DocHeader(format string, a ...interface{}) string {
+func (st *Styler) DocHeader(format string, a ...interface{}) string {
 	return st.stylef(FmtDocHeader)(format, a...)
 }
 
@@ -232,7 +256,7 @@ func DocHeader(format string, a ...interface{}) string {
 
 //Header applies the style 'Header' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Header(format string, a ...interface{}) string {
+func (st *Styler) Header(format string, a ...interface{}) string {
 	return st.stylef(FmtHeader)(format, a...)
 }
 
@@ -244,7 +268,7 @@ func Header(format string, a ...interface{}) string {
 
 //Paragraph applies the style 'Paragraph' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Paragraph(format string, a ...interface{}) string {
+func (st *Styler) Paragraph(format string, a ...interface{}) string {
 	return st.stylef(FmtParagraph)(format, a...)
 }
 
@@ -256,7 +280,7 @@ func Paragraph(format string, a ...interface{}) string {
 
 //Line applies the style 'Line' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Line(format string, a ...interface{}) string {
+func (st *Styler) Line(format string, a ...interface{}) string {
 	return st.stylef(FmtLine)(format, a...)
 }
 
@@ -268,7 +292,7 @@ func Line(format string, a ...interface{}) string {
 
 //List applies the style 'List' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) List(format string, a ...interface{}) string {
+func (st *Styler) List(format string, a ...interface{}) string {
 	return st.stylef(FmtList)(format, a...)
 }
 
@@ -280,7 +304,7 @@ func List(format string, a ...interface{}) string {
 
 //DefTerm applies the style 'DefTerm' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) DefTerm(format string, a ...interface{}) string {
+func (st *Styler) DefTerm(format string, a ...interface{}) string {
 	return st.stylef(FmtDefTerm)(format, a...)
 }
 
@@ -292,7 +316,7 @@ func DefTerm(format string, a ...interface{}) string {
 
 //DefDesc applies the style 'DefDesc' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) DefDesc(format string, a ...interface{}) string {
+func (st *Styler) DefDesc(format string, a ...interface{}) string {
 	return st.stylef(FmtDefDesc)(format, a...)
 }
 
@@ -304,7 +328,7 @@ func DefDesc(format string, a ...interface{}) string {
 
 //Code applies the style 'Code' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Code(format string, a ...interface{}) string {
+func (st *Styler) Code(format string, a ...interface{}) string {
 	return st.stylef(FmtCode)(format, a...)
 }
 
@@ -314,21 +338,9 @@ func Code(format string, a ...interface{}) string {
 	return CurrentStyler.Code(format, a...)
 }
 
-//TrimSpaceLeft applies the style 'TrimSpaceLeft' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st Styler) TrimSpaceLeft(format string, a ...interface{}) string {
-	return st.stylef(FmtTrimSpaceLeft)(format, a...)
-}
-
-//TrimSpaceLeft applies the style 'TrimSpaceLeft' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func TrimSpaceLeft(format string, a ...interface{}) string {
-	return CurrentStyler.TrimSpaceLeft(format, a...)
-}
-
 //Escape applies the style 'Escape' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Escape(format string, a ...interface{}) string {
+func (st *Styler) Escape(format string, a ...interface{}) string {
 	return st.stylef(FmtEscape)(format, a...)
 }
 
@@ -340,7 +352,7 @@ func Escape(format string, a ...interface{}) string {
 
 //Auto applies the style 'Auto' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) Auto(format string, a ...interface{}) string {
+func (st *Styler) Auto(format string, a ...interface{}) string {
 	return st.stylef(FmtAuto)(format, a...)
 }
 
@@ -352,37 +364,38 @@ func Auto(format string, a ...interface{}) string {
 
 //FuncMap provides a text/template FuncMap compatible mapping
 //to use 'style' functions within templates
-func (st Styler) FuncMap() map[string]interface{} {
+func (st *Styler) FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Upper":         st.Upper,
-		"Lower":         st.Lower,
-		"Black":         st.Black,
-		"Red":           st.Red,
-		"Green":         st.Green,
-		"Yellow":        st.Yellow,
-		"Blue":          st.Blue,
-		"Magenta":       st.Magenta,
-		"Cyan":          st.Cyan,
-		"White":         st.White,
-		"Bold":          st.Bold,
-		"Italic":        st.Italic,
-		"Underline":     st.Underline,
-		"Inverse":       st.Inverse,
-		"Strike":        st.Strike,
-		"Wrap":          st.Wrap,
-		"Tab":           st.Tab,
-		"Tab2":          st.Tab2,
-		"DocHeader":     st.DocHeader,
-		"Header":        st.Header,
-		"Paragraph":     st.Paragraph,
-		"Line":          st.Line,
-		"List":          st.List,
-		"DefTerm":       st.DefTerm,
-		"DefDesc":       st.DefDesc,
-		"Code":          st.Code,
-		"TrimSpaceLeft": st.TrimSpaceLeft,
-		"Escape":        st.Escape,
-		"Auto":          st.Auto,
+		"Upper":            st.Upper,
+		"Lower":            st.Lower,
+		"TrimSpace":        st.TrimSpace,
+		"TrimLeadingSpace": st.TrimLeadingSpace,
+		"Black":            st.Black,
+		"Red":              st.Red,
+		"Green":            st.Green,
+		"Yellow":           st.Yellow,
+		"Blue":             st.Blue,
+		"Magenta":          st.Magenta,
+		"Cyan":             st.Cyan,
+		"White":            st.White,
+		"Bold":             st.Bold,
+		"Italic":           st.Italic,
+		"Underline":        st.Underline,
+		"Inverse":          st.Inverse,
+		"Strike":           st.Strike,
+		"Wrap":             st.Wrap,
+		"Tab":              st.Tab,
+		"Tab2":             st.Tab2,
+		"DocHeader":        st.DocHeader,
+		"Header":           st.Header,
+		"Paragraph":        st.Paragraph,
+		"Line":             st.Line,
+		"List":             st.List,
+		"DefTerm":          st.DefTerm,
+		"DefDesc":          st.DefDesc,
+		"Code":             st.Code,
+		"Escape":           st.Escape,
+		"Auto":             st.Auto,
 	}
 }
 
@@ -390,34 +403,35 @@ func (st Styler) FuncMap() map[string]interface{} {
 //to use 'style' CurrentStyler's functions within templates
 func FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Upper":         Upper,
-		"Lower":         Lower,
-		"Black":         Black,
-		"Red":           Red,
-		"Green":         Green,
-		"Yellow":        Yellow,
-		"Blue":          Blue,
-		"Magenta":       Magenta,
-		"Cyan":          Cyan,
-		"White":         White,
-		"Bold":          Bold,
-		"Italic":        Italic,
-		"Underline":     Underline,
-		"Inverse":       Inverse,
-		"Strike":        Strike,
-		"Wrap":          Wrap,
-		"Tab":           Tab,
-		"Tab2":          Tab2,
-		"DocHeader":     DocHeader,
-		"Header":        Header,
-		"Paragraph":     Paragraph,
-		"Line":          Line,
-		"List":          List,
-		"DefTerm":       DefTerm,
-		"DefDesc":       DefDesc,
-		"Code":          Code,
-		"TrimSpaceLeft": TrimSpaceLeft,
-		"Escape":        Escape,
-		"Auto":          Auto,
+		"Upper":            Upper,
+		"Lower":            Lower,
+		"TrimSpace":        TrimSpace,
+		"TrimLeadingSpace": TrimLeadingSpace,
+		"Black":            Black,
+		"Red":              Red,
+		"Green":            Green,
+		"Yellow":           Yellow,
+		"Blue":             Blue,
+		"Magenta":          Magenta,
+		"Cyan":             Cyan,
+		"White":            White,
+		"Bold":             Bold,
+		"Italic":           Italic,
+		"Underline":        Underline,
+		"Inverse":          Inverse,
+		"Strike":           Strike,
+		"Wrap":             Wrap,
+		"Tab":              Tab,
+		"Tab2":             Tab2,
+		"DocHeader":        DocHeader,
+		"Header":           Header,
+		"Paragraph":        Paragraph,
+		"Line":             Line,
+		"List":             List,
+		"DefTerm":          DefTerm,
+		"DefDesc":          DefDesc,
+		"Code":             Code,
+		"Escape":           Escape,
+		"Auto":             Auto,
 	}
 }

@@ -10,7 +10,7 @@ var (
 )
 
 //Term extends PlainText markup to display texts on terminals
-var Term = PlainText.Extend(Styler{
+var Term = PlainText.Extend(FormatMap{
 	FmtWrap: func(s string) string { return text.Wrap(s, termWidth) },
 	FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, termWidth) },
 	FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, termWidth) },
@@ -18,7 +18,7 @@ var Term = PlainText.Extend(Styler{
 
 //ColorTerm extends PlainText markup with colors and text styles that can be
 //understood by terminals that supports colors
-var ColorTerm = Term.Extend(Styler{
+var ColorTerm = Term.Extend(FormatMap{
 	FmtBlack:     Sprintf("\x1b[30m%s\x1b[0m"),
 	FmtRed:       Sprintf("\x1b[31m%s\x1b[0m"),
 	FmtGreen:     Sprintf("\x1b[32m%s\x1b[0m"),

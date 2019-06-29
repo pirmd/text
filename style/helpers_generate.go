@@ -21,7 +21,7 @@ const (
 	helperForStyle = `
 //%[1]s applies the style '%[1]s' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st Styler) %[1]s(format string, a ...interface{}) string {
+func (st *Styler) %[1]s(format string, a ...interface{}) string {
     return st.stylef(%[2]s)(format, a...)
 }
 
@@ -117,22 +117,22 @@ func main() {
 	//generate a text/template.FuncMap
 	fmt.Fprintf(f, "\n//FuncMap provides a text/template FuncMap compatible mapping\n")
 	fmt.Fprintf(f, "//to use 'style' functions within templates\n")
-	fmt.Fprintf(f, "func (st Styler) FuncMap() map[string]interface{} {\n")
-	fmt.Fprintf(f, "    return map[string]interface{} {\n")
+	fmt.Fprintf(f, "func (st *Styler) FuncMap() map[string]interface{} {\n")
+	fmt.Fprintf(f, "\treturn map[string]interface{} {\n")
 	for _, st := range styles {
-		fmt.Fprintf(f, "       \"%[1]s\":  st.%[1]s,\n", strings.TrimPrefix(st, stylePrefix))
+		fmt.Fprintf(f, "\t\t\"%[1]s\":  st.%[1]s,\n", strings.TrimPrefix(st, stylePrefix))
 	}
-	fmt.Fprintf(f, "    }\n")
+	fmt.Fprintf(f, "\t}\n")
 	fmt.Fprintf(f, "}\n")
 
 	//generate a text/template.FuncMap for CurrentStyler
 	fmt.Fprintf(f, "\n//FuncMap provides a text/template FuncMap compatible mapping\n")
 	fmt.Fprintf(f, "//to use 'style' CurrentStyler's functions within templates\n")
 	fmt.Fprintf(f, "func FuncMap() map[string]interface{} {\n")
-	fmt.Fprintf(f, "    return map[string]interface{} {\n")
+	fmt.Fprintf(f, "\treturn map[string]interface{} {\n")
 	for _, st := range styles {
-		fmt.Fprintf(f, "       \"%[1]s\":  %[1]s,\n", strings.TrimPrefix(st, stylePrefix))
+		fmt.Fprintf(f, "\t\t\"%[1]s\":  %[1]s,\n", strings.TrimPrefix(st, stylePrefix))
 	}
-	fmt.Fprintf(f, "    }\n")
+	fmt.Fprintf(f, "\t}\n")
 	fmt.Fprintf(f, "}\n")
 }

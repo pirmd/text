@@ -44,13 +44,13 @@ func (m Markup) Extend(madd Markup) Markup {
 
 //Render returns a FormatFn that applies the specified markup with the given
 //Styler
-func (m Markup) Render(st Styler) FormatFn {
+func (m Markup) Render(st *Styler) FormatFn {
 	return func(s string) string {
 		return m.render(st, s)
 	}
 }
 
-func (m Markup) render(st Styler, s string) string {
+func (m Markup) render(st *Styler, s string) string {
 	for r, fmt := range m {
 		if matches := r.FindAllStringSubmatchIndex(s, -1); matches != nil {
 			var t string
@@ -83,6 +83,6 @@ func (m Markup) render(st Styler, s string) string {
 
 //WithAutostyler creates a new Styler that automatically styles text using the
 //given markup
-func (st Styler) WithAutostyler(m Markup) Styler {
-	return st.Extend(Styler{FmtAuto: m.Render(st)})
+func (st *Styler) WithAutostyler(m Markup) *Styler {
+	return st.Extend(FormatMap{FmtAuto: m.Render(st)})
 }

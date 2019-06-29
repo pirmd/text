@@ -12,12 +12,12 @@ import (
 )
 
 //PrintSimpleVersion outputs to w a command's minimal usage message
-func PrintSimpleVersion(w io.Writer, c *Command, st style.Styler) {
+func PrintSimpleVersion(w io.Writer, c *Command, st *style.Styler) {
 	fmt.Fprintf(w, st.Line("%s %s - %s", fmtName(c), c.Version, c.Usage))
 }
 
 //PrintSimpleUsage outputs to w a command's minimal usage message
-func PrintSimpleUsage(w io.Writer, c *Command, st style.Styler) {
+func PrintSimpleUsage(w io.Writer, c *Command, st *style.Styler) {
 	PrintSimpleVersion(w, c, st)
 
 	fmt.Fprintf(w, st.Header("Synopsis:"))
@@ -27,8 +27,8 @@ func PrintSimpleUsage(w io.Writer, c *Command, st style.Styler) {
 }
 
 //PrintLongUsage outputs a complete help message similar to a manpage
-func PrintLongUsage(w io.Writer, c *Command, st style.Styler) {
-	stHelp := st.Extend(style.Styler{
+func PrintLongUsage(w io.Writer, c *Command, st *style.Styler) {
+	stHelp := st.Extend(style.FormatMap{
 		style.FmtHeader:    style.Combine(st.Upper, st.Header),
 		style.FmtParagraph: style.Combine(st.Tab, st.Paragraph),
 		style.FmtLine:      style.Combine(st.Tab, st.Line),
@@ -60,7 +60,7 @@ func GenerateHelpFile(c *Command) error {
 	return nil
 }
 
-func printLongUsage(w io.Writer, c *Command, st style.Styler) {
+func printLongUsage(w io.Writer, c *Command, st *style.Styler) {
 	fmt.Fprintf(w, st.Header("Name"))
 	fmt.Fprintf(w, st.Paragraph("%s - %s", fmtName(c), c.Usage))
 
@@ -109,7 +109,7 @@ func fmtName(c *Command) string {
 	return strings.Replace(c.fullname, " ", "-", -1)
 }
 
-func fmtFlag(flag *option, st style.Styler) string {
+func fmtFlag(flag *option, st *style.Styler) string {
 	switch {
 	case flag.IsBool():
 		return fmt.Sprintf("--%s", st.Bold(flag.name))
@@ -120,7 +120,7 @@ func fmtFlag(flag *option, st style.Styler) string {
 	}
 }
 
-func fmtArg(arg *option, st style.Styler) string {
+func fmtArg(arg *option, st *style.Styler) string {
 	switch {
 	case arg.IsCumulative():
 		return fmt.Sprintf("%s ...", st.Italic(arg.name))
@@ -129,7 +129,7 @@ func fmtArg(arg *option, st style.Styler) string {
 	}
 }
 
-func fmtCmd(c *Command, st style.Styler) (s string) {
+func fmtCmd(c *Command, st *style.Styler) (s string) {
 	if len(c.flags) > 0 {
 		s = fmt.Sprintf("%s [<flags>]", st.Bold(c.name))
 	} else {
@@ -157,7 +157,7 @@ func fmtCmd(c *Command, st style.Styler) (s string) {
 	return
 }
 
-func fmtSynopsis(c *Command, st style.Styler) []string {
+func fmtSynopsis(c *Command, st *style.Styler) []string {
 	prefix := st.Bold(c.name)
 	for _, flag := range c.flags {
 		prefix = fmt.Sprintf("%s [%s]", prefix, fmtFlag(flag, st))

@@ -20,7 +20,7 @@ const ManSection = "1"
 //PrintManpage outputs to w the command's documentation in a manpage-like
 //format.  It does not recurse over sub-commands if any, so that they are not
 //fully documented in this page and need to be generated separatly.
-func PrintManpage(w io.Writer, c *Command, st style.Styler) {
+func PrintManpage(w io.Writer, c *Command, st *style.Styler) {
 	stMan := st.WithAutostyler(style.LightMarkup.Extend(style.Markup{
 		regexp.MustCompile(`\s((?:[^\s]+?)\([1-7]\))\s`):        style.FmtBold,
 		regexp.MustCompile(fmt.Sprintf(`\s(%s)\s`, fmtName(c))): style.FmtBold,

@@ -6,11 +6,11 @@ import (
 )
 
 func testText() (s string) {
-	S := New(Upper, Blue, Header)
-	P := New(Paragraph, Tab)
-	L := New(List, Tab)
+	S := Chainf(Upper, Blue, Header)
+	P := Chainf(Paragraph, Tab)
+	L := Chainf(List, Tab)
 
-	s = TrimSpaceLeft(S("Introduction"))
+	s = TrimLeadingSpace(S("Introduction"))
 	s += P("This small piece of text aims at demonstrating and testing my styling package '%s'.", Underline("style"))
 	s += P("It is writen by a %s English speaker, so pardon any faults", Bold("non-native"))
 	s += S("Available styles")

@@ -10,6 +10,10 @@ const (
 	FmtUpper Format = iota
 	//FmtLower changes a string case to lower case
 	FmtLower
+	//FmtTrimSpace removes any leading or trailing space
+	FmtTrimSpace
+	//FmtTrimLeadingSpace removes any leading space
+	FmtTrimLeadingSpace
 	//FmtBlack decorates a string foreground color to black
 	FmtBlack
 	//FmtRed decorates a string foreground color to red
@@ -59,8 +63,6 @@ const (
 	FmtDefDesc
 	//FmtCode displays text as a code block
 	FmtCode
-	//FmtTrimSpaceLeft removes any leading space
-	FmtTrimSpaceLeft
 	//FmtEscape escapes the input text. FmtEscape is automatically applied and
 	//does not usually needed to be called manually
 	FmtEscape

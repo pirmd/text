@@ -7,7 +7,7 @@ import (
 )
 
 func testTextSyntax() (s string) {
-	Section := New(Upper, Blue, Header)
+	Section := Chainf(Upper, Blue, Header)
 
 	s = Section("Introduction")
 	s += Paragraph("This small piece of text aims at demonstrating and testing my styling package '*style*'.")
@@ -32,11 +32,11 @@ func TestSyntaxToColorTerm(t *testing.T) {
 }
 
 func TestSyntaxLightMarkup(t *testing.T) {
-	testStyler := Styler{
+	testStyler := New(FormatMap{
 		FmtBold:   Sprintf("BOLD{%s}"),
 		FmtItalic: Sprintf("ITALIC{%s}"),
 		FmtCode:   Sprintf("CODE{%s}"),
-	}
+	})
 
 	testCases := []struct {
 		in  string

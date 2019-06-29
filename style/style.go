@@ -12,6 +12,9 @@ type FormatFn func(string) string
 //fmt.Sprintf
 type FormatfFn func(format string, a ...interface{}) string
 
+//FormatMap registers a set of FormatFn and maps them to a style's Format
+type FormatMap map[Format]FormatFn
+
 //must is a wrapper to transform a function that outputs (string, error) to a
 //FormatFn signature.  It is done by capturing the error and feedbacking it to
 //the output string (similar to fprintf principle)
@@ -44,8 +47,8 @@ func Chain(fn ...FormatFn) FormatFn {
 	}
 }
 
-//New creates a new FormatfFn styling function by combining existing styles
-func New(fn ...FormatfFn) FormatfFn {
+//Chainf creates a new FormatfFn styling function by combining existing FormatFn
+func Chainf(fn ...FormatfFn) FormatfFn {
 	//TODO(pirmd): figure out how to prevent escape function to be applied each time 'f' is call
 	return func(format string, a ...interface{}) string {
 		s := fmt.Sprintf(format, a...)
@@ -71,17 +74,40 @@ func Combine(fn ...FormatfFn) FormatFn {
 //Default to the Term styler
 var CurrentStyler = Term
 
-//Styler repesent a collection of styling functions that can decorate a string
+//Styler repesents a collection of styling functions that can decorate a string
 //apply a given text format.  Styler usually implements a given markup idiom
-//but are pretty flexible to support things like decorating a text with ansi
+//but is pretty flexible to support things like decorating a text with ANSI
 //colors escape sequences.
-type Styler map[Format]FormatFn
+type Styler struct {
+	fmtMap map[Format]FormatFn
+}
+
+//New creates a new Styler
+func New(fmtMap FormatMap) *Styler {
+	return &Styler{
+		fmtMap: fmtMap,
+	}
+}
+
+//Extend dupplicates current Styler and extends it.
+//Existing styles will be overriden by the ones provided
+func (st *Styler) Extend(fmtMap FormatMap) *Styler {
+	stext := New(FormatMap{})
+	for f, fn := range st.fmtMap {
+		stext.fmtMap[f] = fn
+	}
+
+	for f, fn := range fmtMap {
+		stext.fmtMap[f] = fn
+	}
+	return stext
+}
 
 //get retrieves a FormatFn from the given format.  If no FormatFn exists for this
 //format, it returns a "do nothing" function that returns the input string
 //"as-is".
-func (st Styler) get(f Format) FormatFn {
-	if fn, ok := st[f]; ok {
+func (st *Styler) get(f Format) FormatFn {
+	if fn, ok := st.fmtMap[f]; ok {
 		return fn
 	}
 	return func(s string) string { return s }
@@ -89,7 +115,7 @@ func (st Styler) get(f Format) FormatFn {
 
 //style retrieves a FormatFn from the markup definition and ensures that
 //escaping and auto-styling functions are applied to input text, if any.
-func (st Styler) style(f Format) FormatFn {
+func (st *Styler) style(f Format) FormatFn {
 	fn := st.get(f)
 	return func(s string) string {
 		s = st.get(FmtEscape)(s)
@@ -99,21 +125,8 @@ func (st Styler) style(f Format) FormatFn {
 }
 
 //stylef wraps style to offer an interface similar to fmt.Sprintf
-func (st Styler) stylef(f Format) FormatfFn {
+func (st *Styler) stylef(f Format) FormatfFn {
 	return func(format string, a ...interface{}) string {
 		return st.style(f)(fmt.Sprintf(format, a...))
 	}
-}
-
-//Extend dupplicates current Styler and extends it.
-//Existing styles will be overriden by the ones provided
-func (st Styler) Extend(stadd Styler) Styler {
-	stext := Styler{}
-	for f, fn := range st {
-		stext[f] = fn
-	}
-	for f, fn := range stadd {
-		stext[f] = fn
-	}
-	return stext
 }

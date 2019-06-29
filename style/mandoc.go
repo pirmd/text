@@ -2,7 +2,7 @@ package style
 
 //Mandoc is a sub-set of troff markup featuring common used macro for building
 //man pages
-var Mandoc = core.Extend(Styler{
+var Mandoc = core.Extend(FormatMap{
 	FmtBold:   Sprintf("\\fB%s\\fP"),
 	FmtItalic: Sprintf("\\fI%s\\fP"),
 

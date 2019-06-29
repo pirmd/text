@@ -22,16 +22,18 @@ var (
 
 //core is a minimal styler providing function that almost everybody wants to
 //have
-var core = Styler{
-	FmtUpper: strings.ToUpper,
-	FmtLower: strings.ToLower,
-}
+var core = New(FormatMap{
+	FmtUpper:            strings.ToUpper,
+	FmtLower:            strings.ToLower,
+	FmtTrimSpace:        strings.TrimSpace,
+	FmtTrimLeadingSpace: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
+})
 
-//PlainText is a Styler that provides a minimum style for plain texts Wrap
-//formatting wraps text to the maximum length of DefaultTxtWidth.
+//PlainText is a Styler that provides a minimum style for plain texts. Wrap
+//format wraps text to the maximum length specified by DefaultTxtWidth.
 //
-//Chaining multiples Wrap or Tab will in most cases void the result
-var PlainText = core.Extend(Styler{
+//Chaining multiples Wrap or Tab will, in most cases, void the result
+var PlainText = core.Extend(FormatMap{
 	FmtDocHeader: Sprintf("%s\n"),
 	FmtHeader:    Sprintf("\n%s\n"),
 	FmtParagraph: Sprintf("\n%s\n"),
@@ -43,8 +45,6 @@ var PlainText = core.Extend(Styler{
 	FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
 	FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },
 	FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, DefaultTxtWidth) },
-
-	FmtTrimSpaceLeft: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
 })
 
 func init() {
