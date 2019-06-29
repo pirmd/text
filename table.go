@@ -15,10 +15,9 @@ const (
 
 //Table represents a table
 type Table struct {
-	maxWidth int
-	sepV     string //TODO(pirmd): horizontal separator is not yet implemented
-
-	cells [][]string
+	maxWidth   int
+	sepV, sepH string
+	cells      [][]string
 }
 
 //NewTable returns a new empty table. New tables default to no grid with a
@@ -44,9 +43,12 @@ func (t *Table) SetMaxWidth(w int) *Table {
 	return t
 }
 
-//SetGrid manually defines the grid separators
-func (t *Table) SetGrid(sepV string) *Table {
-	t.sepV = sepV
+//SetGrid manually defines the grid separators, respectivelly vertical
+//separator between columns and horizontal separating captions' row (first row)
+//from table content.
+//An empty seperator for horizontal means no separation at all
+func (t *Table) SetGrid(sepV, sepH string) *Table {
+	t.sepV, t.sepH = sepV, sepH
 	return t
 }
 
@@ -95,6 +97,16 @@ func (t *Table) Draw() string {
 		}
 
 		rows = append(rows, columnize(t.sepV, col...))
+	}
+
+	if len(rows) > 1 && t.sepH != "" {
+		var sepH []string
+		for _, l := range colLen {
+			sepH = append(sepH, visualRepeat(t.sepH, l))
+		}
+		sepRow := strings.Join(sepH, t.sepV)
+
+		rows = append([]string{rows[0], sepRow}, rows[1:]...)
 	}
 
 	return strings.Join(rows, "\n")

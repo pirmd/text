@@ -73,3 +73,16 @@ func visualPad(s string, size int, padRune rune) string {
 	}
 	return s + string(pad)
 }
+
+//visualRepeat repeats s until given size is reached
+func visualRepeat(s string, size int) string {
+	l := visualLen(s)
+	r := s
+	for i := l; i <= size; i = i + l {
+		if i == size {
+			return r
+		}
+		r = r + s
+	}
+	return visualTruncate(r, size)
+}
