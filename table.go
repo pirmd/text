@@ -75,8 +75,8 @@ func (t *Table) Col(col ...[]string) *Table {
 	return t
 }
 
-//Title sets the titles of the table
-func (t *Table) Title(row ...string) *Table {
+//Captions sets the columns' captions (first row) of the table
+func (t *Table) Captions(row ...string) *Table {
 	t.cells = append([][]string{row}, t.cells...)
 	return t
 }
