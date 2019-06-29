@@ -117,6 +117,11 @@ func (t *Table) String() string {
 	return t.Draw()
 }
 
+//DrawTable draws a table out of a list of rows
+func DrawTable(width int, sepV, sepH string, rows ...[]string) string {
+	return NewTable().SetMaxWidth(width).SetGrid(sepV, sepH).Rows(rows...).String()
+}
+
 func columnize(sepV string, col ...string) (row string) {
 	for i, r := range multilinesRow(col) {
 		if i == 0 {
