@@ -2,6 +2,7 @@ package style
 
 import (
 	"fmt"
+	"strings"
 )
 
 //FormatFn represents a function that can transform a string to another one
@@ -75,32 +76,69 @@ func Combine(fn ...FormatfFn) FormatFn {
 var CurrentStyler = Term
 
 //Styler repesents a collection of styling functions that can decorate a string
-//apply a given text format.  Styler usually implements a given markup idiom
-//but is pretty flexible to support things like decorating a text with ANSI
-//colors escape sequences.
+//to apply a given text format.
+//
+//Styler is pretty flexible and can be customized through a FormatMap for
+//simple text decoration cases. More advanced text formatting are provided for
+//table
 type Styler struct {
-	fmtMap map[Format]FormatFn
+	fmtMap  map[Format]FormatFn
+	tableFn func(...[]string) string
 }
 
-//New creates a new Styler
-func New(fmtMap FormatMap) *Styler {
+//New creates a new Styler.
+//Provided tableFn  gives a recipe to build a table from the provided rows
+func New(fmtMap FormatMap, tableFn func(...[]string) string) *Styler {
 	return &Styler{
-		fmtMap: fmtMap,
+		fmtMap:  fmtMap,
+		tableFn: tableFn,
 	}
 }
 
 //Extend dupplicates current Styler and extends it.
-//Existing styles will be overriden by the ones provided
-func (st *Styler) Extend(fmtMap FormatMap) *Styler {
-	stext := New(FormatMap{})
+//Existing formats will be overriden by the ones provided. Extended styling
+//functions (like table drawing) will be replaced by the provided ones when not
+//nil.
+func (st *Styler) Extend(stadd *Styler) *Styler {
+	stext := New(FormatMap{}, st.tableFn)
 	for f, fn := range st.fmtMap {
 		stext.fmtMap[f] = fn
 	}
 
-	for f, fn := range fmtMap {
+	for f, fn := range stadd.fmtMap {
 		stext.fmtMap[f] = fn
 	}
+	if stadd.tableFn != nil {
+		stext.tableFn = stadd.tableFn
+	}
+
 	return stext
+}
+
+//Table draws a table according to style's table drawing function.
+//If no style's table drawing exists, it simply list tab-separated
+//text per line for each row.
+//For styles where table depend on text width to adjust columns width, it is
+//not advised to chained it with tabulation or indentataion-based formats.
+func (st *Styler) Table(rows ...[]string) string {
+	if st.tableFn != nil {
+		return st.tableFn(rows...)
+	}
+
+	var r []string
+	for _, row := range rows {
+		r = append(r, strings.Join(row, "\t"))
+	}
+	s := strings.Join(r, "\n")
+
+	s = st.get(FmtEscape)(s)
+	s = st.get(FmtAuto)(s)
+	return s
+}
+
+//Table draws a table using the current Styler
+func Table(rows ...[]string) string {
+	return CurrentStyler.Table(rows...)
 }
 
 //get retrieves a FormatFn from the given format.  If no FormatFn exists for this

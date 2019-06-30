@@ -22,6 +22,7 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
   functions like table
   Introduce new functions/type to manage Styler (FormatMap, New() and newer
   Extend() api)
+- cli/style: add support to format tables
 - cli/style/text: add support for table's horizontal separators
 - cli/style/text: rename Table.Title() to Table.Captions(), which
   should hopefully be less misleading

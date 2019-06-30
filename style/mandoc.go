@@ -2,21 +2,24 @@ package style
 
 //Mandoc is a sub-set of troff markup featuring common used macro for building
 //man pages
-var Mandoc = core.Extend(FormatMap{
-	FmtBold:   Sprintf("\\fB%s\\fP"),
-	FmtItalic: Sprintf("\\fI%s\\fP"),
+var Mandoc = core.Extend(New(
+	FormatMap{
+		FmtBold:   Sprintf("\\fB%s\\fP"),
+		FmtItalic: Sprintf("\\fI%s\\fP"),
 
-	FmtDocHeader: Sprintf(".TH %s\n"),
-	FmtHeader:    Sprintf("\n.SH %s\n"),
-	FmtParagraph: Sprintf(".PP\n%s\n"),
-	FmtLine:      Sprintf(".br\n%s\n"),
-	FmtList:      Sprintf(".RS\n%s\n.RE\n"),
-	FmtDefTerm:   Sprintf("\n.TP\n%s\n"),
-	FmtDefDesc:   Sprintf("%s\n"),
-	FmtCode:      Sprintf(".PP\n.RS\n.nf\n%s\n.fi\n.RE\n"),
+		FmtDocHeader: Sprintf(".TH %s\n"),
+		FmtHeader:    Sprintf("\n.SH %s\n"),
+		FmtParagraph: Sprintf(".PP\n%s\n"),
+		FmtLine:      Sprintf(".br\n%s\n"),
+		FmtList:      Sprintf(".RS\n%s\n.RE\n"),
+		FmtDefTerm:   Sprintf("\n.TP\n%s\n"),
+		FmtDefDesc:   Sprintf("%s\n"),
+		FmtCode:      Sprintf(".PP\n.RS\n.nf\n%s\n.fi\n.RE\n"),
 
-	FmtEscape: escapeMandoc,
-})
+		FmtEscape: escapeMandoc,
+	},
+	nil,
+))
 
 func escapeMandoc(s string) string {
 	var b []byte

@@ -6,7 +6,7 @@
     It is writen by a [1mnon-native[22m English speaker, so pardon 
     any faults
 
-[34mAVAILABLE STYLES[0m
+[34mEXAMPLES OF AVAILABLE STYLES[0m
     
     Section [4mIntroduction[24m already demonstrates useful styles 
     from package 'styles', this section completes with most 
@@ -17,10 +17,9 @@
     It also knows how to format [3mlists[23m:
     
     - This very long and detailed sentence is here to 
-    demonstrate that list can be formatted and wrapped 
-    because it hopefully be so long that it will not fulfill
-    the maximum number of authorized char per lines is 
-    reached.
+    demonstrate that list can be formatted and wrapped. It 
+    should hopefully be so long that it will not fulfill the
+    maximum number of authorized char per lines is reached.
     
     - It is also possible to check that paragraph inside 
     lists are respected.
@@ -31,3 +30,17 @@
     [1mstyle[22m:
         A particular procedure by which something is done; a
         manner or way.
+
+[34mDEMONSTRATING TABLES[0m
+    
+    Package 'style' supports drawing tables for most basic 
+    cases. Using Tab to align tables should be done 
+    carefully as table way to guess optimum columns size 
+    does not take into account the tabulation
+
+Column1      Column2            Column3                     
+------------ ------------------ ----------------------------
+Basic column This one is here   Last but not least shows    
+             to demonstrate     [1mformating[22m within the table  
+             that several lines                             
+             column work                                    

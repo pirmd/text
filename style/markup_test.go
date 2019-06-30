@@ -20,6 +20,12 @@ func testTextSyntax() (s string) {
 	s += List("It is also possible to check that paragraph inside lists are respected.\nAs you can see here in this simple example.")
 	s += Paragraph("It also knows how to _define_ terms:")
 	s += DefTerm("style") + DefDesc("A particular procedure by which something is done; a manner or way.")
+	s += Section("Demonstrating tables")
+	s += Paragraph("Package '*style*' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation")
+	s += Table(
+		[]string{"Column1", "Column2", "Column3"},
+		[]string{"Basic column", "This one is here\nto demonstrate\nthat several lines\ncolumn work", "Last but not least, shows **formating** within the table"},
+	)
 
 	return s
 }
@@ -36,7 +42,7 @@ func TestSyntaxLightMarkup(t *testing.T) {
 		FmtBold:   Sprintf("BOLD{%s}"),
 		FmtItalic: Sprintf("ITALIC{%s}"),
 		FmtCode:   Sprintf("CODE{%s}"),
-	})
+	}, nil)
 
 	testCases := []struct {
 		in  string

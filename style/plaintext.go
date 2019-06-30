@@ -22,30 +22,38 @@ var (
 
 //core is a minimal styler providing function that almost everybody wants to
 //have
-var core = New(FormatMap{
-	FmtUpper:            strings.ToUpper,
-	FmtLower:            strings.ToLower,
-	FmtTrimSpace:        strings.TrimSpace,
-	FmtTrimLeadingSpace: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
-})
+var core = New(
+	FormatMap{
+		FmtUpper:            strings.ToUpper,
+		FmtLower:            strings.ToLower,
+		FmtTrimSpace:        strings.TrimSpace,
+		FmtTrimLeadingSpace: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
+	},
+	nil,
+)
 
 //PlainText is a Styler that provides a minimum style for plain texts. Wrap
 //format wraps text to the maximum length specified by DefaultTxtWidth.
 //
-//Chaining multiples Wrap or Tab will, in most cases, void the result
-var PlainText = core.Extend(FormatMap{
-	FmtDocHeader: Sprintf("%s\n"),
-	FmtHeader:    Sprintf("\n%s\n"),
-	FmtParagraph: Sprintf("\n%s\n"),
-	FmtLine:      Sprintf("%s\n"),
-	FmtList:      Sprintf("\n- %s\n"),
-	FmtDefTerm:   Sprintf("\n%s:\n"),
-	FmtDefDesc:   Sprintf("%s\n"),
+//Chaining multiples Wrap or Tab will, in most cases, void the result.
+var PlainText = core.Extend(New(
+	FormatMap{
+		FmtDocHeader: Sprintf("%s\n"),
+		FmtHeader:    Sprintf("\n%s\n"),
+		FmtParagraph: Sprintf("\n%s\n"),
+		FmtLine:      Sprintf("%s\n"),
+		FmtList:      Sprintf("\n- %s\n"),
+		FmtDefTerm:   Sprintf("\n%s:\n"),
+		FmtDefDesc:   Sprintf("%s\n"),
 
-	FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
-	FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },
-	FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, DefaultTxtWidth) },
-})
+		FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
+		FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },
+		FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, DefaultTxtWidth) },
+	},
+
+	//tableFn
+	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", rows...) },
+))
 
 func init() {
 	indent2Prefix = append(IndentPrefix, IndentPrefix...)

@@ -28,11 +28,14 @@ func PrintSimpleUsage(w io.Writer, c *Command, st *style.Styler) {
 
 //PrintLongUsage outputs a complete help message similar to a manpage
 func PrintLongUsage(w io.Writer, c *Command, st *style.Styler) {
-	stHelp := st.Extend(style.FormatMap{
-		style.FmtHeader:    style.Combine(st.Upper, st.Header),
-		style.FmtParagraph: style.Combine(st.Tab, st.Paragraph),
-		style.FmtLine:      style.Combine(st.Tab, st.Line),
-	}).WithAutostyler(style.LightMarkup)
+	stHelp := st.Extend(style.New(
+		style.FormatMap{
+			style.FmtHeader:    style.Combine(st.Upper, st.Header),
+			style.FmtParagraph: style.Combine(st.Tab, st.Paragraph),
+			style.FmtLine:      style.Combine(st.Tab, st.Line),
+		},
+		nil,
+	)).WithAutostyler(style.LightMarkup)
 
 	printLongUsage(w, c, stHelp)
 }
