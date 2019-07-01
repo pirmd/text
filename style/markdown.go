@@ -14,3 +14,4 @@ var Markdown = PlainText.Extend(New(
 ))
 
 //XXX: Introduce Code and Bloc, transfer them to plaintext?
+//XXX: Introduce escaping logic

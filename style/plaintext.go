@@ -57,7 +57,6 @@ var PlainText = core.Extend(New(
 
 //XXX: add a Numbered Item
 //XXX: create a Tab(n) function -> FormatFn
-
 //XXX: DrawTable -> Grid to accomodate Pandoc multilines format (sepHeader, sepRow, sepCol)
 
 func init() {
