@@ -18,7 +18,7 @@ var Term = PlainText.Extend(New(
 	},
 
 	//tableFn
-	func(rows ...[]string) string { return "\n" + text.DrawTable(termWidth, " ", "-", rows...) },
+	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", " ", rows...) },
 ))
 
 //ColorTerm extends PlainText markup with colors and text styles that can be

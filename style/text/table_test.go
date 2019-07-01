@@ -32,7 +32,7 @@ func TestTable(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", "").SetMaxWidth(24).Rows(tc.in...).String()
+		got := NewTable().SetGrid("|", "", "").SetMaxWidth(24).Rows(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -50,7 +50,7 @@ func TestTableByCol(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", "").SetMaxWidth(24).Col(tc.in...).String()
+		got := NewTable().SetGrid("|", "", "").SetMaxWidth(24).Col(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -61,19 +61,44 @@ func TestTableWithSepH(t *testing.T) {
 	testTable := [][]string{{"Col1.1", "Col1.2", "Col1.3"}, {"Col2.1", "Col2.2", "Col2.3"}}
 
 	testCases := []struct {
-		in  string
+		inT [][]string
+		inH string
 		out string
 	}{
-		{"", "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3"},
-		{"-", "Col1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3"},
-		{"-*", "Col1.1|Col1.2|Col1.3\n-*-*-*|-*-*-*|-*-*-*\nCol2.1|Col2.2|Col2.3"},
-		{"-**-", "Col1.1|Col1.2|Col1.3\n-**--*|-**--*|-**--*\nCol2.1|Col2.2|Col2.3"},
+		{testTable, "", "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3"},
+		{testTable, "-", "Col1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3"},
+		{testTable, "-*", "Col1.1|Col1.2|Col1.3\n-*-*-*|-*-*-*|-*-*-*\nCol2.1|Col2.2|Col2.3"},
+		{testTable, "-**-", "Col1.1|Col1.2|Col1.3\n-**--*|-**--*|-**--*\nCol2.1|Col2.2|Col2.3"},
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", tc.in).SetMaxWidth(24).Rows(testTable...).String()
+		got := NewTable().SetGrid("|", "", tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
 		if got != tc.out {
-			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
+			t.Errorf("table failed for sep='%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.inH, tc.out, got)
+		}
+	}
+}
+
+func TestTableWithGrid(t *testing.T) {
+	testTable := [][]string{{"Col1.1", "Col1.2", "Col1.3"}, {"Col2.1", "Col2.2", "Col2.3"}, {"Col3.1", "Col3.2", "Col3.3"}}
+
+	testCases := []struct {
+		inT      [][]string
+		inC, inH string
+		out      string
+	}{
+		{testTable, "", "", "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3\nCol3.1|Col3.2|Col3.3"},
+		{testTable, "-", "", "------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\nCol3.1|Col3.2|Col3.3\n------|------|------"},
+		{testTable, "", "-", "Col1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n------|------|------\nCol3.1|Col3.2|Col3.3"},
+		{testTable, "-", "=", "------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n======|======|======\nCol3.1|Col3.2|Col3.3\n------|------|------"},
+		{[][]string{{"Col1.1", "Col1.2", "Col1.3"}}, "-", "=", "------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------"},
+		{[][]string{{"Col1.1", "Col1.2", "Col1.3"}}, "", "=", "Col1.1|Col1.2|Col1.3"},
+	}
+
+	for _, tc := range testCases {
+		got := NewTable().SetGrid("|", tc.inC, tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
+		if got != tc.out {
+			t.Errorf("table failed for sep_C='%s', sep_H='%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.inC, tc.inH, tc.out, got)
 		}
 	}
 }

@@ -45,4 +45,6 @@ Column1 | Column2 | Column3
 Basic column | This one is here
 to demonstrate
 that colums with several lines work too | Last but not least shows \fBformating\fP within the table
+.br
+ | This second row is here to test multi\-lines rows format | Also possibly a good opportunity to check escaping *sequence*
 

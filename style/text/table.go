@@ -15,9 +15,9 @@ const (
 
 //Table represents a table
 type Table struct {
-	maxWidth   int
-	sepV, sepH string
-	cells      [][]string
+	maxWidth         int
+	sepV, sepC, sepH string
+	cells            [][]string
 }
 
 //NewTable returns a new empty table. New tables default to no grid with a
@@ -43,12 +43,13 @@ func (t *Table) SetMaxWidth(w int) *Table {
 	return t
 }
 
-//SetGrid manually defines the grid separators, respectivelly vertical
-//separator between columns and horizontal separating captions' row (first row)
-//from table content.
-//An empty seperator for horizontal means no separation at all
-func (t *Table) SetGrid(sepV, sepH string) *Table {
-	t.sepV, t.sepH = sepV, sepH
+//SetGrid defines the grid separators, respectively vertical separator between
+//columns and horizontal separating captions' row from table content (before
+//and after first row, after last row) and between rows.
+//
+//An empty seperator means no separation at all.
+func (t *Table) SetGrid(sepV, sepC, sepH string) *Table {
+	t.sepV, t.sepC, t.sepH = sepV, sepC, sepH
 	return t
 }
 
@@ -81,35 +82,27 @@ func (t *Table) Captions(row ...string) *Table {
 	return t
 }
 
-//Draw draws the table.  Columns length are determined in order to maximize the
-//use of the table maximum width Text is automatically wrapped to fit into the
-//columns size.  This algorithm to define colums' size has limitation and will
-//provide unreadable output if available table's width is too short compared to
-//content length.
+//Draw draws the table.
+//Columns length are determined in order to maximize the use of the table
+//maximum width Text is automatically wrapped to fit into the columns size.
+//
+//The algorithm that defines colums' size has limitation and will provide
+//unreadable output if available table's width is too short compared to content
+//length.
 func (t *Table) Draw() string {
-	colLen := colMaxLen(t.maxWidth, visualLen(t.sepV), t.cells)
+	maxColLen := colMaxLen(t.maxWidth, visualLen(t.sepV), t.cells)
 
 	rows := []string{}
 	for _, row := range t.cells {
 		col := []string{}
 		for i, cell := range row {
-			col = append(col, Justify(cell, colLen[i]))
+			col = append(col, Justify(cell, maxColLen[i]))
 		}
 
 		rows = append(rows, columnize(t.sepV, col...))
 	}
 
-	if len(rows) > 1 && t.sepH != "" {
-		var sepH []string
-		for _, l := range colLen {
-			sepH = append(sepH, visualRepeat(t.sepH, l))
-		}
-		sepRow := strings.Join(sepH, t.sepV)
-
-		rows = append([]string{rows[0], sepRow}, rows[1:]...)
-	}
-
-	return strings.Join(rows, "\n")
+	return strings.Join(t.addHorizontalGrid(rows, maxColLen), "\n")
 }
 
 //String returns a string representation of the table
@@ -117,9 +110,64 @@ func (t *Table) String() string {
 	return t.Draw()
 }
 
+func (t *Table) addHorizontalGrid(rows []string, colLen []int) []string {
+	var rowsWithGrid []string
+
+	var sepH string
+	if t.sepH != "" {
+		var sep []string
+		for _, l := range colLen {
+			sep = append(sep, visualRepeat(t.sepH, l))
+		}
+
+		sepH = strings.Join(sep, t.sepV)
+	}
+
+	var sepC string
+	if t.sepC != "" {
+		var sep []string
+		for _, l := range colLen {
+			sep = append(sep, visualRepeat(t.sepC, l))
+		}
+
+		sepC = strings.Join(sep, t.sepV)
+	}
+
+	if t.sepH != "" {
+		if len(rows) > 2 {
+			for _, row := range rows[2:] {
+				rowsWithGrid = append(rowsWithGrid, sepH, row)
+			}
+		}
+	} else if len(rows) > 2 {
+		rowsWithGrid = append(rowsWithGrid, rows[2:]...)
+	}
+
+	if t.sepC != "" {
+		if len(rows) > 1 {
+			rowsWithGrid = append([]string{sepC, rows[0], sepC, rows[1]}, rowsWithGrid...)
+			rowsWithGrid = append(rowsWithGrid, sepC)
+		} else {
+			rowsWithGrid = append([]string{sepC, rows[0], sepC})
+		}
+	} else {
+		if t.sepH != "" && len(rows) > 1 {
+			//Situation where we don't want any caption separation but ask for an
+			//horizontal separation
+			rowsWithGrid = append([]string{rows[0], sepH, rows[1]}, rowsWithGrid...)
+		} else if len(rows) > 1 {
+			rowsWithGrid = append(rows[0:2], rowsWithGrid...)
+		} else {
+			rowsWithGrid = append([]string{rows[0]}, rowsWithGrid...)
+		}
+	}
+
+	return rowsWithGrid
+}
+
 //DrawTable draws a table out of a list of rows
-func DrawTable(width int, sepV, sepH string, rows ...[]string) string {
-	return NewTable().SetMaxWidth(width).SetGrid(sepV, sepH).Rows(rows...).String()
+func DrawTable(width int, sepV, sepC, sepH string, rows ...[]string) string {
+	return NewTable().SetMaxWidth(width).SetGrid(sepV, sepC, sepH).Rows(rows...).String()
 }
 
 func columnize(sepV string, col ...string) (row string) {

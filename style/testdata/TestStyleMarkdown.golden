@@ -42,9 +42,15 @@ cases. Using Tab to align tables should be done carefully as
 table way to guess optimum columns size does not take into 
 account the tabulation
 
+------------ ----------------------- -----------------------
 Column1      Column2                 Column3                
 ------------ ----------------------- -----------------------
 Basic column This one is here        Last but not least     
              to demonstrate          shows **formating**    
              that colums with        within the table       
              several lines work too                         
+                                                            
+             This second row is here Also possibly a good   
+             to test multi-lines     opportunity to check   
+             rows format             escaping *sequence*    
+------------ ----------------------- -----------------------

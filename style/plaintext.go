@@ -52,12 +52,11 @@ var PlainText = core.Extend(New(
 	},
 
 	//tableFn
-	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", rows...) },
+	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", " ", rows...) },
 ))
 
 //XXX: add a Numbered Item
 //XXX: create a Tab(n) function -> FormatFn
-//XXX: DrawTable -> Grid to accomodate Pandoc multilines format (sepHeader, sepRow, sepCol)
 
 func init() {
 	indent2Prefix = append(IndentPrefix, IndentPrefix...)

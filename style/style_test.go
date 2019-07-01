@@ -31,6 +31,7 @@ func testText() (s string) {
 	s += Table(
 		[]string{"Column1", "Column2", "Column3"},
 		[]string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Last but not least shows " + Bold("formating") + " within the table"},
+		[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a good opportunity to check escaping *sequence*"},
 	)
 
 	return
