@@ -28,7 +28,11 @@ A particular procedure by which something is done; a manner or way.
 .SH DEMONSTRATING TABLES
 .PP
 Package 'style' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation
-Column1	Column2	Column3
-Basic column	This one is here
+.PP
+.br
+Column1 | Column2 | Column3
+.br
+Basic column | This one is here
 to demonstrate
-that colums with several lines work too	Last but not least shows \fBformating\fP within the table
+that colums with several lines work too | Last but not least shows \fBformating\fP within the table
+

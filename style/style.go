@@ -116,24 +116,35 @@ func (st *Styler) Extend(stadd *Styler) *Styler {
 }
 
 //Table draws a table according to style's table drawing function.
-//If no style's table drawing exists, it simply list tab-separated
-//text per line for each row.
-//For styles where table depend on text width to adjust columns width, it is
-//not advised to chained it with tabulation or indentataion-based formats.
+//If no style's table drawing exists, it simply outputs "|"-separated text per
+//line for each row.
+//For styles where table depends on text width to adjust columns width, it is
+//not advised to chained it with tabulation or indentation-based formats.
 func (st *Styler) Table(rows ...[]string) string {
-	if st.tableFn != nil {
-		return st.tableFn(rows...)
-	}
-
-	var r []string
+	var autoRows [][]string
 	for _, row := range rows {
-		r = append(r, strings.Join(row, "\t"))
+		var autoRow []string
+		for _, cell := range row {
+			autoRow = append(autoRow, st.auto(cell))
+		}
+		autoRows = append(autoRows, autoRow)
 	}
-	s := strings.Join(r, "\n")
 
-	s = st.get(FmtEscape)(s)
-	s = st.get(FmtAuto)(s)
-	return s
+	if st.tableFn == nil {
+		//Default poor-man table ("|"-separated columns)
+		var r []string
+		for _, row := range autoRows {
+			r = append(r, strings.Join(row, " | "))
+		}
+
+		var s string
+		for _, row := range r {
+			s += st.Line(row)
+		}
+		return st.Paragraph(s)
+	}
+
+	return st.tableFn(rows...)
 }
 
 //Table draws a table using the current Styler
@@ -156,9 +167,7 @@ func (st *Styler) get(f Format) FormatFn {
 func (st *Styler) style(f Format) FormatFn {
 	fn := st.get(f)
 	return func(s string) string {
-		s = st.get(FmtEscape)(s)
-		s = st.get(FmtAuto)(s)
-		return fn(s)
+		return fn(st.auto(s))
 	}
 }
 
@@ -167,4 +176,11 @@ func (st *Styler) stylef(f Format) FormatfFn {
 	return func(format string, a ...interface{}) string {
 		return st.style(f)(fmt.Sprintf(format, a...))
 	}
+}
+
+//auto run automatic formatting
+func (st *Styler) auto(s string) string {
+	s = st.get(FmtEscape)(s)
+	s = st.get(FmtAuto)(s)
+	return s
 }
