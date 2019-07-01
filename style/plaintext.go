@@ -42,7 +42,7 @@ var PlainText = core.Extend(New(
 		FmtHeader:    Sprintf("\n%s\n"),
 		FmtParagraph: Sprintf("\n%s\n"),
 		FmtLine:      Sprintf("%s\n"),
-		FmtList:      Sprintf("\n- %s\n"),
+		FmtList:      Sprintf("- %s\n"),
 		FmtDefTerm:   Sprintf("\n%s:\n"),
 		FmtDefDesc:   Sprintf("%s\n"),
 
@@ -54,6 +54,11 @@ var PlainText = core.Extend(New(
 	//tableFn
 	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", rows...) },
 ))
+
+//XXX: add a Numbered Item
+//XXX: create a Tab(n) function -> FormatFn
+
+//XXX: DrawTable -> Grid to accomodate Pandoc multilines format (sepHeader, sepRow, sepCol)
 
 func init() {
 	indent2Prefix = append(IndentPrefix, IndentPrefix...)

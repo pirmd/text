@@ -21,6 +21,8 @@ var Mandoc = core.Extend(New(
 	nil,
 ))
 
+//XXX: add mandoc tbl extension
+
 func escapeMandoc(s string) string {
 	var b []byte
 	var isEscaped bool
