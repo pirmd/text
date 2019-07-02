@@ -31,7 +31,7 @@ func visualLen(s string) int {
 	return length
 }
 
-//TODO(pirmd): when an ansi escape sequence are found, an ansi reset sequence
+//TODO(pirmd): when an ansi escape sequence is found, an ansi reset sequence
 //is appended to the final truncated even if there is no specific need (reset
 //sequence already exists)
 

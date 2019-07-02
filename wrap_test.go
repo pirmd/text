@@ -28,17 +28,31 @@ func TestWrap(t *testing.T) {
 }
 
 func TestWrapAndIndent(t *testing.T) {
-	testCase := "This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached."
-	wanted := `    This very long and detailed sentence
-    is here to demonstrate that list can
-    be formatted and wrapped because it 
-    hopefully be so long that it will 
-    not fulfill the maximum number of 
-    authorized char per lines is 
-    reached.`
+	testCases := []struct {
+		inP, inT string
+		out      string
+	}{
+		{
+			"    ",
+			"Test",
+			"    Test",
+		},
+		{
+			"  > ",
+			"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.",
+			"  > This very long and detailed sentence\n  > is here to demonstrate that list can\n  > be formatted and wrapped because it \n  > hopefully be so long that it will \n  > not fulfill the maximum number of \n  > authorized char per lines is \n  > reached.",
+		},
+		{
+			"  \x1b[1m>\x1b[22m ",
+			"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.",
+			"  \x1b[1m>\x1b[22m This very long and detailed sentence\n  \x1b[1m>\x1b[22m is here to demonstrate that list can\n  \x1b[1m>\x1b[22m be formatted and wrapped because it \n  \x1b[1m>\x1b[22m hopefully be so long that it will \n  \x1b[1m>\x1b[22m not fulfill the maximum number of \n  \x1b[1m>\x1b[22m authorized char per lines is \n  \x1b[1m>\x1b[22m reached.",
+		},
+	}
 
-	got := Tab(testCase, []byte("    "), 40)
-	if got != wanted {
-		t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%s\nGot   :\n%s\n", wanted, got)
+	for _, tc := range testCases {
+		got := Tab(tc.inT, tc.inP, 40)
+		if got != tc.out {
+			t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%s\nGot   :\n%s\n", tc.out, got)
+		}
 	}
 }
