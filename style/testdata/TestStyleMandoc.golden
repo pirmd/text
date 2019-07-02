@@ -17,13 +17,7 @@ This very long and detailed sentence is here to demonstrate that list can be for
 .RS
 It is also a nice\-to have feature that sub\-lists are supported
 .RE
-.RS
-Sub\-list is here
-.RE
-.RS
-Sub\-list is also here
-.RE
-.RS
+Sub\-list is hereSub\-list is also here.RS
 It is also possible to have a list item containing several paragraphs
 .RE
 .PP

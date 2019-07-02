@@ -42,9 +42,11 @@ var PlainText = core.Extend(New(
 		FmtHeader:    Sprintf("\n%s\n"),
 		FmtParagraph: Sprintf("\n%s\n"),
 		FmtLine:      Sprintf("%s\n"),
-		FmtList:      Sprintf("- %s\n"),
 		FmtDefTerm:   Sprintf("\n%s:\n"),
 		FmtDefDesc:   Sprintf("%s\n"),
+
+		FmtList:  func(s string) string { return text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth) + "\n" },
+		FmtList2: func(s string) string { return text.TabWithBullet(s, ". ", indent2Prefix, DefaultTxtWidth) + "\n" },
 
 		FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
 		FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },

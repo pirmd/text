@@ -57,6 +57,8 @@ const (
 	FmtLine
 	//FmtList displays text as a new simple list member
 	FmtList
+	//FmtList2 displays text as a new sub-list member
+	FmtList2
 	//FmtDefTerm displays text as the term part of a definition list
 	FmtDefTerm
 	//FmtDefDesc displays text as the description part of a definition list

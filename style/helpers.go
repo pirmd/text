@@ -302,6 +302,18 @@ func List(format string, a ...interface{}) string {
 	return CurrentStyler.List(format, a...)
 }
 
+//List2 applies the style 'List2' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) List2(format string, a ...interface{}) string {
+	return st.stylef(FmtList2)(format, a...)
+}
+
+//List2 applies the style 'List2' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func List2(format string, a ...interface{}) string {
+	return CurrentStyler.List2(format, a...)
+}
+
 //DefTerm applies the style 'DefTerm' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st *Styler) DefTerm(format string, a ...interface{}) string {
@@ -391,6 +403,7 @@ func (st *Styler) FuncMap() map[string]interface{} {
 		"Paragraph":        st.Paragraph,
 		"Line":             st.Line,
 		"List":             st.List,
+		"List2":            st.List2,
 		"DefTerm":          st.DefTerm,
 		"DefDesc":          st.DefDesc,
 		"Code":             st.Code,
@@ -428,6 +441,7 @@ func FuncMap() map[string]interface{} {
 		"Paragraph":        Paragraph,
 		"Line":             Line,
 		"List":             List,
+		"List2":            List2,
 		"DefTerm":          DefTerm,
 		"DefDesc":          DefDesc,
 		"Code":             Code,

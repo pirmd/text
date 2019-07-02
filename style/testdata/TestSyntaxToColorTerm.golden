@@ -16,16 +16,16 @@ Notably, package '[4mstyle[24m' can print in [31mred[0m or [1m[32mbold gre
 chosen style supports it).
 
 It also knows how to format [3mlists[23m:
-- This very long and detailed sentence is here to 
-demonstrate that list can be formatted and wrapped. It 
-should hopefully be so long that it will not fulfill the 
-maximum number of authorized char per lines is reached.
-- It is also a nice-to have feature that sub-lists are 
-supported
-    - Sub-list is here
-    - Sub-list is also here
-- It is also possible to have a list item containing several
-paragraphs
+  - This very long and detailed sentence is here to 
+    demonstrate that list can be formatted and wrapped. It 
+    should hopefully be so long that it will not fulfill the
+    maximum number of authorized char per lines is reached.
+  - It is also a nice-to have feature that sub-lists are 
+    supported
+      . Sub-list is here
+      . Sub-list is also here
+  - It is also possible to have a list item containing 
+    several paragraphs
     
     For example, this paragraph
 
