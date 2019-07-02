@@ -12,7 +12,7 @@ var (
 //Term extends PlainText markup to display texts on terminals
 var Term = PlainText.Extend(New(
 	FormatMap{
-		FmtList:  func(s string) string { return text.TabWithBullet(s, "- ", IndentPrefix, termWidth) + "\n" },
+		FmtList:  func(s string) string { return "\n" + text.TabWithBullet(s, "- ", IndentPrefix, termWidth) + "\n" },
 		FmtList2: func(s string) string { return text.TabWithBullet(s, ". ", indent2Prefix, termWidth) + "\n" },
 
 		FmtWrap: func(s string) string { return text.Wrap(s, termWidth) },
@@ -24,7 +24,7 @@ var Term = PlainText.Extend(New(
 	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", " ", rows...) },
 ))
 
-//ColorTerm extends PlainText markup with colors and text styles that can be
+//ColorTerm extends Term markup with colors and text styles that can be
 //understood by terminals that supports colors
 var ColorTerm = Term.Extend(New(
 	FormatMap{

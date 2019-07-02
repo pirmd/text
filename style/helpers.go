@@ -26,6 +26,18 @@ func Lower(format string, a ...interface{}) string {
 	return CurrentStyler.Lower(format, a...)
 }
 
+//Title applies the style 'Title' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) Title(format string, a ...interface{}) string {
+	return st.stylef(FmtTitle)(format, a...)
+}
+
+//Title applies the style 'Title' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func Title(format string, a ...interface{}) string {
+	return CurrentStyler.Title(format, a...)
+}
+
 //TrimSpace applies the style 'TrimSpace' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st *Styler) TrimSpace(format string, a ...interface{}) string {
@@ -266,6 +278,30 @@ func Header(format string, a ...interface{}) string {
 	return CurrentStyler.Header(format, a...)
 }
 
+//Header2 applies the style 'Header2' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) Header2(format string, a ...interface{}) string {
+	return st.stylef(FmtHeader2)(format, a...)
+}
+
+//Header2 applies the style 'Header2' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func Header2(format string, a ...interface{}) string {
+	return CurrentStyler.Header2(format, a...)
+}
+
+//Header3 applies the style 'Header3' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) Header3(format string, a ...interface{}) string {
+	return st.stylef(FmtHeader3)(format, a...)
+}
+
+//Header3 applies the style 'Header3' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func Header3(format string, a ...interface{}) string {
+	return CurrentStyler.Header3(format, a...)
+}
+
 //Paragraph applies the style 'Paragraph' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st *Styler) Paragraph(format string, a ...interface{}) string {
@@ -380,6 +416,7 @@ func (st *Styler) FuncMap() map[string]interface{} {
 	return map[string]interface{}{
 		"Upper":            st.Upper,
 		"Lower":            st.Lower,
+		"Title":            st.Title,
 		"TrimSpace":        st.TrimSpace,
 		"TrimLeadingSpace": st.TrimLeadingSpace,
 		"Black":            st.Black,
@@ -400,6 +437,8 @@ func (st *Styler) FuncMap() map[string]interface{} {
 		"Tab2":             st.Tab2,
 		"DocHeader":        st.DocHeader,
 		"Header":           st.Header,
+		"Header2":          st.Header2,
+		"Header3":          st.Header3,
 		"Paragraph":        st.Paragraph,
 		"Line":             st.Line,
 		"List":             st.List,
@@ -418,6 +457,7 @@ func FuncMap() map[string]interface{} {
 	return map[string]interface{}{
 		"Upper":            Upper,
 		"Lower":            Lower,
+		"Title":            Title,
 		"TrimSpace":        TrimSpace,
 		"TrimLeadingSpace": TrimLeadingSpace,
 		"Black":            Black,
@@ -438,6 +478,8 @@ func FuncMap() map[string]interface{} {
 		"Tab2":             Tab2,
 		"DocHeader":        DocHeader,
 		"Header":           Header,
+		"Header2":          Header2,
+		"Header3":          Header3,
 		"Paragraph":        Paragraph,
 		"Line":             Line,
 		"List":             List,

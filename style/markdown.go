@@ -7,8 +7,11 @@ var Markdown = PlainText.Extend(New(
 		FmtItalic: Sprintf("*%s*"),
 		FmtStrike: Sprintf("~~%s~~"),
 
-		FmtHeader: Sprintf("\n# %s\n"),
-		FmtCode:   Sprintf("`%s`"),
+		FmtHeader:  Sprintf("\n# %s\n"),
+		FmtHeader2: Sprintf("\n## %s\n"),
+		FmtHeader3: Sprintf("\n### %s\n"),
+
+		FmtCode: Sprintf("`%s`"),
 	},
 	nil,
 ))

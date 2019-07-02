@@ -8,6 +8,7 @@ faults.
 
 [34mEXAMPLES OF AVAILABLE STYLES[0m
 
+[31mDemonstrating Common Formatting[0m
 Section [4mIntroduction[24m already demonstrates useful styles from
 package 'styles', this section completes them with most of 
 the others possibilities.
@@ -15,15 +16,19 @@ the others possibilities.
 Notably, package '[4mstyle[24m' can print in [31mred[0m or [1m[32mbold green[0m[22m (if 
 chosen style supports it).
 
+[31mDemonstrating Lists[0m
 It also knows how to format [3mlists[23m:
+
   - This very long and detailed sentence is here to 
     demonstrate that list can be formatted and wrapped. It 
     should hopefully be so long that it will not fulfill the
-    maximum number of authorized char per lines is reached.
+    maximum number of authorized chars per line is reached.
+
   - It is also a nice-to have feature that sub-lists are 
     supported
       . Sub-list is here
       . Sub-list is also here
+
   - It is also possible to have a list item containing 
     several paragraphs
     
@@ -35,8 +40,7 @@ It also knows how to [3mdefine[23m terms:
     A particular procedure by which something is done; a 
     manner or way.
 
-[34mDEMONSTRATING TABLES[0m
-
+[31mDemonstrating Tables[0m
 Package 'style' supports drawing tables for most basic 
 cases. Using Tab to align tables should be done carefully as
 table way to guess optimum columns size does not take into 

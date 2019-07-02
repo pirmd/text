@@ -48,7 +48,8 @@ func Chain(fn ...FormatFn) FormatFn {
 	}
 }
 
-//Chainf creates a new FormatfFn styling function by combining existing FormatFn
+//Chainf creates a new FormatfFn styling function by combining provided
+//FormatFn
 func Chainf(fn ...FormatfFn) FormatfFn {
 	//TODO(pirmd): figure out how to prevent escape function to be applied each time 'f' is call
 	return func(format string, a ...interface{}) string {

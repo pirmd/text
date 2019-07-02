@@ -26,6 +26,7 @@ var core = New(
 	FormatMap{
 		FmtUpper:            strings.ToUpper,
 		FmtLower:            strings.ToLower,
+		FmtTitle:            strings.Title,
 		FmtTrimSpace:        strings.TrimSpace,
 		FmtTrimLeadingSpace: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
 	},
@@ -40,12 +41,14 @@ var PlainText = core.Extend(New(
 	FormatMap{
 		FmtDocHeader: Sprintf("%s\n"),
 		FmtHeader:    Sprintf("\n%s\n"),
+		FmtHeader2:   Sprintf("\n%s"),
+		FmtHeader3:   Sprintf("\n%s"),
 		FmtParagraph: Sprintf("\n%s\n"),
 		FmtLine:      Sprintf("%s\n"),
 		FmtDefTerm:   Sprintf("\n%s:\n"),
 		FmtDefDesc:   Sprintf("%s\n"),
 
-		FmtList:  func(s string) string { return text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth) + "\n" },
+		FmtList:  func(s string) string { return "\n" + text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth) + "\n" },
 		FmtList2: func(s string) string { return text.TabWithBullet(s, ". ", indent2Prefix, DefaultTxtWidth) + "\n" },
 
 		FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },

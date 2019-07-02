@@ -10,6 +10,8 @@ const (
 	FmtUpper Format = iota
 	//FmtLower changes a string case to lower case
 	FmtLower
+	//FmtTitle changes all letters that begin words to their title case.
+	FmtTitle
 	//FmtTrimSpace removes any leading or trailing space
 	FmtTrimSpace
 	//FmtTrimLeadingSpace removes any leading space
@@ -51,6 +53,10 @@ const (
 	FmtDocHeader
 	//FmtHeader displays text as a section header
 	FmtHeader
+	//FmtHeader2 displays text as a section header of rank 2
+	FmtHeader2
+	//FmtHeader3 displays text as a section header of rank 3
+	FmtHeader3
 	//FmtParagraph displays text as a new paragraph
 	FmtParagraph
 	//FmtLine displays text as a new line
