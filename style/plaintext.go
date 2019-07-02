@@ -15,9 +15,9 @@ var (
 	//IndentPrefix is the suit of bytes used to indent text for markups that
 	//supports it (PlainText notably) Use of '\t' is not recommended as it does
 	//not cohabite correctly with wrapping func that cannot guess a '\t' length
-	IndentPrefix = []byte("    ")
+	IndentPrefix = "    "
 
-	indent2Prefix []byte //IndentPrefix x2
+	indent2Prefix string //IndentPrefix x2
 )
 
 //core is a minimal styler providing function that almost everybody wants to
@@ -59,5 +59,5 @@ var PlainText = core.Extend(New(
 //XXX: create a Tab(n) function -> FormatFn
 
 func init() {
-	indent2Prefix = append(IndentPrefix, IndentPrefix...)
+	indent2Prefix = IndentPrefix + IndentPrefix
 }

@@ -6,18 +6,19 @@ import (
 )
 
 //Indent indents a string (add prefix at the begining and before any new line)
-func Indent(s string, prefix []byte) string {
-	b := []byte{}
+func Indent(s string, prefix string) string {
+	var indented string
+
 	lastRune := len(s) - 1
 
 	for i, c := range s {
-		b = append(b, byte(c))
+		indented += string(c)
 		if c == '\n' && i != lastRune {
-			b = append(b, prefix...)
+			indented += prefix
 		}
 	}
 
-	return string(append(prefix, b...))
+	return prefix + indented
 }
 
 //Wrap wraps a text by ensuring that no text's line will be longer than the provided
@@ -41,8 +42,8 @@ func Wrap(txt string, limit int) string {
 //Tab calculates the correct wraping limits taking indent's prefix length
 //It does not work if prefix is made of tabs as indent's prefix length is
 //unknown (like '\t')
-func Tab(s string, prefix []byte, limit int) string {
-	r := Wrap(s, limit-len(prefix))
+func Tab(s string, prefix string, limit int) string {
+	r := Wrap(s, limit-visualLen(prefix))
 	return Indent(r, prefix)
 }
 

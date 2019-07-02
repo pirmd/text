@@ -26,6 +26,10 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
   (style.Func -> style.FormatFn, style.New -> style.Chainf)
 - cli/style/text: rename Table.Title() to Table.Captions(), which
   should hopefully be less misleading
+- cli/style/text: correct BUG where text.Indent() and text.Wrap() where not
+  accepting non visible chars (like AINSI colors).
+  It also modified text.Indent() and text.Tab() api: prefix is a string and not
+  a []byte
 
 
 ## [0.1.0] - 2019-05-11
