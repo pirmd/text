@@ -7,18 +7,7 @@ import (
 
 //Indent indents a string (add prefix at the begining and before any new line)
 func Indent(s string, prefix string) string {
-	var indented string
-
-	lastRune := len(s) - 1
-
-	for i, c := range s {
-		indented += string(c)
-		if c == '\n' && i != lastRune {
-			indented += prefix
-		}
-	}
-
-	return prefix + indented
+	return indent(s, prefix, prefix)
 }
 
 //Wrap wraps a text by ensuring that no text's line will be longer than the provided
@@ -38,13 +27,40 @@ func Wrap(txt string, limit int) string {
 	return strings.Join(wrap(txt, limit), "\n")
 }
 
-//Tab wraps then indent
-//Tab calculates the correct wraping limits taking indent's prefix length
+//Tab wraps then indents the given text.
+//Tab calculates the correct wraping limits taking indent's prefix length.
 //It does not work if prefix is made of tabs as indent's prefix length is
 //unknown (like '\t')
 func Tab(s string, prefix string, limit int) string {
 	r := Wrap(s, limit-visualLen(prefix))
 	return Indent(r, prefix)
+}
+
+//TabWithBullet adds a bullet/number, wraps and finally indents given text.
+//
+//Bullet is superposed to the indent prefix to obtain the first line
+//prefix, If bullet length is greater than prefix, prefix is completed by
+//trailing spaces.
+//
+//TabWithBullet calculates the correct wraping limits taking indent's
+//prefix length. It does not work if prefix is made of tabs as indent's
+//prefix length is unknown (like '\t')
+func TabWithBullet(s string, bullet, prefix string, limit int) string {
+	lB, lP := visualLen(bullet), visualLen(prefix)
+
+	var r string
+	switch {
+	case lB > lP:
+		prefix = visualPad(prefix, lB, ' ')
+		r = Wrap(s, limit-lB)
+	case lB < lP:
+		bullet = visualTruncate(prefix, lP-lB) + bullet
+		r = Wrap(s, limit-lP)
+	default:
+		r = Wrap(s, limit-lP)
+	}
+
+	return indent(r, bullet, prefix)
 }
 
 //BUG(pirmd): wrap blindly assumes that word length is smaller than
@@ -103,4 +119,19 @@ func wrap(txt string, limit int) []string {
 	default:
 		return append(ws, line+word)
 	}
+}
+
+func indent(s string, firstPrefix, prefix string) string {
+	var indented string
+
+	lastRune := len(s) - 1
+
+	for i, c := range s {
+		indented += string(c)
+		if c == '\n' && i != lastRune {
+			indented += prefix
+		}
+	}
+
+	return firstPrefix + indented
 }
