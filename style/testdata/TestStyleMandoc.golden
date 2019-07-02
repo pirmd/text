@@ -5,11 +5,15 @@ This small piece of text aims at demonstrating and testing my styling package 's
 It is writen by a \fBnon\-native\fP English speaker, so pardon any faults.
 
 .SH EXAMPLES OF AVAILABLE STYLES
-Demonstrating Common Formatting.PP
+
+.SS Demonstrating Common Formatting
+.PP
 Section Introduction already demonstrates useful styles from package 'styles', this section completes them with most of the others possibilities.
 .PP
 Notably, package 'style' can print in red or \fBbold green\fP (if chosen style supports it).
-Demonstrating Lists.PP
+
+.SS Demonstrating Lists
+.PP
 It also knows how to format \fIlists\fP:
 .RS
 This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.
@@ -28,15 +32,35 @@ It also knows how to \fIdefine\fP terms:
 .TP
 style
 A particular procedure by which something is done; a manner or way.
-Demonstrating Tables.PP
-Package 'style' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation
-.PP
-.br
-Column1 | Column2 | Column3
-.br
-Basic column | This one is here
-to demonstrate
-that colums with several lines work too | Last but not least shows \fBformating\fP within the table
-.br
- | This second row is here to test multi\-lines rows format | Also possibly a good opportunity to check escaping *sequence*
 
+.SS Demonstrating Tables
+.PP
+Package 'style' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation
+
+.TS
+allbox;
+lx lx lx.
+T{
+Column1
+T}	T{
+Column2
+T}	T{
+Column3
+T}
+T{
+Basic column
+T}	T{
+This one is here
+to demonstrate
+that colums with several lines work too
+T}	T{
+Last but not least shows \fBformating\fP within the table
+T}
+T{
+
+T}	T{
+This second row is here to test multi\-lines rows format
+T}	T{
+Also possibly a good opportunity to check escaping *sequence*
+T}
+.TE

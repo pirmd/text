@@ -55,5 +55,5 @@ Basic column This one is here                  Last but not least shows
              work too                                                           
                                                                                 
              This second row is here to test   Also possibly a good opportunity 
-             multi-lines rows format           to check escaping *sequence*     
+             multi-lines rows format           to check escaping [1msequence[22m       
 ------------ --------------------------------- ---------------------------------

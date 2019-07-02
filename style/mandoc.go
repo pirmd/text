@@ -1,5 +1,10 @@
 package style
 
+import (
+	"fmt"
+	"strings"
+)
+
 //Mandoc is a sub-set of troff markup featuring common used macro for building
 //man pages
 var Mandoc = core.Extend(New(
@@ -9,6 +14,8 @@ var Mandoc = core.Extend(New(
 
 		FmtDocHeader: Sprintf(".TH %s\n"),
 		FmtHeader:    Sprintf("\n.SH %s\n"),
+		FmtHeader2:   Sprintf("\n.SS %s\n"),
+		FmtHeader3:   Sprintf("\n.SS %s\n"),
 		FmtParagraph: Sprintf(".PP\n%s\n"),
 		FmtLine:      Sprintf(".br\n%s\n"),
 		FmtList:      Sprintf(".RS\n%s\n.RE\n"),
@@ -18,10 +25,30 @@ var Mandoc = core.Extend(New(
 
 		FmtEscape: escapeMandoc,
 	},
-	nil,
+
+	//tableFn
+	func(rows ...[]string) string {
+		if len(rows) == 0 {
+			return ""
+		}
+
+		var r []string
+		for _, row := range rows {
+			for i, c := range row {
+				row[i] = fmt.Sprintf("T{\n%s\nT}", c)
+			}
+			r = append(r, strings.Join(row, "\t"))
+		}
+
+		var layout []string
+		for range rows[0] {
+			layout = append(layout, "lx")
+		}
+
+		return fmt.Sprintf("\n.TS\nallbox;\n%s.\n%s\n.TE\n", strings.Join(layout, " "), strings.Join(r, "\n"))
+	},
 ))
 
-//XXX: add mandoc tbl extension
 //XXX: add mandoc sub list, sub headers
 
 func escapeMandoc(s string) string {

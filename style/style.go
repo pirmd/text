@@ -145,7 +145,7 @@ func (st *Styler) Table(rows ...[]string) string {
 		return st.Paragraph(s)
 	}
 
-	return st.tableFn(rows...)
+	return st.tableFn(autoRows...)
 }
 
 //Table draws a table using the current Styler
