@@ -18,6 +18,7 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
 - cli/style: add support to format tables
 - cli/style/text: add support for table's horizontal separators
 - cli/style/text: add a new DrawTable() function
+- cli/style/text: add a new TabWithBullet() function
 ### Modified
 - cli/style: rename NewLine to Line
 - cli/style: give markdown some love, alig nas far as possible plain text
