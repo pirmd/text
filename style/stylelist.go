@@ -14,8 +14,10 @@ const (
 	FmtTitle
 	//FmtTrimSpace removes any leading or trailing space
 	FmtTrimSpace
-	//FmtTrimLeadingSpace removes any leading space
-	FmtTrimLeadingSpace
+	//FmtNoLeadingSpace removes any leading space
+	FmtNoLeadingSpace
+	//FmtNoTrailingSpace removes any trailing space
+	FmtNoTrailingSpace
 	//FmtBlack decorates a string foreground color to black
 	FmtBlack
 	//FmtRed decorates a string foreground color to red
@@ -61,10 +63,14 @@ const (
 	FmtParagraph
 	//FmtLine displays text as a new line
 	FmtLine
-	//FmtList displays text as a new simple list member
+	//FmtList displays text as list
 	FmtList
-	//FmtList2 displays text as a new sub-list member
+	//FmtList2 displays text as sub-list
 	FmtList2
+	//FmtListItem displays text as a new list member
+	FmtListItem
+	//FmtList2Item displays text as a new sub-list member
+	FmtList2Item
 	//FmtDefTerm displays text as the term part of a definition list
 	FmtDefTerm
 	//FmtDefDesc displays text as the description part of a definition list

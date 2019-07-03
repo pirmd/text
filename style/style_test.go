@@ -6,29 +6,39 @@ import (
 )
 
 func testText() (s string) {
-	S := Chainf(Upper, Blue, Header)
-	S2 := Chainf(Title, Red, Header2)
+	H := Chainf(Upper, Blue, Header)
+	H2 := Chainf(Title, Red, Header2)
 	P := Chainf(Paragraph, Wrap)
 
-	s = TrimLeadingSpace(S("Introduction"))
+	s = NoLeadingSpace(H("Introduction"))
 	s += P("This small piece of text aims at demonstrating and testing my styling package '%s'.", Underline("style"))
 	s += P("It is writen by a %s English speaker, so pardon any faults.", Bold("non-native"))
-	s += S("Examples of available styles")
-	s += S2("Demonstrating common formatting")
+	s += H("Examples of available styles")
+	s += H2("Demonstrating common formatting")
 	s += P("Section %s already demonstrates useful styles from package 'styles', this section completes them with most of the others possibilities.", Underline("Introduction"))
 	s += P("Notably, package '%s' can print in %s or %s (if chosen style supports it).", Underline("style"), Red("red"), Bold(Green("bold green")))
-	s += S2("Demonstrating lists")
+	s += H2("Demonstrating lists")
 	s += P("It also knows how to format %s:", Italic("lists"))
-	s += List("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.")
-	s += List("It is also a nice-to have feature that sub-lists are supported")
-	s += List2("Sub-list is here")
-	s += List2("Sub-list is also here")
-	s += List("It is also possible to have a list item containing several paragraphs")
-	s += Tab(Paragraph("For example, this paragraph"))
+	s += List(
+		ListItem(
+			"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.",
+		) +
+			ListItem(
+				Line("It also can support sub-lists:")+
+					List2(
+						List2Item("Sub-list is here")+
+							List2Item("Sub-list is also here"),
+					),
+			) +
+			ListItem(
+				Line("It is also possible to have a list's item that contains several paragraphs")+
+					Paragraph("For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list"),
+			),
+	)
 	s += P("It also knows how to %s terms:", Italic("define"))
 	s += DefTerm("style")
 	s += Tab(DefDesc("A particular procedure by which something is done; a manner or way."))
-	s += S2("Demonstrating tables")
+	s += H2("Demonstrating tables")
 	s += P("Package 'style' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation")
 	s += Table(
 		[]string{"Column1", "Column2", "Column3"},

@@ -1,6 +1,8 @@
 package style
 
 import (
+	"strings"
+
 	"github.com/pirmd/cli/style/termsize"
 	"github.com/pirmd/cli/style/text"
 )
@@ -12,8 +14,20 @@ var (
 //Term extends PlainText markup to display texts on terminals
 var Term = PlainText.Extend(New(
 	FormatMap{
-		FmtList:  func(s string) string { return "\n" + text.TabWithBullet(s, "- ", IndentPrefix, termWidth) + "\n" },
-		FmtList2: func(s string) string { return text.TabWithBullet(s, ". ", indent2Prefix, termWidth) + "\n" },
+		FmtListItem: func(s string) string {
+			l := "\n" + text.TabWithBullet(s, "- ", IndentPrefix, termWidth)
+			if strings.HasSuffix(l, "\n") {
+				return l
+			}
+			return l + "\n"
+		},
+		FmtList2Item: func(s string) string {
+			l := text.TabWithBullet(s, "- ", IndentPrefix, termWidth)
+			if strings.HasSuffix(l, "\n") {
+				return l
+			}
+			return l + "\n"
+		},
 
 		FmtWrap: func(s string) string { return text.Wrap(s, termWidth) },
 		FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, termWidth) },

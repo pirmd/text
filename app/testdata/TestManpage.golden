@@ -7,20 +7,13 @@ cli.test \- A test for my minimalist cli app building lib
 .SH Synopsis
 .PP
 \fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fIstring\fP
-.br
 \fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBhelp\fP
-.br
 \fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBversion\fP
-.br
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest\fP \fItest\_arg\fP
-.br
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP
-.br
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest\fP \fItest\_arg\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP
 \fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [\-\-\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
-.br
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [\-\-\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31\_arg\fP
-.br
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest4\fP \fItest4\_arg\fP ...
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31\_arg\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest4\fP \fItest4\_arg\fP ...
 
 .SH Description
 .PP
@@ -56,10 +49,10 @@ Show version information.
 
 .TP
 \fBtest\fP \fItest\_arg\fP
-Many of you know about \\\fIlorem ipsum\\\fP but few know what it means. So this sub\-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.
+Many of you know about \\fIlorem ipsum\\fP but few know what it means. So this sub\-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.
 
 .TP
-\fBtest2\fP \fItest2\\\fIarg1\fP \fItest2\\\fParg2\fP
+\fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP
 Test a second sub\-command
 
 .TP

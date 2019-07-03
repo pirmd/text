@@ -24,11 +24,12 @@ var (
 //have
 var core = New(
 	FormatMap{
-		FmtUpper:            strings.ToUpper,
-		FmtLower:            strings.ToLower,
-		FmtTitle:            strings.Title,
-		FmtTrimSpace:        strings.TrimSpace,
-		FmtTrimLeadingSpace: func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
+		FmtUpper:           strings.ToUpper,
+		FmtLower:           strings.ToLower,
+		FmtTitle:           strings.Title,
+		FmtTrimSpace:       strings.TrimSpace,
+		FmtNoLeadingSpace:  func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
+		FmtNoTrailingSpace: func(s string) string { return strings.TrimRightFunc(s, unicode.IsSpace) },
 	},
 	nil,
 )
@@ -48,8 +49,20 @@ var PlainText = core.Extend(New(
 		FmtDefTerm:   Sprintf("\n%s:\n"),
 		FmtDefDesc:   Sprintf("%s\n"),
 
-		FmtList:  func(s string) string { return "\n" + text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth) + "\n" },
-		FmtList2: func(s string) string { return text.TabWithBullet(s, ". ", indent2Prefix, DefaultTxtWidth) + "\n" },
+		FmtListItem: func(s string) string {
+			l := "\n" + text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth)
+			if strings.HasSuffix(l, "\n") {
+				return l
+			}
+			return l + "\n"
+		},
+		FmtList2Item: func(s string) string {
+			l := text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth)
+			if strings.HasSuffix(l, "\n") {
+				return l
+			}
+			return l + "\n"
+		},
 
 		FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
 		FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },

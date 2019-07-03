@@ -50,16 +50,28 @@ func TrimSpace(format string, a ...interface{}) string {
 	return CurrentStyler.TrimSpace(format, a...)
 }
 
-//TrimLeadingSpace applies the style 'TrimLeadingSpace' to the formatted string directive.
+//NoLeadingSpace applies the style 'NoLeadingSpace' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) TrimLeadingSpace(format string, a ...interface{}) string {
-	return st.stylef(FmtTrimLeadingSpace)(format, a...)
+func (st *Styler) NoLeadingSpace(format string, a ...interface{}) string {
+	return st.stylef(FmtNoLeadingSpace)(format, a...)
 }
 
-//TrimLeadingSpace applies the style 'TrimLeadingSpace' using current Styler.
+//NoLeadingSpace applies the style 'NoLeadingSpace' using current Styler.
 //The given format and arguments follow fmt.Sprintf format
-func TrimLeadingSpace(format string, a ...interface{}) string {
-	return CurrentStyler.TrimLeadingSpace(format, a...)
+func NoLeadingSpace(format string, a ...interface{}) string {
+	return CurrentStyler.NoLeadingSpace(format, a...)
+}
+
+//NoTrailingSpace applies the style 'NoTrailingSpace' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) NoTrailingSpace(format string, a ...interface{}) string {
+	return st.stylef(FmtNoTrailingSpace)(format, a...)
+}
+
+//NoTrailingSpace applies the style 'NoTrailingSpace' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func NoTrailingSpace(format string, a ...interface{}) string {
+	return CurrentStyler.NoTrailingSpace(format, a...)
 }
 
 //Black applies the style 'Black' to the formatted string directive.
@@ -350,6 +362,30 @@ func List2(format string, a ...interface{}) string {
 	return CurrentStyler.List2(format, a...)
 }
 
+//ListItem applies the style 'ListItem' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) ListItem(format string, a ...interface{}) string {
+	return st.stylef(FmtListItem)(format, a...)
+}
+
+//ListItem applies the style 'ListItem' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func ListItem(format string, a ...interface{}) string {
+	return CurrentStyler.ListItem(format, a...)
+}
+
+//List2Item applies the style 'List2Item' to the formatted string directive.
+//The given format and arguments follow fmt.Sprintf format.
+func (st *Styler) List2Item(format string, a ...interface{}) string {
+	return st.stylef(FmtList2Item)(format, a...)
+}
+
+//List2Item applies the style 'List2Item' using current Styler.
+//The given format and arguments follow fmt.Sprintf format
+func List2Item(format string, a ...interface{}) string {
+	return CurrentStyler.List2Item(format, a...)
+}
+
 //DefTerm applies the style 'DefTerm' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st *Styler) DefTerm(format string, a ...interface{}) string {
@@ -414,40 +450,43 @@ func Auto(format string, a ...interface{}) string {
 //to use 'style' functions within templates
 func (st *Styler) FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Upper":            st.Upper,
-		"Lower":            st.Lower,
-		"Title":            st.Title,
-		"TrimSpace":        st.TrimSpace,
-		"TrimLeadingSpace": st.TrimLeadingSpace,
-		"Black":            st.Black,
-		"Red":              st.Red,
-		"Green":            st.Green,
-		"Yellow":           st.Yellow,
-		"Blue":             st.Blue,
-		"Magenta":          st.Magenta,
-		"Cyan":             st.Cyan,
-		"White":            st.White,
-		"Bold":             st.Bold,
-		"Italic":           st.Italic,
-		"Underline":        st.Underline,
-		"Inverse":          st.Inverse,
-		"Strike":           st.Strike,
-		"Wrap":             st.Wrap,
-		"Tab":              st.Tab,
-		"Tab2":             st.Tab2,
-		"DocHeader":        st.DocHeader,
-		"Header":           st.Header,
-		"Header2":          st.Header2,
-		"Header3":          st.Header3,
-		"Paragraph":        st.Paragraph,
-		"Line":             st.Line,
-		"List":             st.List,
-		"List2":            st.List2,
-		"DefTerm":          st.DefTerm,
-		"DefDesc":          st.DefDesc,
-		"Code":             st.Code,
-		"Escape":           st.Escape,
-		"Auto":             st.Auto,
+		"Upper":           st.Upper,
+		"Lower":           st.Lower,
+		"Title":           st.Title,
+		"TrimSpace":       st.TrimSpace,
+		"NoLeadingSpace":  st.NoLeadingSpace,
+		"NoTrailingSpace": st.NoTrailingSpace,
+		"Black":           st.Black,
+		"Red":             st.Red,
+		"Green":           st.Green,
+		"Yellow":          st.Yellow,
+		"Blue":            st.Blue,
+		"Magenta":         st.Magenta,
+		"Cyan":            st.Cyan,
+		"White":           st.White,
+		"Bold":            st.Bold,
+		"Italic":          st.Italic,
+		"Underline":       st.Underline,
+		"Inverse":         st.Inverse,
+		"Strike":          st.Strike,
+		"Wrap":            st.Wrap,
+		"Tab":             st.Tab,
+		"Tab2":            st.Tab2,
+		"DocHeader":       st.DocHeader,
+		"Header":          st.Header,
+		"Header2":         st.Header2,
+		"Header3":         st.Header3,
+		"Paragraph":       st.Paragraph,
+		"Line":            st.Line,
+		"List":            st.List,
+		"List2":           st.List2,
+		"ListItem":        st.ListItem,
+		"List2Item":       st.List2Item,
+		"DefTerm":         st.DefTerm,
+		"DefDesc":         st.DefDesc,
+		"Code":            st.Code,
+		"Escape":          st.Escape,
+		"Auto":            st.Auto,
 	}
 }
 
@@ -455,39 +494,42 @@ func (st *Styler) FuncMap() map[string]interface{} {
 //to use 'style' CurrentStyler's functions within templates
 func FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Upper":            Upper,
-		"Lower":            Lower,
-		"Title":            Title,
-		"TrimSpace":        TrimSpace,
-		"TrimLeadingSpace": TrimLeadingSpace,
-		"Black":            Black,
-		"Red":              Red,
-		"Green":            Green,
-		"Yellow":           Yellow,
-		"Blue":             Blue,
-		"Magenta":          Magenta,
-		"Cyan":             Cyan,
-		"White":            White,
-		"Bold":             Bold,
-		"Italic":           Italic,
-		"Underline":        Underline,
-		"Inverse":          Inverse,
-		"Strike":           Strike,
-		"Wrap":             Wrap,
-		"Tab":              Tab,
-		"Tab2":             Tab2,
-		"DocHeader":        DocHeader,
-		"Header":           Header,
-		"Header2":          Header2,
-		"Header3":          Header3,
-		"Paragraph":        Paragraph,
-		"Line":             Line,
-		"List":             List,
-		"List2":            List2,
-		"DefTerm":          DefTerm,
-		"DefDesc":          DefDesc,
-		"Code":             Code,
-		"Escape":           Escape,
-		"Auto":             Auto,
+		"Upper":           Upper,
+		"Lower":           Lower,
+		"Title":           Title,
+		"TrimSpace":       TrimSpace,
+		"NoLeadingSpace":  NoLeadingSpace,
+		"NoTrailingSpace": NoTrailingSpace,
+		"Black":           Black,
+		"Red":             Red,
+		"Green":           Green,
+		"Yellow":          Yellow,
+		"Blue":            Blue,
+		"Magenta":         Magenta,
+		"Cyan":            Cyan,
+		"White":           White,
+		"Bold":            Bold,
+		"Italic":          Italic,
+		"Underline":       Underline,
+		"Inverse":         Inverse,
+		"Strike":          Strike,
+		"Wrap":            Wrap,
+		"Tab":             Tab,
+		"Tab2":            Tab2,
+		"DocHeader":       DocHeader,
+		"Header":          Header,
+		"Header2":         Header2,
+		"Header3":         Header3,
+		"Paragraph":       Paragraph,
+		"Line":            Line,
+		"List":            List,
+		"List2":           List2,
+		"ListItem":        ListItem,
+		"List2Item":       List2Item,
+		"DefTerm":         DefTerm,
+		"DefDesc":         DefDesc,
+		"Code":            Code,
+		"Escape":          Escape,
+		"Auto":            Auto,
 	}
 }

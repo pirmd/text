@@ -26,15 +26,16 @@ It also knows how to format *lists*:
     should hopefully be so long that it will not fulfill the
     maximum number of authorized chars per line is reached.
 
-  - It is also a nice-to have feature that sub-lists are 
-    supported
-      . Sub-list is here
-      . Sub-list is also here
+  - It also can support sub-lists:
+      - Sub-list is here
+      - Sub-list is also here
 
-  - It is also possible to have a list item containing 
+  - It is also possible to have a list's item that contains 
     several paragraphs
     
-    For example, this paragraph
+    For example, this paragraph that I made artificially 
+    long to verify that wrapping is working correctly inside
+    list
 
 It also knows how to *define* terms:
 

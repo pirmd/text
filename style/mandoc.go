@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-//Mandoc is a sub-set of troff markup featuring common used macro for building
-//man pages
+//Mandoc is a sub-set of troff markup featuring common used mdoc macro for
+//building man pages
 var Mandoc = core.Extend(New(
 	FormatMap{
 		FmtBold:   Sprintf("\\fB%s\\fP"),
@@ -17,11 +17,16 @@ var Mandoc = core.Extend(New(
 		FmtHeader2:   Sprintf("\n.SS %s\n"),
 		FmtHeader3:   Sprintf("\n.SS %s\n"),
 		FmtParagraph: Sprintf(".PP\n%s\n"),
-		FmtLine:      Sprintf(".br\n%s\n"),
-		FmtList:      Sprintf(".RS\n%s\n.RE\n"),
+		FmtLine:      Sprintf("%s\n"),
 		FmtDefTerm:   Sprintf("\n.TP\n%s\n"),
 		FmtDefDesc:   Sprintf("%s\n"),
 		FmtCode:      Sprintf(".PP\n.RS\n.nf\n%s\n.fi\n.RE\n"),
+
+		//Needs mdoc macros set
+		FmtList:      Sprintf("\n.Bl -dash\n%s.El\n"),
+		FmtListItem:  Sprintf(".It\n%s\n"),
+		FmtList2:     Sprintf(".Bl -bullet\n%s.El"),
+		FmtList2Item: Sprintf(".It\n%s\n"),
 
 		FmtEscape: escapeMandoc,
 	},
@@ -49,32 +54,26 @@ var Mandoc = core.Extend(New(
 	},
 ))
 
-//XXX: add mandoc sub list, sub headers
-
 func escapeMandoc(s string) string {
-	var b []byte
-	var isEscaped bool
+	var toEsc = [...]string{"-", "_", "&", "~"}
 
-	for _, c := range s {
-		switch {
-		case c == '\\':
-			if isEscaped {
-				b = append(b, '\\', '\\')
-				isEscaped = false
-			}
-			isEscaped = true
-
-		case c == '-' || c == '_' || c == '&' || c == '~':
-			b = append(b, '\\', byte(c))
-			isEscaped = false
-
-		default:
-			if isEscaped { //isEscaped is triggerd but escape nothing known, it is eventually a standalone '\' that needs to b eescaped itself
-				b = append(b, '\\')
-			}
-			b = append(b, byte(c))
-			isEscaped = false
+	//Assume that if supplied string contains already escaped char, it was
+	//already escaped (chaining of styling's functions)
+	for _, e := range toEsc {
+		if strings.Contains(s, "\\"+e) {
+			return s
 		}
 	}
-	return string(b)
+
+	for _, e := range toEsc {
+		s = strings.ReplaceAll(s, e, "\\"+e)
+	}
+
+	//Ugly trick to prevent valid mdoc macros options to be escaped when
+	//styling functions are chained
+	//TODO(pirmd): can something better be imagined?
+	s = strings.ReplaceAll(s, ".Bl \\-bullet", ".Bl -bullet")
+	s = strings.ReplaceAll(s, ".Bl \\-dash", ".Bl -dash")
+
+	return s
 }
