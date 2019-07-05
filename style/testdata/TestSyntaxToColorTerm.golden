@@ -16,24 +16,48 @@ the others possibilities.
 Notably, package '[4mstyle[24m' can print in [31mred[0m or [1m[32mbold green[0m[22m (if 
 chosen style supports it).
 
+Several levels of tabulations can be used:
+    
+    (Level 1) Lorem ipsum dolor sit amet, consectetur 
+    adipiscing elit, sed do eiusmod tempor incididunt ut 
+    labore et dolore magna aliqua.
+        
+        (Level 2) Ut enim ad minim veniam, quis nostrud 
+        exercitation ullamco laboris nisi ut aliquip ex ea 
+        commodo consequat. Duis aute irure dolor in 
+        reprehenderit in voluptate velit esse cillum dolore 
+        eu fugiat nulla pariatur.
+                
+                (Level 4) Excepteur sint occaecat cupidatat 
+                non proident, sunt in culpa qui officia 
+                deserunt mollit anim id est laborum.
+
 [31mDemonstrating Lists[0m
 It also knows how to format [3mlists[23m:
 
-  - This very long and detailed sentence is here to 
-    demonstrate that list can be formatted and wrapped. It 
-    should hopefully be so long that it will not fulfill the
-    maximum number of authorized chars per line is reached.
+- This very long and detailed sentence is here to 
+  demonstrate that list can be formatted and wrapped. It 
+  should hopefully be so long that it will not fulfill the 
+  maximum number of authorized chars per line is reached.
 
-  - It also can support sub-lists:
-      - Sub-list is here
-      - Sub-list is also here
+- It also can support sub-lists:
+  * Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+    sed do eiusmod tempor incididunt ut labore et dolore 
+    magna aliqua.
 
-  - It is also possible to have a list's item that contains 
-    several paragraphs
-    
-    For example, this paragraph that I made artificially 
-    long to verify that wrapping is working correctly inside
-    list
+  * Ut enim ad minim veniam, quis nostrud exercitation 
+    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate 
+    velit esse cillum dolore eu fugiat nulla pariatur.
+
+  * Excepteur sint occaecat cupidatat non proident, sunt in 
+    culpa qui officia deserunt mollit anim id est laborum.
+
+- It is also possible to have a list's item that contains 
+  several paragraphs
+  
+  For example, this paragraph that I made artificially long 
+  to verify that wrapping is working correctly inside list
 
 It also knows how to [3mdefine[23m terms:
 
@@ -41,20 +65,32 @@ It also knows how to [3mdefine[23m terms:
     A particular procedure by which something is done; a 
     manner or way.
 
+[1mlorem ipsum[22m:
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+    sed do eiusmod tempor incididunt ut labore et dolore 
+    magna aliqua. Ut enim ad minim veniam, quis nostrud 
+    exercitation ullamco laboris nisi ut aliquip ex ea 
+    commodo consequat. Duis aute irure dolor in 
+    reprehenderit in voluptate velit esse cillum dolore eu 
+    fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+    non proident, sunt in culpa qui officia deserunt mollit 
+    anim id est laborum.
+
 [31mDemonstrating Tables[0m
 Package 'style' supports drawing tables for most basic 
 cases. Using Tab to align tables should be done carefully as
 table way to guess optimum columns size does not take into 
 account the tabulation
 
------------- --------------------------------- ---------------------------------
-Column1      Column2                           Column3                          
------------- --------------------------------- ---------------------------------
-Basic column This one is here                  Last but not least shows         
-             to demonstrate                    [1mformating[22m within the table       
-             that colums with several lines                                     
-             work too                                                           
-                                                                                
-             This second row is here to test   Also possibly a good opportunity 
-             multi-lines rows format           to check escaping [1msequence[22m       
------------- --------------------------------- ---------------------------------
+------------ ----------------------- -----------------------
+Column1      Column2                 Column3                
+------------ ----------------------- -----------------------
+Basic column This one is here        Last but not least     
+             to demonstrate          shows [1mformating[22m within 
+             that colums with        the table              
+             several lines work too                         
+                                                            
+             This second row is here Also possibly a good   
+             to test multi-lines     opportunity to check   
+             rows format             escaping [1msequence[22m      
+------------ ----------------------- -----------------------

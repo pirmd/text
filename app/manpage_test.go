@@ -12,6 +12,6 @@ func TestManpage(t *testing.T) {
 	testApp := buildTestApp()
 
 	out := new(bytes.Buffer)
-	PrintManpage(out, testApp, style.Mandoc)
+	PrintManpage(out, testApp, style.Man)
 	verify.MatchGolden(t, out.String(), "Manpage message is incorrectly formatted")
 }

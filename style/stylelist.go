@@ -47,10 +47,6 @@ const (
 	FmtStrike
 	//FmtWrap wraps a text
 	FmtWrap
-	//FmtTab indents then wraps a text
-	FmtTab
-	//FmtTab2 indents two times then wraps a text
-	FmtTab2
 	//FmtDocHeader displays text as information in the document headers
 	FmtDocHeader
 	//FmtHeader displays text as a section header
@@ -63,18 +59,6 @@ const (
 	FmtParagraph
 	//FmtLine displays text as a new line
 	FmtLine
-	//FmtList displays text as list
-	FmtList
-	//FmtList2 displays text as sub-list
-	FmtList2
-	//FmtListItem displays text as a new list member
-	FmtListItem
-	//FmtList2Item displays text as a new sub-list member
-	FmtList2Item
-	//FmtDefTerm displays text as the term part of a definition list
-	FmtDefTerm
-	//FmtDefDesc displays text as the description part of a definition list
-	FmtDefDesc
 	//FmtCode displays text as a code block
 	FmtCode
 	//FmtEscape escapes the input text. FmtEscape is automatically applied and

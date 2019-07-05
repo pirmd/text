@@ -22,7 +22,7 @@ func PrintSimpleUsage(w io.Writer, c *Command, st *style.Styler) {
 
 	fmt.Fprintf(w, st.Header("Synopsis:"))
 	for _, s := range fmtSynopsis(c, st) {
-		fmt.Fprintf(w, st.Tab(st.Paragraph(s)))
+		fmt.Fprintf(w, st.Tab(1)(st.Paragraph(s)))
 	}
 }
 
@@ -31,10 +31,10 @@ func PrintLongUsage(w io.Writer, c *Command, st *style.Styler) {
 	stHelp := st.Extend(style.New(
 		style.FormatMap{
 			style.FmtHeader:    style.Combine(st.Upper, st.Header),
-			style.FmtParagraph: style.Combine(st.Tab, st.Paragraph),
-			style.FmtLine:      style.Combine(st.Tab, st.Line),
+			style.FmtParagraph: style.Combine(st.Tab(1), st.Paragraph),
+			style.FmtLine:      style.Combine(st.Tab(1), st.Line),
 		},
-		nil,
+		nil, nil, nil, nil, nil,
 	)).WithAutostyler(style.LightMarkup)
 
 	printLongUsage(w, c, stHelp)
@@ -83,21 +83,21 @@ func printLongUsage(w io.Writer, c *Command, st *style.Styler) {
 		if i == 0 {
 			fmt.Fprintf(w, st.Header("Options"))
 		}
-		fmt.Fprintf(w, st.Tab(st.DefTerm(fmtFlag(flag, st)))+st.Tab2(st.DefDesc(flag.Usage)))
+		fmt.Fprintf(w, st.Define(fmtFlag(flag, st), flag.Usage))
 	}
 
 	for i, cmd := range c.cmds {
 		if i == 0 {
 			fmt.Fprintf(w, st.Header("Commands"))
 		}
-		fmt.Fprintf(w, st.Tab(st.DefTerm(fmtCmd(cmd, st)))+st.Tab2(st.DefDesc(description(cmd))))
+		fmt.Fprintf(w, st.Define(fmtCmd(cmd, st), description(cmd)))
 	}
 
 	for i, arg := range c.args {
 		if i == 0 {
 			fmt.Fprintf(w, st.Header("Arguments"))
 		}
-		fmt.Fprintf(w, st.Tab(st.DefTerm(st.Italic(arg.name)))+st.Tab2(st.DefDesc(arg.Usage)))
+		fmt.Fprintf(w, st.Define(st.Italic(arg.name), arg.Usage))
 	}
 }
 

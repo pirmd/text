@@ -62,6 +62,7 @@ func Chainf(fn ...FormatfFn) FormatfFn {
 }
 
 //Combine combines several FormatfFn into one FormatFn
+//XXX: is it used?
 func Combine(fn ...FormatfFn) FormatFn {
 	return func(src string) string {
 		s := src
@@ -83,16 +84,25 @@ var CurrentStyler = Term
 //simple text decoration cases. More advanced text formatting are provided for
 //table
 type Styler struct {
-	fmtMap  map[Format]FormatFn
-	tableFn func(...[]string) string
+	fmtMap map[Format]FormatFn
+
+	tabFn      func(int) FormatFn
+	listFn     func(int) func(...string) string
+	listItemFn func(int) FormatFn
+	tableFn    func(...[]string) string
+	defineFn   func(string, string) string
 }
 
 //New creates a new Styler.
 //Provided tableFn  gives a recipe to build a table from the provided rows
-func New(fmtMap FormatMap, tableFn func(...[]string) string) *Styler {
+func New(fmtMap FormatMap, tabFn func(int) FormatFn, listFn func(int) func(...string) string, listItemFn func(int) FormatFn, tableFn func(...[]string) string, defineFn func(string, string) string) *Styler {
 	return &Styler{
-		fmtMap:  fmtMap,
-		tableFn: tableFn,
+		fmtMap:     fmtMap,
+		tabFn:      tabFn,
+		listFn:     listFn,
+		listItemFn: listItemFn,
+		tableFn:    tableFn,
+		defineFn:   defineFn,
 	}
 }
 
@@ -101,7 +111,7 @@ func New(fmtMap FormatMap, tableFn func(...[]string) string) *Styler {
 //functions (like table drawing) will be replaced by the provided ones when not
 //nil.
 func (st *Styler) Extend(stadd *Styler) *Styler {
-	stext := New(FormatMap{}, st.tableFn)
+	stext := New(FormatMap{}, st.tabFn, st.listFn, st.listItemFn, st.tableFn, st.defineFn)
 	for f, fn := range st.fmtMap {
 		stext.fmtMap[f] = fn
 	}
@@ -109,15 +119,27 @@ func (st *Styler) Extend(stadd *Styler) *Styler {
 	for f, fn := range stadd.fmtMap {
 		stext.fmtMap[f] = fn
 	}
+	if stadd.tabFn != nil {
+		stext.tabFn = stadd.tabFn
+	}
+	if stadd.listFn != nil {
+		stext.listFn = stadd.listFn
+	}
+	if stadd.listItemFn != nil {
+		stext.listItemFn = stadd.listItemFn
+	}
 	if stadd.tableFn != nil {
 		stext.tableFn = stadd.tableFn
+	}
+	if stadd.defineFn != nil {
+		stext.defineFn = stadd.defineFn
 	}
 
 	return stext
 }
 
 //Table draws a table according to style's table drawing function.
-//If no style's table drawing exists, it simply outputs "|"-separated text per
+//If no table drawing function exists, it simply outputs "|"-separated text per
 //line for each row.
 //For styles where table depends on text width to adjust columns width, it is
 //not advised to chained it with tabulation or indentation-based formats.
@@ -151,6 +173,88 @@ func (st *Styler) Table(rows ...[]string) string {
 //Table draws a table using the current Styler
 func Table(rows ...[]string) string {
 	return CurrentStyler.Table(rows...)
+}
+
+//Tab returns a FormatfFn that indents then wraps the provided string by the
+//given level.
+//If no table drawing function exists, it returns a "do nothing" function that
+//returns the input string "as-is".
+func (st *Styler) Tab(level int) FormatfFn {
+	if st.tabFn == nil {
+		return func(format string, a ...interface{}) string {
+			s := fmt.Sprintf(format, a...)
+			return st.auto(s)
+		}
+	}
+
+	return func(format string, a ...interface{}) string {
+		s := fmt.Sprintf(format, a...)
+		return st.tabFn(level)(st.auto(s))
+	}
+}
+
+//Tab indents then wraps the text using the current Styler
+func Tab(level int) FormatfFn {
+	return CurrentStyler.Tab(level)
+}
+
+//List creates a new with the given nested level.
+//If no list drawing function exists, it returns one line per item.
+func (st *Styler) List(level int) func(...string) string {
+	if st.listFn == nil {
+		return func(items ...string) string {
+			return strings.Join(items, "\n")
+		}
+	}
+
+	return func(items ...string) string {
+		return st.listFn(level)(items...)
+	}
+}
+
+//List creates a new list with the given nest-level using the current Styler
+func List(level int) func(...string) string {
+	return CurrentStyler.List(level)
+}
+
+//ListItem creates a new list item of teh given nest-level.
+//If no list item function exists, it returns the input preceded by a "-"
+func (st *Styler) ListItem(level int) FormatFn {
+	if st.listItemFn == nil {
+		return func(s string) string {
+			return Tab(level)("- " + s)
+		}
+	}
+
+	return func(s string) string {
+		return st.listItemFn(level)(st.auto(s))
+	}
+}
+
+//ListItem creates a new list item of the given nest-level using the current
+//Styler.
+func ListItem(level int) FormatFn {
+	return CurrentStyler.ListItem(level)
+}
+
+//Define adds a term definition
+//If no define function exists, it simply outputs term: description
+//
+//LIMITATION: Defines might already use Tab internally and threfore does not
+//chain easily with another styling funvtion that use Wrap or Tab
+func (st *Styler) Define(term, desc string) string {
+	term, desc = st.auto(term), st.auto(desc)
+
+	if st.defineFn == nil {
+		return term + ": " + desc
+	}
+
+	return st.defineFn(term, desc)
+}
+
+//Define adds a term definition using current Styler
+func Define(term, desc string) string {
+	return CurrentStyler.Define(term, desc)
 }
 
 //get retrieves a FormatFn from the given format.  If no FormatFn exists for this

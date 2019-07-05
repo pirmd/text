@@ -84,5 +84,5 @@ func (m Markup) render(st *Styler, s string) string {
 //WithAutostyler creates a new Styler that automatically styles text using the
 //given markup
 func (st *Styler) WithAutostyler(m Markup) *Styler {
-	return st.Extend(New(FormatMap{FmtAuto: m.Render(st)}, nil))
+	return st.Extend(New(FormatMap{FmtAuto: m.Render(st)}, nil, nil, nil, nil, nil))
 }

@@ -16,10 +16,7 @@ func testTextSyntax() (s string) {
 	s += Paragraph("Section _Introduction_ already demonstrates useful '*styles*''s Styles, this section completes with most of the others possibilities.")
 	s += Paragraph("Notably, package '*style*' can print in %s or *%s*.", Red("red"), Green("bold green"))
 	s += Paragraph("It also knows how to format _lists_:")
-	s += List("this very long and detailed sentence is here to demonstrate that list can be formatted and wrapped because it hopefully be so long that it will not fulfill the maximum number of authorized char per lines is reached.")
-	s += List("It is also possible to check that paragraph inside lists are respected.\nAs you can see here in this simple example.")
 	s += Paragraph("It also knows how to _define_ terms:")
-	s += DefTerm("style") + DefDesc("A particular procedure by which something is done; a manner or way.")
 	s += Section("Demonstrating tables")
 	s += Paragraph("Package '*style*' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation")
 	s += Table(
@@ -42,7 +39,7 @@ func TestSyntaxLightMarkup(t *testing.T) {
 		FmtBold:   Sprintf("BOLD{%s}"),
 		FmtItalic: Sprintf("ITALIC{%s}"),
 		FmtCode:   Sprintf("CODE{%s}"),
-	}, nil)
+	}, nil, nil, nil, nil, nil)
 
 	testCases := []struct {
 		in  string

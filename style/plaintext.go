@@ -1,6 +1,7 @@
 package style
 
 import (
+	"fmt"
 	"strings"
 	"unicode"
 
@@ -17,7 +18,10 @@ var (
 	//not cohabite correctly with wrapping func that cannot guess a '\t' length
 	IndentPrefix = "    "
 
-	indent2Prefix string //IndentPrefix x2
+	//ListBullets list the bullets to be added for each list items. Bullets are
+	//chosen in that order per list nested-level
+	ListBullets = [...]string{"-", "*", "+"}
+	//ListBullets = [...]string{"\u2043", "\u2022", "\u25E6"}
 )
 
 //core is a minimal styler providing function that almost everybody wants to
@@ -31,6 +35,10 @@ var core = New(
 		FmtNoLeadingSpace:  func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
 		FmtNoTrailingSpace: func(s string) string { return strings.TrimRightFunc(s, unicode.IsSpace) },
 	},
+	nil,
+	nil,
+	nil,
+	nil,
 	nil,
 )
 
@@ -46,36 +54,37 @@ var PlainText = core.Extend(New(
 		FmtHeader3:   Sprintf("\n%s"),
 		FmtParagraph: Sprintf("\n%s\n"),
 		FmtLine:      Sprintf("%s\n"),
-		FmtDefTerm:   Sprintf("\n%s:\n"),
-		FmtDefDesc:   Sprintf("%s\n"),
+		FmtWrap:      func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
+	},
 
-		FmtListItem: func(s string) string {
-			l := "\n" + text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth)
-			if strings.HasSuffix(l, "\n") {
-				return l
-			}
-			return l + "\n"
-		},
-		FmtList2Item: func(s string) string {
-			l := text.TabWithBullet(s, "- ", IndentPrefix, DefaultTxtWidth)
-			if strings.HasSuffix(l, "\n") {
-				return l
-			}
-			return l + "\n"
-		},
+	//tabFn
+	func(level int) FormatFn {
+		prefix := strings.Repeat(IndentPrefix, level)
+		return func(s string) string {
+			return text.Tab(s, prefix, DefaultTxtWidth)
+		}
+	},
 
-		FmtWrap: func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
-		FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, DefaultTxtWidth) },
-		FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, DefaultTxtWidth) },
+	//listFn
+	nil,
+
+	//listItemFn
+	func(level int) FormatFn {
+		prefix := strings.Repeat(IndentPrefix, level)
+		bullet := ListBullets[level%len(ListBullets)] + " "
+		return func(s string) string {
+			return "\n" + text.TabWithBullet(s, bullet, prefix, DefaultTxtWidth)
+		}
 	},
 
 	//tableFn
 	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", " ", rows...) },
+
+	//defineFn
+	func(term, desc string) string {
+		desc = text.Tab(desc, IndentPrefix, DefaultTxtWidth)
+		return fmt.Sprintf("\n%s:\n%s\n", term, desc)
+	},
 ))
 
 //XXX: add a Numbered Item
-//XXX: create a Tab(n) function -> FormatFn
-
-func init() {
-	indent2Prefix = IndentPrefix + IndentPrefix
-}

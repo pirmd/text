@@ -14,8 +14,10 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
   This behaviour can be overwriten as wished
 - cli/input: add function to fire up a tool for a user to manually merge
   files/data
-- cli/style: add new styling functions: TrimLeadingSpace and TrimSpace
-- cli/style: add support to format tables
+- cli/style: add new styling functions: NoLeadingSpace, NoTrailingSpace and
+  TrimSpace
+- cli/style: add support to format tables, nested lists and tabs
+- cli/style: add preliminary support to mdoc format
 - cli/style/text: add support for table's horizontal separators
 - cli/style/text: add a new DrawTable() function
 - cli/style/text: add a new TabWithBullet() function

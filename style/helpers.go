@@ -242,30 +242,6 @@ func Wrap(format string, a ...interface{}) string {
 	return CurrentStyler.Wrap(format, a...)
 }
 
-//Tab applies the style 'Tab' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) Tab(format string, a ...interface{}) string {
-	return st.stylef(FmtTab)(format, a...)
-}
-
-//Tab applies the style 'Tab' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func Tab(format string, a ...interface{}) string {
-	return CurrentStyler.Tab(format, a...)
-}
-
-//Tab2 applies the style 'Tab2' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) Tab2(format string, a ...interface{}) string {
-	return st.stylef(FmtTab2)(format, a...)
-}
-
-//Tab2 applies the style 'Tab2' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func Tab2(format string, a ...interface{}) string {
-	return CurrentStyler.Tab2(format, a...)
-}
-
 //DocHeader applies the style 'DocHeader' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st *Styler) DocHeader(format string, a ...interface{}) string {
@@ -338,78 +314,6 @@ func Line(format string, a ...interface{}) string {
 	return CurrentStyler.Line(format, a...)
 }
 
-//List applies the style 'List' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) List(format string, a ...interface{}) string {
-	return st.stylef(FmtList)(format, a...)
-}
-
-//List applies the style 'List' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func List(format string, a ...interface{}) string {
-	return CurrentStyler.List(format, a...)
-}
-
-//List2 applies the style 'List2' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) List2(format string, a ...interface{}) string {
-	return st.stylef(FmtList2)(format, a...)
-}
-
-//List2 applies the style 'List2' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func List2(format string, a ...interface{}) string {
-	return CurrentStyler.List2(format, a...)
-}
-
-//ListItem applies the style 'ListItem' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) ListItem(format string, a ...interface{}) string {
-	return st.stylef(FmtListItem)(format, a...)
-}
-
-//ListItem applies the style 'ListItem' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func ListItem(format string, a ...interface{}) string {
-	return CurrentStyler.ListItem(format, a...)
-}
-
-//List2Item applies the style 'List2Item' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) List2Item(format string, a ...interface{}) string {
-	return st.stylef(FmtList2Item)(format, a...)
-}
-
-//List2Item applies the style 'List2Item' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func List2Item(format string, a ...interface{}) string {
-	return CurrentStyler.List2Item(format, a...)
-}
-
-//DefTerm applies the style 'DefTerm' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) DefTerm(format string, a ...interface{}) string {
-	return st.stylef(FmtDefTerm)(format, a...)
-}
-
-//DefTerm applies the style 'DefTerm' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func DefTerm(format string, a ...interface{}) string {
-	return CurrentStyler.DefTerm(format, a...)
-}
-
-//DefDesc applies the style 'DefDesc' to the formatted string directive.
-//The given format and arguments follow fmt.Sprintf format.
-func (st *Styler) DefDesc(format string, a ...interface{}) string {
-	return st.stylef(FmtDefDesc)(format, a...)
-}
-
-//DefDesc applies the style 'DefDesc' using current Styler.
-//The given format and arguments follow fmt.Sprintf format
-func DefDesc(format string, a ...interface{}) string {
-	return CurrentStyler.DefDesc(format, a...)
-}
-
 //Code applies the style 'Code' to the formatted string directive.
 //The given format and arguments follow fmt.Sprintf format.
 func (st *Styler) Code(format string, a ...interface{}) string {
@@ -470,20 +374,12 @@ func (st *Styler) FuncMap() map[string]interface{} {
 		"Inverse":         st.Inverse,
 		"Strike":          st.Strike,
 		"Wrap":            st.Wrap,
-		"Tab":             st.Tab,
-		"Tab2":            st.Tab2,
 		"DocHeader":       st.DocHeader,
 		"Header":          st.Header,
 		"Header2":         st.Header2,
 		"Header3":         st.Header3,
 		"Paragraph":       st.Paragraph,
 		"Line":            st.Line,
-		"List":            st.List,
-		"List2":           st.List2,
-		"ListItem":        st.ListItem,
-		"List2Item":       st.List2Item,
-		"DefTerm":         st.DefTerm,
-		"DefDesc":         st.DefDesc,
 		"Code":            st.Code,
 		"Escape":          st.Escape,
 		"Auto":            st.Auto,
@@ -514,20 +410,12 @@ func FuncMap() map[string]interface{} {
 		"Inverse":         Inverse,
 		"Strike":          Strike,
 		"Wrap":            Wrap,
-		"Tab":             Tab,
-		"Tab2":            Tab2,
 		"DocHeader":       DocHeader,
 		"Header":          Header,
 		"Header2":         Header2,
 		"Header3":         Header3,
 		"Paragraph":       Paragraph,
 		"Line":            Line,
-		"List":            List,
-		"List2":           List2,
-		"ListItem":        ListItem,
-		"List2Item":       List2Item,
-		"DefTerm":         DefTerm,
-		"DefDesc":         DefDesc,
 		"Code":            Code,
 		"Escape":          Escape,
 		"Auto":            Auto,

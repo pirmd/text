@@ -33,40 +33,39 @@ DESCRIPTION
     non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 OPTIONS
-    
-    [1m--[1mbool[22m[22m:
-        A boolean flag
-    
-    [1m--[1mflag[22m=[3mFLAG[23m[22m:
-        A string flag
-    
-    [1m--[1menum[22m=[3mgood|bad|ugly[23m[22m:
-        An enum flag
+
+[1m--[1mbool[22m[22m:
+    A boolean flag
+
+[1m--[1mflag[22m=[3mFLAG[23m[22m:
+    A string flag
+
+[1m--[1menum[22m=[3mgood|bad|ugly[23m[22m:
+    An enum flag
 
 COMMANDS
-    
-    [1m[1mhelp[22m[22m:
-        Show usage information.
-    
-    [1m[1mversion[22m[22m:
-        Show version information.
-    
-    [1m[1mtest[22m [3mtest_arg[23m[22m:
-        Many of you know about [3mlorem ipsum[23m but few know what it means. So this 
-        sub-command's description is a perfect occasion to clarify that, while 
-        it was popularized in the XVI century, it originates from a text from 
-        Ciceron.
-    
-    [1m[1mtest2[22m [3mtest2[3marg1[23m [3mtest2[23marg2[23m[22m:
-        Test a second sub-command
-    
-    [1m[1mtest3[22m [<flags>] [1mhelp[22m|[1mtest31[22m [3mtest31_arg[23m[22m:
-        Test another sub-command that has a sub-subcommand [1mTest31[22m
-    
-    [1m[1mtest4[22m [3mtest4_arg[23m ...[22m:
-        Test another sub-command with unlimited args
+
+[1m[1mhelp[22m[22m:
+    Show usage information.
+
+[1m[1mversion[22m[22m:
+    Show version information.
+
+[1m[1mtest[22m [3mtest_arg[23m[22m:
+    Many of you know about [3mlorem ipsum[23m but few know what it means. So this 
+    sub-command's description is a perfect occasion to clarify that, while it 
+    was popularized in the XVI century, it originates from a text from Ciceron.
+
+[1m[1mtest2[22m [3mtest2[3marg1[23m [3mtest2[23marg2[23m[22m:
+    Test a second sub-command
+
+[1m[1mtest3[22m [<flags>] [1mhelp[22m|[1mtest31[22m [3mtest31_arg[23m[22m:
+    Test another sub-command that has a sub-subcommand [1mTest31[22m
+
+[1m[1mtest4[22m [3mtest4_arg[23m ...[22m:
+    Test another sub-command with unlimited args
 
 ARGUMENTS
-    
-    [1m[3mstring[23m[22m:
-        An argument that should be a string
+
+[1m[3mstring[23m[22m:
+    An argument that should be a string

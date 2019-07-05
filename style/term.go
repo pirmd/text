@@ -1,6 +1,7 @@
 package style
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/pirmd/cli/style/termsize"
@@ -14,28 +15,40 @@ var (
 //Term extends PlainText markup to display texts on terminals
 var Term = PlainText.Extend(New(
 	FormatMap{
-		FmtListItem: func(s string) string {
-			l := "\n" + text.TabWithBullet(s, "- ", IndentPrefix, termWidth)
-			if strings.HasSuffix(l, "\n") {
-				return l
-			}
-			return l + "\n"
-		},
-		FmtList2Item: func(s string) string {
-			l := text.TabWithBullet(s, "- ", IndentPrefix, termWidth)
-			if strings.HasSuffix(l, "\n") {
-				return l
-			}
-			return l + "\n"
-		},
-
 		FmtWrap: func(s string) string { return text.Wrap(s, termWidth) },
-		FmtTab:  func(s string) string { return text.Tab(s, IndentPrefix, termWidth) },
-		FmtTab2: func(s string) string { return text.Tab(s, indent2Prefix, termWidth) },
+	},
+
+	//tabFn
+	func(level int) FormatFn {
+		prefix := strings.Repeat(IndentPrefix, level)
+		return func(s string) string {
+			return text.Tab(s, prefix, termWidth)
+		}
+	},
+
+	//listFn
+	nil,
+
+	//ListItemFn
+	func(level int) FormatFn {
+		prefix := strings.Repeat(IndentPrefix, level)
+		bullet := ListBullets[level%len(ListBullets)] + " "
+		return func(s string) string {
+			return "\n" + text.TabWithBullet(s, bullet, prefix, termWidth)
+		}
 	},
 
 	//tableFn
-	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", " ", rows...) },
+	func(rows ...[]string) string {
+		return "\n" + text.DrawTable(termWidth, " ", "-", " ", rows...)
+	},
+
+	//defineFn
+	//XXX: Allow variable tab level
+	func(term, desc string) string {
+		desc = text.Tab(desc, IndentPrefix, termWidth)
+		return fmt.Sprintf("\n%s:\n%s\n", term, desc)
+	},
 ))
 
 //ColorTerm extends Term markup with colors and text styles that can be
@@ -55,10 +68,17 @@ var ColorTerm = Term.Extend(New(
 		FmtUnderline: Sprintf("\x1b[4m%s\x1b[24m"),
 		FmtInverse:   Sprintf("\x1b[7m%s\x1b[27m"),
 		FmtStrike:    Sprintf("\x1b[9m%s\x1b[29m"),
-
-		FmtDefTerm: Sprintf("\n\x1b[1m%s\x1b[22m:\n"), //Defterm in Bold
 	},
 	nil,
+	nil,
+	nil,
+	nil,
+
+	//defineFn (term in Bold)
+	func(term, desc string) string {
+		desc = text.Tab(desc, IndentPrefix, termWidth)
+		return fmt.Sprintf("\n\x1b[1m%s\x1b[22m:\n%s\n", term, desc)
+	},
 ))
 
 func init() {

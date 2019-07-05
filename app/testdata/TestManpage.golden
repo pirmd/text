@@ -26,47 +26,47 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 .SH Options
 
 .TP
-\-\-\fBbool\fP
+\fB\-\-\fBbool\fP\fP
 A boolean flag
 
 .TP
-\-\-\fBflag\fP=\fIFLAG\fP
+\fB\-\-\fBflag\fP=\fIFLAG\fP\fP
 A string flag
 
 .TP
-\-\-\fBenum\fP=\fIgood|bad|ugly\fP
+\fB\-\-\fBenum\fP=\fIgood|bad|ugly\fP\fP
 An enum flag
 
 .SH Commands
 
 .TP
-\fBhelp\fP
+\fB\fBhelp\fP\fP
 Show usage information.
 
 .TP
-\fBversion\fP
+\fB\fBversion\fP\fP
 Show version information.
 
 .TP
-\fBtest\fP \fItest\_arg\fP
+\fB\fBtest\fP \fItest\_arg\fP\fP
 Many of you know about \\fIlorem ipsum\\fP but few know what it means. So this sub\-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.
 
 .TP
-\fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP
+\fB\fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP\fP
 Test a second sub\-command
 
 .TP
-\fBtest3\fP [<flags>] \fBhelp\fP|\fBtest31\fP \fItest31\_arg\fP
+\fB\fBtest3\fP [<flags>] \fBhelp\fP|\fBtest31\fP \fItest31\_arg\fP\fP
 Test another sub\-command that has a sub\-subcommand \fBTest31\fP
 
 .TP
-\fBtest4\fP \fItest4\_arg\fP ...
+\fB\fBtest4\fP \fItest4\_arg\fP ...\fP
 Test another sub\-command with unlimited args
 
 .SH Arguments
 
 .TP
-\fIstring\fP
+\fB\fIstring\fP\fP
 An argument that should be a string
 
 .SH See Also
