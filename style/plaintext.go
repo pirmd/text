@@ -39,6 +39,7 @@ type Text struct {
 	//ListBullets list the bullets added to each list items. Bullets are chosen
 	//in the given order following the list nested-level (if nested-level is
 	//greter than bullets number it restarts from 1)
+	//XXX: could be prompoted from Core?
 	ListBullets []string
 
 	indentLvl int
@@ -79,31 +80,25 @@ func (st *Text) Header(lvl int) func(s string) string {
 
 //Paragraph returns text as a new paragraph
 func (st *Text) Paragraph(s string) string {
-	return st.br() + st.Line(s)
-}
-
-//Line returns text as a new line
-func (st *Text) Line(s string) string {
-	return st.tab(s, st.indentLvl, "") + "\n"
+	return st.br() + st.tab(s, st.indentLvl, "") + "\n"
 }
 
 //List returns a new bullet-list. It returns one line per list item.
+//It adds a bullet in front of each item according to st.BulletList and the
+//list's level.
+//A Tab is inserted before each item according to the list level.
 func (st *Text) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
+	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)] + " "
+
 	return func(items ...string) string {
 		st.indentLvl = oldlvl
+		for i, item := range items {
+			items[i] = st.br() + st.tab(item, st.indentLvl, bullet)
+		}
 		return strings.Join(items, "\n")
 	}
-}
-
-//ListItem returns a new bullet list's item.
-//It adds a bullet to each item according to the list level and the bullets
-//list found in st.ListBullets.  A Tab is inserted before each item according
-//to the list level.
-func (st *Text) ListItem(s string) string {
-	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)] + " "
-	return st.br() + st.tab(s, st.indentLvl, bullet)
 }
 
 //Define returns a term definition

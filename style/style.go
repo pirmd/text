@@ -60,10 +60,6 @@ type Styler interface {
 	//Paragraph returns text as a new paragraph.
 	Paragraph(string) string
 
-	//Line returns text as a new line
-	//XXX: Who use that?
-	Line(string) string
-
 	//Tab indents then wraps the provided string by the given indent level.
 	Tab(int) func(string) string
 

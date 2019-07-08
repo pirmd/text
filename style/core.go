@@ -118,11 +118,6 @@ func (st *Core) Paragraph(s string) string {
 	return s + "\n"
 }
 
-//Line returns text as a new line.
-func (st *Core) Line(s string) string {
-	return s + "\n"
-}
-
 //List returns a new bulleted-list. It returns one line per list item.
 //It adds a bullet in front of each item according to st.BulletList and the
 //list's level.

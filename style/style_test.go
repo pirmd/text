@@ -35,7 +35,7 @@ func testText(st style.Styler) (s string) {
 			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
 			"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 		),
-		st.Line("It is also possible to have a list's item that contains several paragraphs")+
+		"It is also possible to have a list's item that contains several paragraphs\n"+
 			st.Paragraph("For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list"),
 	)
 	s += st.Paragraph("It also knows how to " + st.Italic("define") + " terms:")
