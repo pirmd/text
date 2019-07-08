@@ -30,9 +30,9 @@ func TestWrap(t *testing.T) {
 
 func TestWrapAndIndent(t *testing.T) {
 	testCases := []struct {
-		inT string
-		inP string
-		out string
+		inTxt string
+		inP   string
+		out   string
 	}{
 		{
 			"Test",
@@ -52,17 +52,17 @@ func TestWrapAndIndent(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Tab(tc.inT, tc.inP, 40)
+		got := Tab(tc.inTxt, tc.inP, 40)
 		if got != tc.out {
 			t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%s\nGot   :\n%s\n", showTrailingSpaces(tc.out), showTrailingSpaces(got))
 		}
 	}
 }
 
-func TestTabWithBullet(t *testing.T) {
+func TestTabWithTag(t *testing.T) {
 	testCases := []struct {
-		inT      string
-		inB, inP string
+		inTxt    string
+		inT, inP string
 		out      string
 	}{
 		{
@@ -104,9 +104,61 @@ func TestTabWithBullet(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := TabWithBullet(tc.inT, tc.inB, tc.inP, 40)
+		got := TabWithTag(tc.inTxt, tc.inT, tc.inP, 40)
 		if got != tc.out {
-			t.Errorf("Inserting Bullet (bullet='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inB, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
+			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inT, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
+		}
+	}
+}
+
+func TestInsertWithTag(t *testing.T) {
+	testCases := []struct {
+		inTxt    string
+		inT, inP string
+		out      string
+	}{
+		{
+			"Test",
+			"  - ",
+			"    ",
+			"  - Test",
+		},
+		{
+			"This two-lines paragraph will be indented with a bullet on the first line.\nSecond line is only here for test with no real message or interesting content.",
+			"  \x1b[31m-\x1b[0m ",
+			"  \x1b[31m>\x1b[0m ",
+			"  \x1b[31m-\x1b[0m This two-lines paragraph will be indented with a bullet on the first line.\n  \x1b[31m>\x1b[0m Second line is only here for test with no real message or interesting content.",
+		},
+		{
+			"This two-lines paragraph will be indented with a bullet on the first line.\nSecond line is only here for test with no real message or interesting content.",
+			"- ",
+			"  > ",
+			"  - This two-lines paragraph will be indented with a bullet on the first line.\n  > Second line is only here for test with no real message or interesting content.",
+		},
+		{
+			"This two-lines paragraph will be indented with a bullet on the first line.\nSecond line is only here for test with no real message or interesting content.",
+			"\x1b[31m-\x1b[0m ",
+			"  \x1b[31m>\x1b[0m ",
+			"  \x1b[31m-\x1b[0m This two-lines paragraph will be indented with a bullet on the first line.\n  \x1b[31m>\x1b[0m Second line is only here for test with no real message or interesting content.",
+		},
+		{
+			"This two-lines paragraph will be indented with a bullet on the first line.\nSecond line is only here for test with no real message or interesting content.",
+			"- ",
+			"",
+			"- This two-lines paragraph will be indented with a bullet on the first line.\n  Second line is only here for test with no real message or interesting content.",
+		},
+		{
+			"This two-lines paragraph will be indented with a bullet on the first line.\nSecond line is only here for test with no real message or interesting content.",
+			"  - ",
+			"> ",
+			"  - This two-lines paragraph will be indented with a bullet on the first line.\n>   Second line is only here for test with no real message or interesting content.",
+		},
+	}
+
+	for _, tc := range testCases {
+		got := IndentWithTag(tc.inTxt, tc.inT, tc.inP)
+		if got != tc.out {
+			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inT, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
 		}
 	}
 }
