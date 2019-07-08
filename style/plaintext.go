@@ -1,90 +1,144 @@
 package style
 
 import (
-	"fmt"
 	"strings"
-	"unicode"
 
 	"github.com/pirmd/cli/style/text"
 )
 
 var (
-	//DefaultTxtWidth is the text width used to wrap text for markups that
-	//supports it (PlainText notably)
-	DefaultTxtWidth = 80
+	_ Styler = (*Text)(nil) //Makes sure that Text implements Styler
 
-	//IndentPrefix is the suit of bytes used to indent text for markups that
-	//supports it (PlainText notably) Use of '\t' is not recommended as it does
-	//not cohabite correctly with wrapping func that cannot guess a '\t' length
-	IndentPrefix = "    "
-
-	//ListBullets list the bullets to be added for each list items. Bullets are
-	//chosen in that order per list nested-level
-	ListBullets = [...]string{"-", "*", "+"}
-	//ListBullets = [...]string{"\u2043", "\u2022", "\u25E6"}
+	//Plaintext is a customized style.Text Styler to write plain text. It
+	//allows for maximum 80 chars per line, indenting is made of 4 spaces and
+	//list bullets are made of unicode hyphen and bullet.
+	Plaintext = &Text{
+		TextWidth:    80,
+		IndentPrefix: "    ",
+		ListBullets:  []string{"\u2043", "\u2022", "\u25E6"},
+	}
 )
 
-//core is a minimal styler providing function that almost everybody wants to
-//have
-var core = New(
-	FormatMap{
-		FmtUpper:           strings.ToUpper,
-		FmtLower:           strings.ToLower,
-		FmtTitle:           strings.Title,
-		FmtTrimSpace:       strings.TrimSpace,
-		FmtNoLeadingSpace:  func(s string) string { return strings.TrimLeftFunc(s, unicode.IsSpace) },
-		FmtNoTrailingSpace: func(s string) string { return strings.TrimRightFunc(s, unicode.IsSpace) },
-	},
-	nil,
-	nil,
-	nil,
-	nil,
-	nil,
-)
+//Text implements Styler interface to provide basic formatting to write plain
+//texts.  It supports text indenting and wraping as well as table but does not
+//provide color nor text emphasis supports.
+type Text struct {
+	*Core
 
-//PlainText is a Styler that provides a minimum style for plain texts. Wrap
-//format wraps text to the maximum length specified by DefaultTxtWidth.
-//
-//Chaining multiples Wrap or Tab will, in most cases, void the result.
-var PlainText = core.Extend(New(
-	FormatMap{
-		FmtDocHeader: Sprintf("%s\n"),
-		FmtHeader:    Sprintf("\n%s\n"),
-		FmtHeader2:   Sprintf("\n%s"),
-		FmtHeader3:   Sprintf("\n%s"),
-		FmtParagraph: Sprintf("\n%s\n"),
-		FmtLine:      Sprintf("%s\n"),
-		FmtWrap:      func(s string) string { return text.Wrap(s, DefaultTxtWidth) },
-	},
+	//TextWidth specified the maximum length of a text line
+	//If st.TextWidth is null or negative, wraping is disabled (in practice, you
+	//still want st.Textwidth to be large enough to obtain a readable output).
+	TextWidth int
 
-	//tabFn
-	func(level int) FormatFn {
-		prefix := strings.Repeat(IndentPrefix, level)
-		return func(s string) string {
-			return text.Tab(s, prefix, DefaultTxtWidth)
-		}
-	},
+	//IndentPrefix is the string used to indent text.
+	//Use of "\t" is not recommended as it does not cohabite correctly with
+	//wrapping func that cannot guess a '\t' length.
+	//An empty string disable indenting and tabulation-like features.
+	IndentPrefix string
 
-	//listFn
-	nil,
+	//ListBullets list the bullets added to each list items. Bullets are chosen
+	//in the given order following the list nested-level (if nested-level is
+	//greter than bullets number it restarts from 1)
+	ListBullets []string
 
-	//listItemFn
-	func(level int) FormatFn {
-		prefix := strings.Repeat(IndentPrefix, level)
-		bullet := ListBullets[level%len(ListBullets)] + " "
-		return func(s string) string {
-			return "\n" + text.TabWithBullet(s, bullet, prefix, DefaultTxtWidth)
-		}
-	},
+	indentLvl int
 
-	//tableFn
-	func(rows ...[]string) string { return "\n" + text.DrawTable(DefaultTxtWidth, " ", "-", " ", rows...) },
+	separateWithBR bool //If true, adds a line break before paragraphs, headers
+	//or lists. It is automatically set-up the first time one
+	//any of these formats is used.
+}
 
-	//defineFn
-	func(term, desc string) string {
-		desc = text.Tab(desc, IndentPrefix, DefaultTxtWidth)
-		return fmt.Sprintf("\n%s:\n%s\n", term, desc)
-	},
-))
+//Tab changes the tabulation level.
+//If the tabulation level is positive, it wraps then indents provided text.
+//Wraping is done according to st.TextWidth value, if st.TextWidth is null, Tab
+//only indents and doesn't wrap the provided text.
+//Indenting is done using st.IndentPrefix string, that is repeated for each
+//tab-level.
+func (st *Text) Tab(lvl int) func(string) string {
+	oldlvl := st.indentLvl
+	st.indentLvl = lvl
+	return func(s string) string {
+		st.indentLvl = oldlvl
+		return s
+	}
+}
 
-//XXX: add a Numbered Item
+//Header returns text as a chapter's header.
+//This style does not support document metadata (Header(0) is not returning
+//anything)
+func (st *Text) Header(lvl int) func(s string) string {
+	switch lvl {
+	case 0:
+		return func(string) string { return "" }
+	case 1:
+		return func(s string) string { return st.br() + st.Upper(s) + "\n" }
+	default:
+		return func(s string) string { return st.br() + st.TitleCase(s) }
+	}
+}
+
+//Paragraph returns text as a new paragraph
+func (st *Text) Paragraph(s string) string {
+	return st.br() + st.Line(s)
+}
+
+//Line returns text as a new line
+func (st *Text) Line(s string) string {
+	return st.tab(s, st.indentLvl, "") + "\n"
+}
+
+//List returns a new bullet-list. It returns one line per list item.
+func (st *Text) List(lvl int) func(...string) string {
+	oldlvl := st.indentLvl
+	st.indentLvl = lvl
+	return func(items ...string) string {
+		st.indentLvl = oldlvl
+		return strings.Join(items, "\n")
+	}
+}
+
+//ListItem returns a new bullet list's item.
+//It adds a bullet to each item according to the list level and the bullets
+//list found in st.ListBullets.  A Tab is inserted before each item according
+//to the list level.
+func (st *Text) ListItem(s string) string {
+	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)] + " "
+	return st.br() + st.tab(s, st.indentLvl, bullet)
+}
+
+//Define returns a term definition
+func (st *Text) Define(term string, desc string) string {
+	term = st.tab(term, st.indentLvl, "") + "\n"
+	desc = st.tab(desc, st.indentLvl+1, "") + "\n"
+	return st.br() + term + desc
+}
+
+//Table draws a table out of the rpovided rows.
+//Table column width are guessed automatically and are arranged so that the table
+//fits into st.TextWidth.
+func (st *Text) Table(rows ...[]string) string {
+	//TODO(pirmd): ensure that IdentPrefix can work with ANSI code inside (notably
+	//here where len is used, should be text.visualLen?)
+	width := st.TextWidth - (st.indentLvl * len(st.IndentPrefix))
+	//TODO(pirmd): introduce way to chose/define Table grid
+	table := text.DrawTable(width, " ", "-", " ", rows...)
+
+	return st.br() + st.tab(table, st.indentLvl, "") + "\n"
+}
+
+func (st *Text) br() string {
+	if st.separateWithBR {
+		return "\n"
+	}
+	st.separateWithBR = true
+	return ""
+}
+
+func (st *Text) tab(s string, lvl int, tag string) string {
+	prefix := strings.Repeat(st.IndentPrefix, lvl)
+
+	if st.TextWidth > 0 {
+		return text.TabWithTag(s, tag, prefix, st.TextWidth)
+	}
+	return text.IndentWithTag(s, tag, prefix)
+}
