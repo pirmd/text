@@ -29,16 +29,14 @@ func testText(st style.Styler) (s string) {
 	s += st.Header(2)("Demonstrating lists")
 	s += st.Paragraph("It also knows how to format " + st.Italic("lists") + ": ")
 	s += st.List(0)(
-		st.ListItem("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached."),
-		st.ListItem("It also can support sub-lists:")+st.List(1)(
-			st.ListItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
-			st.ListItem("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."),
-			st.ListItem("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+		"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.",
+		"It also can support sub-lists:\n"+st.List(1)(
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+			"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 		),
-		st.ListItem(
-			st.Line("It is also possible to have a list's item that contains several paragraphs")+
-				st.Paragraph("For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list"),
-		),
+		st.Line("It is also possible to have a list's item that contains several paragraphs")+
+			st.Paragraph("For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list"),
 	)
 	s += st.Paragraph("It also knows how to " + st.Italic("define") + " terms:")
 	s += st.Define("style", "A particular procedure by which something is done; a manner or way.")
@@ -65,7 +63,7 @@ func testText(st style.Styler) (s string) {
 }
 
 func TestStyleCore(t *testing.T) {
-	out := testText(&style.Core{})
+	out := testText(&style.Core{ListBullets: []string{"-", "*", "+"}})
 	verify.MatchGolden(t, out, "Styling with 'Core' style failed")
 }
 

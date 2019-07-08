@@ -14,7 +14,12 @@ var (
 //outputs.
 //
 //Its only use is probably to serve as a basis to developp new Stylers.
-type Core struct{}
+type Core struct {
+	//ListBullets list the bullets added to each list items. Bullets are chosen
+	//in the given order following the list nested-level (if nested-level is
+	//greter than bullets number it restarts from 1)
+	ListBullets []string
+}
 
 //Upper changes a string to upper case
 func (st *Core) Upper(s string) string {
@@ -118,19 +123,20 @@ func (st *Core) Line(s string) string {
 	return s + "\n"
 }
 
-//List returns a new bullet-list. It returns one line per list item.
+//List returns a new bulleted-list. It returns one line per list item.
+//It adds a bullet in front of each item according to st.BulletList and the
+//list's level.
 //This style does not support nested-list so level is not taken into account.
 func (st *Core) List(lvl int) func(...string) string {
+	bullet := st.ListBullets[lvl%len(st.ListBullets)] + " "
+
 	return func(items ...string) string {
+		for i, item := range items {
+			items[i] = bullet + item
+		}
+
 		return strings.Join(items, "\n")
 	}
-}
-
-//ListItem returns a new bullet list's item. It returns the input preceded by a
-//hyphen ("- ")
-func (st *Core) ListItem(s string) string {
-	//TODO(pirmd): maybe allows to differenciate bullets type ("-", "+", "*")?
-	return "- " + s
 }
 
 //Define returns a term definition
@@ -150,9 +156,8 @@ func (st *Core) Table(rows ...[]string) string {
 	return strings.Join(r, "\n")
 }
 
-//Escape does nothing.
+//Escape does nothing for this type.
 func (st *Core) Escape(s string) string {
-	//XXX: implements Escape
 	return s
 }
 

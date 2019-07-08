@@ -70,9 +70,6 @@ type Styler interface {
 	//List returns a new bullet list with the given nested level.
 	List(int) func(...string) string
 
-	//ListItem returns a new bullet list's item.
-	ListItem(string) string
-
 	//Define returns a term definition.
 	Define(string, string) string
 
