@@ -151,6 +151,16 @@ func (st *Core) Table(rows ...[]string) string {
 	return strings.Join(r, "\n")
 }
 
+//Link returns links to internal or external resources
+func (st *Core) Link(txt string, url string) string {
+	return "[" + txt + "](" + url + ")"
+}
+
+//Img returns a string pointing to an image
+func (st *Core) Img(txt string, url string) string {
+	return "!" + st.Link(txt, url)
+}
+
 //Escape does nothing for this style.
 func (st *Core) Escape(s string) string {
 	return s

@@ -76,6 +76,12 @@ type Styler interface {
 	//Table draws a table.
 	Table(...[]string) string
 
+	//Link returns links to internal or external resources
+	Link(string, string) string
+
+	//Img returns links to an image
+	Img(string, string) string
+
 	//Escape escapes the provided text. Chaining Escapes with Styler formatting
 	//functions can lead to unexpected results.
 	Escape(string) string
