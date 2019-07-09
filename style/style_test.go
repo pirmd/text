@@ -11,9 +11,12 @@ func testText(st style.Styler) (s string) {
 	H := style.Chain(st.Header(1), st.Blue)
 	H2 := style.Chain(st.Header(2), st.Red)
 
-	s = H("Introduction")
+	s = st.Metadata("Test of package 'github.com/pirmd/cli/style'", "pirmd", "2019.07.09")
+
+	s += H("Introduction")
 	s += st.Paragraph("This small piece of text aims at demonstrating and testing package '" + st.Underline("style") + "'.")
 	s += st.Paragraph("It is writen by a " + st.Bold("non-native") + " English speaker, so pardon any faults.")
+	s += st.Paragraph("All details can be found in " + st.Link(st.Img("GoDoc", "https://godoc.org/github.com/pirmd/cli/style?status.svg"), "https://godoc.org/github.com/pirmd/cli/style"))
 
 	s += H("Examples of available styles")
 
@@ -90,11 +93,15 @@ func TestStyleTerm(t *testing.T) {
 	verify.MatchGolden(t, out, "Styling with 'Term' style failed")
 }
 
-//XXX: test with TextWidth = -1
-
 func TestStyleColorTerm(t *testing.T) {
 	st := style.ColorTerm
 	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
 	out := testText(st)
 	verify.MatchGolden(t, out, "Styling with 'ColorTerm' style failed")
+}
+
+func TestStyleMarkdown(t *testing.T) {
+	st := style.Markdown
+	out := testText(st)
+	verify.MatchGolden(t, out, "Styling with 'Markdown' style failed")
 }

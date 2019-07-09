@@ -105,7 +105,17 @@ func (st *Core) Tab(lvl int) func(string) string {
 
 //Header returns text as a chapter's header
 func (st *Core) Header(lvl int) func(s string) string {
-	return func(s string) string { return s + "\n" }
+	switch {
+	case lvl <= 0:
+		return func(string) string { return "" }
+	default:
+		return func(s string) string { return s + "\n" }
+	}
+}
+
+//Metadata is not supported by this style
+func (st *Core) Metadata(title, authors, date string) string {
+	return ""
 }
 
 //Paragraph returns text as a new paragraph.
@@ -161,7 +171,7 @@ func (st *Core) Img(txt string, url string) string {
 	return "!" + st.Link(txt, url)
 }
 
-//Escape does nothing for this style.
+//Escape escapes the provided text.
 func (st *Core) Escape(s string) string {
 	return s
 }

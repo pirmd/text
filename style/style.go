@@ -35,6 +35,10 @@ type Styler interface {
 	//White changes a string foreground color to white
 	White(string) string
 
+	//Inverse changes a string by inverting its fore- and back-ground
+	//colors
+	Inverse(string) string
+
 	//Bold changes a string case to bold
 	Bold(string) string
 
@@ -44,10 +48,6 @@ type Styler interface {
 	//Underline changes a string to be underlined
 	Underline(string) string
 
-	//Inverse changes a string by inverting its fore- and back-ground
-	//colors
-	Inverse(string) string
-
 	//Crossout changes a string to be strikethrough
 	Crossout(string) string
 
@@ -55,8 +55,10 @@ type Styler interface {
 	Tab(int) func(string) string
 
 	//Header returns text as a chapter's header
-	//Header of level 0 corresponds to document header.
 	Header(int) func(string) string
+
+	//Metadata returns formatted metadata information (title, author(s), date)
+	Metadata(string, string, string) string
 
 	//Paragraph returns text as a new paragraph.
 	Paragraph(string) string
@@ -82,8 +84,8 @@ type Styler interface {
 	//Img returns links to an image
 	Img(string, string) string
 
-	//Escape escapes the provided text. Chaining Escapes with Styler formatting
-	//functions can lead to unexpected results.
+	//Escape escapes the provided text.
+	//Chaining Escapes with Styler formatting functions can lead to unexpected results.
 	Escape(string) string
 }
 

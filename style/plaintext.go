@@ -68,13 +68,11 @@ func (st *Text) Tab(lvl int) func(string) string {
 }
 
 //Header returns text as a chapter's header.
-//This style does not support document metadata (Header(0) is not returning
-//anything)
 func (st *Text) Header(lvl int) func(s string) string {
-	switch lvl {
-	case 0:
+	switch {
+	case lvl <= 0:
 		return func(string) string { return "" }
-	case 1:
+	case lvl == 1:
 		return func(s string) string { return st.br() + st.Upper(s) + "\n" }
 	default:
 		return func(s string) string { return st.br() + st.TitleCase(s) }

@@ -1,34 +1,82 @@
 package style
 
 import (
-	"fmt"
-	"github.com/pirmd/cli/style/text"
+	"strings"
 )
 
-//Markdown is a sub-set of markdown markup
-var Markdown = PlainText.Extend(New(
-	FormatMap{
-		FmtBold:   Sprintf("**%s**"),
-		FmtItalic: Sprintf("*%s*"),
-		FmtStrike: Sprintf("~~%s~~"),
+var (
+	_ Styler = (*MkdText)(nil) //Makes sure that MkdText implements Styler
 
-		FmtHeader:  Sprintf("\n# %s\n"),
-		FmtHeader2: Sprintf("\n## %s\n"),
-		FmtHeader3: Sprintf("\n### %s\n"),
+	//Markdown is a customized style.MkdText Styler to write plain text using
+	//the markdown idiom.
+	//Text wrapping is activated (80 chars maximum per line) so that reading
+	//directly markdown text is easier to the eye.
+	Markdown = &MkdText{&Text{
+		TextWidth:    80,
+		IndentPrefix: "    ",
+		ListBullets:  []string{"- ", "* ", "+ "},
+	}}
+)
 
-		FmtCode: Sprintf("`%s`"),
-	},
-	nil,
-	nil,
-	nil,
-	nil,
+//MkdText implements Styler interface to provide formatting to write plain
+//texts using the markdown idiom.
+type MkdText struct {
+	*Text
+}
 
-	//defineFn
-	func(term, desc string) string {
-		s := fmt.Sprintf("\n%s\n:%s\n", term, desc)
-		return text.Wrap(s, DefaultTxtWidth)
-	},
-))
+//Header returns text as a chapter's header.
+func (st *MkdText) Header(lvl int) func(s string) string {
+	switch {
+	case lvl <= 0:
+		return func(string) string { return "" }
+	case lvl == 1:
+		return func(s string) string { return st.br() + "# " + st.Upper(s) + "\n" }
+	default:
+		hashes := strings.Repeat("#", lvl) + " "
+		return func(s string) string { return st.br() + hashes + st.TitleCase(s) + "\n" }
+	}
+}
 
-//XXX: Introduce Code and Bloc, transfer them to plaintext?
-//XXX: Introduce escaping logic
+//Metadata returns formatted metadata information (title, author(s), date)
+func (st *MkdText) Metadata(title, authors, date string) string {
+	return st.br() + "% " + title + "\n% " + authors + "\n% " + date + "\n"
+}
+
+//Bold changes a string case to bold
+func (st *MkdText) Bold(s string) string {
+	return "__" + s + "__"
+}
+
+//Italic changes a string case to italic
+func (st *MkdText) Italic(s string) string {
+	return "*" + s + "*"
+}
+
+//Crossout changes a string to be strikethrough
+func (st *MkdText) Crossout(s string) string {
+	return "~~" + s + "~~"
+}
+
+//Define returns a term definition
+func (st *MkdText) Define(term string, desc string) string {
+	return st.br() + st.tab(term+"\n:"+desc, st.indentLvl, "") + "\n"
+}
+
+//Escape escapes the provided text.
+func (st *MkdText) Escape(s string) string {
+	var toEscape = [...]string{"\\", "`", "*", "_", "{", "}", "[", "]", "(", ")", ">", "#", "+", "-", ".", "!"}
+
+	//Assume that if supplied string contains already escaped char, it was
+	//already escaped (chaining of styling's functions)
+	for _, e := range toEscape {
+		if strings.Contains(s, "\\"+e) {
+			return s
+		}
+	}
+
+	for _, e := range toEscape {
+		s = strings.ReplaceAll(s, e, "\\"+e)
+	}
+
+	return s
+}
