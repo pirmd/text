@@ -15,7 +15,7 @@ var (
 	Plaintext = &Text{
 		TextWidth:    80,
 		IndentPrefix: "    ",
-		ListBullets:  []string{"\u2043", "\u2022", "\u25E6"},
+		ListBullets:  []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}
 )
 
@@ -38,15 +38,16 @@ type Text struct {
 
 	//ListBullets list the bullets added to each list items. Bullets are chosen
 	//in the given order following the list nested-level (if nested-level is
-	//greter than bullets number it restarts from 1)
-	//XXX: could be prompoted from Core?
+	//greater than bullets number it restarts from 1).
+	//If you want some spaces between the bullet and the start of text, you
+	//have to include it (avoid "\t" nevertheless).
 	ListBullets []string
 
 	indentLvl int
 
-	separateWithBR bool //If true, adds a line break before paragraphs, headers
-	//or lists. It is automatically set-up the first time one
-	//any of these formats is used.
+	//If true, adds a line break before paragraphs, headers or lists. It is
+	//automatically set-up the first time one any of these formats is used.
+	needBR bool
 }
 
 //Tab changes the tabulation level.
@@ -90,7 +91,7 @@ func (st *Text) Paragraph(s string) string {
 func (st *Text) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
-	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)] + " "
+	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
 
 	return func(items ...string) string {
 		st.indentLvl = oldlvl
@@ -122,10 +123,10 @@ func (st *Text) Table(rows ...[]string) string {
 }
 
 func (st *Text) br() string {
-	if st.separateWithBR {
+	if st.needBR {
 		return "\n"
 	}
-	st.separateWithBR = true
+	st.needBR = true
 	return ""
 }
 

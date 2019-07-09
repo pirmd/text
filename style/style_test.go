@@ -63,7 +63,7 @@ func testText(st style.Styler) (s string) {
 }
 
 func TestStyleCore(t *testing.T) {
-	out := testText(&style.Core{ListBullets: []string{"-", "*", "+"}})
+	out := testText(&style.Core{})
 	verify.MatchGolden(t, out, "Styling with 'Core' style failed")
 }
 

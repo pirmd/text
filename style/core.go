@@ -14,12 +14,7 @@ var (
 //outputs.
 //
 //Its only use is probably to serve as a basis to developp new Stylers.
-type Core struct {
-	//ListBullets list the bullets added to each list items. Bullets are chosen
-	//in the given order following the list nested-level (if nested-level is
-	//greter than bullets number it restarts from 1)
-	ListBullets []string
-}
+type Core struct{}
 
 //Upper changes a string to upper case
 func (st *Core) Upper(s string) string {
@@ -123,7 +118,7 @@ func (st *Core) Paragraph(s string) string {
 //list's level.
 //This style does not support nested-list so level is not taken into account.
 func (st *Core) List(lvl int) func(...string) string {
-	bullet := st.ListBullets[lvl%len(st.ListBullets)] + " "
+	bullet := [3]string{"- ", "+ ", "* "}[lvl%3]
 
 	return func(items ...string) string {
 		for i, item := range items {
@@ -151,13 +146,7 @@ func (st *Core) Table(rows ...[]string) string {
 	return strings.Join(r, "\n")
 }
 
-//Escape does nothing for this type.
+//Escape does nothing for this style.
 func (st *Core) Escape(s string) string {
-	return s
-}
-
-//Auto auto-styles the input text.
-func (st *Core) Auto(s string) string {
-	//XXX: implements Auto
 	return s
 }

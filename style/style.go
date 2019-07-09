@@ -1,7 +1,5 @@
 package style
 
-//XXX: Harmonize with pandoc's markdown guide ([[https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html%23raw-tex]]
-
 //Styler represents any type that knows how to style text
 type Styler interface {
 	//Upper changes a string case to upper case
@@ -53,15 +51,15 @@ type Styler interface {
 	//Strike changes a string to be strikethrough
 	Strike(string) string
 
+	//Tab indents then wraps the provided text by the given indent level.
+	Tab(int) func(string) string
+
 	//Header returns text as a chapter's header
 	//Header of level 0 corresponds to document header.
 	Header(int) func(string) string
 
 	//Paragraph returns text as a new paragraph.
 	Paragraph(string) string
-
-	//Tab indents then wraps the provided string by the given indent level.
-	Tab(int) func(string) string
 
 	//List returns a new bullet list with the given nested level.
 	List(int) func(...string) string
@@ -72,11 +70,7 @@ type Styler interface {
 	//Table draws a table.
 	Table(...[]string) string
 
-	//Escape escapes the input text. Escape is automatically applied and
-	//does not usually need to be called manually
+	//Escape escapes the provided text. Chaining Escapes with Styler formatting
+	//functions can lead to unexpected results.
 	Escape(string) string
-
-	//Auto auto-styles the input text. Usually used with a Markup Auto is
-	//automatically applied and does not usually need to be called manually
-	Auto(string) string
 }
