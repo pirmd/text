@@ -1,6 +1,7 @@
 package style
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/pirmd/cli/style/text"
@@ -43,7 +44,8 @@ type Text struct {
 	//have to include it (avoid "\t" nevertheless).
 	ListBullets []string
 
-	indentLvl int
+	indentLvl   int
+	enumerators []int
 
 	//If true, adds a line break before paragraphs, headers or lists. It is
 	//automatically set-up the first time one any of these formats is used.
@@ -84,24 +86,41 @@ func (st *Text) Paragraph(s string) string {
 	return st.br() + st.tab(s, st.indentLvl, "") + "\n"
 }
 
-//List returns a new bullet-list. It returns one line per list item.
+//List returns a new list (ordered or bulleted) with the proper nested level.
+//List works in conjunction with either BulletedItem or OrderedItem.
 func (st *Text) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
 
+	for st.indentLvl >= len(st.enumerators) {
+		st.enumerators = append(st.enumerators, make([]int, 2)...)
+	}
+
 	return func(items ...string) string {
+		st.enumerators[st.indentLvl] = 0
 		st.indentLvl = oldlvl
 		return strings.Join(items, "\n")
 	}
 }
 
-//ListItem returns a new bullet-list item.
-//It adds a bullet in front of each item according to st.BulletList and the
-//list's level.
+//BulletedItem returns a new bullet-list item.
+//It adds a bullet in front of the provided string according to st.BulletList
+//and the list's level.
 //A Tab is inserted before each item according to the list level.
-func (st *Text) ListItem(s string) string {
+func (st *Text) BulletedItem(s string) string {
 	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
 	return st.br() + st.tab(s, st.indentLvl, bullet)
+}
+
+//OrderedItem returns a new ordered-list item.
+//It adds an enumerator in front of the provided string according to the
+//current enumerator increment of the corresponding list's level (therefore
+//only one enumerator can be followed for a given list's level).
+//A Tab is inserted before each item according to the list level.
+func (st *Text) OrderedItem(s string) string {
+	st.enumerators[st.indentLvl]++
+	enum := strconv.Itoa(st.enumerators[st.indentLvl]) + ". "
+	return st.br() + st.tab(s, st.indentLvl, enum)
 }
 
 //Define returns a term definition

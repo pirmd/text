@@ -120,11 +120,18 @@ func (st *Core) List(lvl int) func(...string) string {
 	}
 }
 
-//ListItem returns a new bullet-list item.
+//BulletedItem returns a new bullet-list item.
 //It adds an hyphen in front of each item. This style does not support
 //nested-list so level is not taken into account.
-func (st *Core) ListItem(s string) string {
+func (st *Core) BulletedItem(s string) string {
 	return "- " + s
+}
+
+//OrderedItem returns a new ordered-list item.
+//It adds a "#" in front of each item. This style does not support
+//nested-list so level is not taken into account.
+func (st *Core) OrderedItem(s string) string {
+	return "# " + s
 }
 
 //Define returns a term definition

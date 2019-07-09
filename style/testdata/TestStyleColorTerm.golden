@@ -33,36 +33,58 @@ Several levels of tabulations can be used:
                 deserunt mollit anim id est laborum.
 [31m
 Demonstrating Lists[0m
-It also knows how to format [3mlists[23m: 
+It knows how to format [3mlists[23m: 
 
-  • This very long and detailed sentence is here to 
+⁃ This very long and detailed sentence is here to 
+  demonstrate that list can be formatted and wrapped. It 
+  should hopefully be so long that it will not fulfill the 
+  maximum number of authorized chars per line is reached.
+
+⁃ It also can support sub-lists:
+
+  • Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+    sed do eiusmod tempor incididunt ut labore et dolore 
+    magna aliqua.
+
+  • Ut enim ad minim veniam, quis nostrud exercitation 
+    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate 
+    velit esse cillum dolore eu fugiat nulla pariatur.
+
+  • Excepteur sint occaecat cupidatat non proident, sunt in 
+    culpa qui officia deserunt mollit anim id est laborum.
+
+⁃ It is also possible to have a list's item that contains 
+  several paragraphs.
+
+For example, this paragraph that I made artificially long to
+verify that wrapping is working correctly inside list
+
+It can build [1mordered [3mlists[23m[22m: 
+
+ 1. This very long and detailed sentence is here to 
     demonstrate that list can be formatted and wrapped. It 
     should hopefully be so long that it will not fulfill the
     maximum number of authorized chars per line is reached.
 
-  • It also can support sub-lists:
+ 2. It also can support sub-lists:
 
-      ◦ Lorem ipsum dolor sit amet, consectetur adipiscing 
+     1. Lorem ipsum dolor sit amet, consectetur adipiscing 
         elit, sed do eiusmod tempor incididunt ut labore et 
         dolore magna aliqua.
 
-      ◦ Ut enim ad minim veniam, quis nostrud exercitation 
+     2. Ut enim ad minim veniam, quis nostrud exercitation 
         ullamco laboris nisi ut aliquip ex ea commodo 
         consequat. Duis aute irure dolor in reprehenderit in
         voluptate velit esse cillum dolore eu fugiat nulla 
         pariatur.
 
-      ◦ Excepteur sint occaecat cupidatat non proident, sunt
+     3. Excepteur sint occaecat cupidatat non proident, sunt
         in culpa qui officia deserunt mollit anim id est 
         laborum.
 
-  • It is also possible to have a list's item that contains 
-    several paragraphs.
-
-    For example, this paragraph that I made artificially 
-    long to verify that wrapping is working correctly inside
-    list
-
+  • It is also possible to mix with bullet list if you 
+    really want to.
 It also knows how to [3mdefine[23m terms:
 
 [1mstyle[22m

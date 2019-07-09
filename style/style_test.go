@@ -26,17 +26,29 @@ func testText(st style.Styler) (s string) {
 	s += st.Tab(4)(st.Paragraph("(Level 4) Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."))
 
 	s += H2("Demonstrating lists")
-	s += st.Paragraph("It also knows how to format " + st.Italic("lists") + ": ")
-	s += st.List(1)(
-		st.ListItem("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached."),
-		st.ListItem("It also can support sub-lists:\n")+st.List(2)(
-			st.ListItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
-			st.ListItem("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."),
-			st.ListItem("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+	s += st.Paragraph("It knows how to format " + st.Italic("lists") + ": ")
+	s += st.List(0)(
+		st.BulletedItem("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached."),
+		st.BulletedItem("It also can support sub-lists:\n")+st.List(1)(
+			st.BulletedItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+			st.BulletedItem("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."),
+			st.BulletedItem("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
 		),
-		st.ListItem("It is also possible to have a list's item that contains several paragraphs.\n")+
+		st.BulletedItem("It is also possible to have a list's item that contains several paragraphs.\n")+
 			st.Paragraph("For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list"),
 	)
+
+	s += st.Paragraph("It can build " + st.Bold("ordered"+" "+st.Italic("lists")) + ": ")
+	s += st.List(1)(
+		st.OrderedItem("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached."),
+		st.OrderedItem("It also can support sub-lists:\n")+st.List(2)(
+			st.OrderedItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+			st.OrderedItem("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."),
+			st.OrderedItem("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+		),
+		st.BulletedItem("It is also possible to mix with bullet list if you really want to."),
+	)
+
 	s += st.Paragraph("It also knows how to " + st.Italic("define") + " terms:")
 	s += st.Define("style", "A particular procedure by which something is done; a manner or way.")
 	s += st.Paragraph("Even using Tabs:")
