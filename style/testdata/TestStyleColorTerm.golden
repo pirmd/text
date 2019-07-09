@@ -1,82 +1,88 @@
-[34mINTRODUCTION[0m
-
+[34mINTRODUCTION
+[0m
 This small piece of text aims at demonstrating and testing 
-my styling package '[4mstyle[24m'.
+package '[4mstyle[24m'.
 
 It is writen by a [1mnon-native[22m English speaker, so pardon any 
 faults.
-
-[34mEXAMPLES OF AVAILABLE STYLES[0m
-
-[31mDemonstrating Common Formatting[0m
+[34m
+EXAMPLES OF AVAILABLE STYLES
+[0m[31m
+Demonstrating Common Formatting[0m
 Section [4mIntroduction[24m already demonstrates useful styles from
 package 'styles', this section completes them with most of 
 the others possibilities.
 
-Notably, package '[4mstyle[24m' can print in [31mred[0m or [1m[32mbold green[0m[22m (if 
+Notably, package [4mstyle[24m can print in [31mred[0m or [1m[32mgreen bold[0m[22m (if 
 chosen style supports it).
 
 Several levels of tabulations can be used:
-    
+
     (Level 1) Lorem ipsum dolor sit amet, consectetur 
     adipiscing elit, sed do eiusmod tempor incididunt ut 
     labore et dolore magna aliqua.
-        
+
         (Level 2) Ut enim ad minim veniam, quis nostrud 
         exercitation ullamco laboris nisi ut aliquip ex ea 
         commodo consequat. Duis aute irure dolor in 
         reprehenderit in voluptate velit esse cillum dolore 
         eu fugiat nulla pariatur.
-                
+
                 (Level 4) Excepteur sint occaecat cupidatat 
                 non proident, sunt in culpa qui officia 
                 deserunt mollit anim id est laborum.
+[31m
+Demonstrating Lists[0m
+It also knows how to format [3mlists[23m: 
 
-[31mDemonstrating Lists[0m
-It also knows how to format [3mlists[23m:
+  • This very long and detailed sentence is here to 
+    demonstrate that list can be formatted and wrapped. It 
+    should hopefully be so long that it will not fulfill the
+    maximum number of authorized chars per line is reached.
 
-- This very long and detailed sentence is here to 
-  demonstrate that list can be formatted and wrapped. It 
-  should hopefully be so long that it will not fulfill the 
-  maximum number of authorized chars per line is reached.
+  • It also can support sub-lists:
 
-- It also can support sub-lists:
-  * Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore 
-    magna aliqua.
+      ◦ Lorem ipsum dolor sit amet, consectetur adipiscing 
+        elit, sed do eiusmod tempor incididunt ut labore et 
+        dolore magna aliqua.
 
-  * Ut enim ad minim veniam, quis nostrud exercitation 
-    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate 
-    velit esse cillum dolore eu fugiat nulla pariatur.
+      ◦ Ut enim ad minim veniam, quis nostrud exercitation 
+        ullamco laboris nisi ut aliquip ex ea commodo 
+        consequat. Duis aute irure dolor in reprehenderit in
+        voluptate velit esse cillum dolore eu fugiat nulla 
+        pariatur.
 
-  * Excepteur sint occaecat cupidatat non proident, sunt in 
-    culpa qui officia deserunt mollit anim id est laborum.
+      ◦ Excepteur sint occaecat cupidatat non proident, sunt
+        in culpa qui officia deserunt mollit anim id est 
+        laborum.
 
-- It is also possible to have a list's item that contains 
-  several paragraphs
-  
-  For example, this paragraph that I made artificially long 
-  to verify that wrapping is working correctly inside list
+  • It is also possible to have a list's item that contains 
+    several paragraphs.
+
+    For example, this paragraph that I made artificially 
+    long to verify that wrapping is working correctly inside
+    list
 
 It also knows how to [3mdefine[23m terms:
 
-[1mstyle[22m:
+[1mstyle[22m
     A particular procedure by which something is done; a 
     manner or way.
 
-[1mlorem ipsum[22m:
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore 
-    magna aliqua. Ut enim ad minim veniam, quis nostrud 
-    exercitation ullamco laboris nisi ut aliquip ex ea 
-    commodo consequat. Duis aute irure dolor in 
-    reprehenderit in voluptate velit esse cillum dolore eu 
-    fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit 
-    anim id est laborum.
+Even using Tabs:
 
-[31mDemonstrating Tables[0m
+    [1mlorem ipsum[22m
+        Lorem ipsum dolor sit amet, consectetur adipiscing 
+        elit, sed do eiusmod tempor incididunt ut labore et 
+        dolore magna aliqua. Ut enim ad minim veniam, quis 
+        nostrud exercitation ullamco laboris nisi ut aliquip
+        ex ea commodo consequat. Duis aute irure dolor in 
+        reprehenderit in voluptate velit esse cillum dolore 
+        eu fugiat nulla pariatur. Excepteur sint occaecat 
+        cupidatat non proident, sunt in culpa qui officia 
+        deserunt mollit anim id est laborum.
+[31m
+Demonstrating Tables[0m
 Package 'style' supports drawing tables for most basic 
 cases. Using Tab to align tables should be done carefully as
 table way to guess optimum columns size does not take into 
@@ -94,3 +100,20 @@ Basic column This one is here        Last but not least
              to test multi-lines     opportunity to check   
              rows format             escaping *sequence*    
 ------------ ----------------------- -----------------------
+
+It is also possible to use tabs with tables:
+
+    ------------ --------------------- ---------------------
+    Column1      Column2               Column3              
+    ------------ --------------------- ---------------------
+    Basic column This one is here      Last but not least   
+                 to demonstrate        shows [1mformating[22m      
+                 that colums with      within the table     
+                 several lines work                         
+                 too                                        
+                                                            
+                 This second row is    Also possibly a good 
+                 here to test          opportunity to check 
+                 multi-lines rows      escaping *sequence*  
+                 format                                     
+    ------------ --------------------- ---------------------

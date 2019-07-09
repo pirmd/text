@@ -8,8 +8,8 @@ import (
 )
 
 func testText(st style.Styler) (s string) {
-	H := style.Chain(st.Blue, st.Header(1))
-	H2 := style.Chain(st.Red, st.Header(2))
+	H := style.Chain(st.Header(1), st.Blue)
+	H2 := style.Chain(st.Header(2), st.Red)
 
 	s = H("Introduction")
 	s += st.Paragraph("This small piece of text aims at demonstrating and testing package '" + st.Underline("style") + "'.")
@@ -27,14 +27,14 @@ func testText(st style.Styler) (s string) {
 
 	s += H2("Demonstrating lists")
 	s += st.Paragraph("It also knows how to format " + st.Italic("lists") + ": ")
-	s += st.List(0)(
-		"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.",
-		"It also can support sub-lists:\n"+st.List(1)(
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-			"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+	s += st.List(1)(
+		st.ListItem("This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached."),
+		st.ListItem("It also can support sub-lists:\n")+st.List(2)(
+			st.ListItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+			st.ListItem("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."),
+			st.ListItem("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
 		),
-		"It is also possible to have a list's item that contains several paragraphs\n"+
+		st.ListItem("It is also possible to have a list's item that contains several paragraphs.\n")+
 			st.Paragraph("For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list"),
 	)
 	s += st.Paragraph("It also knows how to " + st.Italic("define") + " terms:")
@@ -69,4 +69,20 @@ func TestStyleCore(t *testing.T) {
 func TestStylePlainText(t *testing.T) {
 	out := testText(style.Plaintext)
 	verify.MatchGolden(t, out, "Styling with 'Plaintext' style failed")
+}
+
+func TestStyleTerm(t *testing.T) {
+	st := style.Term
+	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
+	out := testText(st)
+	verify.MatchGolden(t, out, "Styling with 'Term' style failed")
+}
+
+//XXX: test with TextWidth = -1
+
+func TestStyleColorTerm(t *testing.T) {
+	st := style.ColorTerm
+	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
+	out := testText(st)
+	verify.MatchGolden(t, out, "Styling with 'ColorTerm' style failed")
 }

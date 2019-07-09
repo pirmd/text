@@ -91,8 +91,8 @@ func (st *Core) Underline(s string) string {
 	return s
 }
 
-//Strike does nothing (this style does not support emphasis)
-func (st *Core) Strike(s string) string {
+//Crossout does nothing (this style does not support emphasis)
+func (st *Core) Crossout(s string) string {
 	return s
 }
 
@@ -114,19 +114,17 @@ func (st *Core) Paragraph(s string) string {
 }
 
 //List returns a new bulleted-list. It returns one line per list item.
-//It adds a bullet in front of each item according to st.BulletList and the
-//list's level.
-//This style does not support nested-list so level is not taken into account.
 func (st *Core) List(lvl int) func(...string) string {
-	bullet := [3]string{"- ", "+ ", "* "}[lvl%3]
-
 	return func(items ...string) string {
-		for i, item := range items {
-			items[i] = bullet + item
-		}
-
 		return strings.Join(items, "\n")
 	}
+}
+
+//ListItem returns a new bullet-list item.
+//It adds an hyphen in front of each item. This style does not support
+//nested-list so level is not taken into account.
+func (st *Core) ListItem(s string) string {
+	return "- " + s
 }
 
 //Define returns a term definition

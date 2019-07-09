@@ -48,8 +48,8 @@ type Styler interface {
 	//colors
 	Inverse(string) string
 
-	//Strike changes a string to be strikethrough
-	Strike(string) string
+	//Crossout changes a string to be strikethrough
+	Crossout(string) string
 
 	//Tab indents then wraps the provided text by the given indent level.
 	Tab(int) func(string) string
@@ -63,6 +63,9 @@ type Styler interface {
 
 	//List returns a new bullet list with the given nested level.
 	List(int) func(...string) string
+
+	//ListItem returns a new bullet list item.
+	ListItem(s string) string
 
 	//Define returns a term definition.
 	Define(string, string) string

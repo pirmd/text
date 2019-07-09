@@ -85,21 +85,23 @@ func (st *Text) Paragraph(s string) string {
 }
 
 //List returns a new bullet-list. It returns one line per list item.
-//It adds a bullet in front of each item according to st.BulletList and the
-//list's level.
-//A Tab is inserted before each item according to the list level.
 func (st *Text) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
-	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
 
 	return func(items ...string) string {
 		st.indentLvl = oldlvl
-		for i, item := range items {
-			items[i] = st.br() + st.tab(item, st.indentLvl, bullet)
-		}
 		return strings.Join(items, "\n")
 	}
+}
+
+//ListItem returns a new bullet-list item.
+//It adds a bullet in front of each item according to st.BulletList and the
+//list's level.
+//A Tab is inserted before each item according to the list level.
+func (st *Text) ListItem(s string) string {
+	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
+	return st.br() + st.tab(s, st.indentLvl, bullet)
 }
 
 //Define returns a term definition
