@@ -74,3 +74,19 @@ type Styler interface {
 	//functions can lead to unexpected results.
 	Escape(string) string
 }
+
+//Chain combines several styling functions into one. Styling functions are
+//executed in the provided order.
+//
+//Notice that chaining styling functions can be tricky, and should b euse
+//wisely (for example, some styling functions can alter formatting tags
+//inserted by the previous chaining function voiding the result).
+func Chain(fn ...func(string) string) func(string) string {
+	return func(src string) string {
+		s := src
+		for _, f := range fn {
+			s = f(s)
+		}
+		return s
+	}
+}
