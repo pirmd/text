@@ -134,7 +134,7 @@ func (st *Text) tab(s string, lvl int, tag string) string {
 	prefix := strings.Repeat(st.IndentPrefix, lvl)
 
 	if st.TextWidth > 0 {
-		return text.TabWithTag(s, tag, prefix, st.TextWidth)
+		return text.Tab(s, tag, prefix, st.TextWidth)
 	}
-	return text.IndentWithTag(s, tag, prefix)
+	return text.Indent(s, tag, prefix)
 }

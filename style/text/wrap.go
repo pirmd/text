@@ -5,17 +5,12 @@ import (
 	"unicode"
 )
 
-//Indent indents a string (add prefix at the begining and before any new line)
-func Indent(s string, prefix string) string {
-	return indent(s, prefix, prefix)
-}
-
-//IndentWithTag inserts a bullet/number at the begining of the string, then
-//indents it (add prefix at the begining and before any new line)
+//Indent inserts a name/bullet/number at the begining of the string, then
+//indents it (add prefix at the begining and before any new line).
 //
 //Tag is superposed to the indent prefix to obtain the first line prefix, if
 //tag length is greater than prefix, prefix is completed by trailing spaces.
-func IndentWithTag(s string, tag, prefix string) string {
+func Indent(s string, tag, prefix string) string {
 	lB, lP := visualLen(tag), visualLen(prefix)
 
 	switch {
@@ -45,24 +40,16 @@ func Wrap(txt string, limit int) string {
 	return strings.Join(wrap(txt, limit), "\n")
 }
 
-//Tab wraps then indents the given text.
-//Tab calculates the correct wraping limits taking indent's prefix length.
-//It does not work if prefix is made of tabs as indent's prefix length is
-//unknown (like '\t')
-func Tab(s string, prefix string, limit int) string {
-	r := Wrap(s, limit-visualLen(prefix))
-	return indent(r, prefix, prefix)
-}
-
-//TabWithTag adds a name/bullet/number, wraps and finally indents given text.
+//Tab wraps and indents the given text.
 //
-//Tag is superposed to the indent prefix to obtain the first line prefix, if
-//tag length is greater than prefix, prefix is completed by trailing spaces.
+//Tab will aditionally add the given tag in front of the first line. Tag is
+//superposed to the indent prefix to obtain the first line prefix, if tag's
+//length is greater than prefix, prefix is completed by trailing spaces.
 //
-//TabWithTag calculates the correct wraping limits taking indent's prefix
-//length. It does not work if prefix is made of tabs as indent's prefix length
-//is unknown (like '\t')
-func TabWithTag(s string, tag, prefix string, limit int) string {
+//Tab calculates the correct wraping limits taking indent's prefix length. It
+//does not work if prefix is made of tabs as indent's tag/prefix length is
+//unknown (like '\t').
+func Tab(s string, tag, prefix string, limit int) string {
 	lB, lP := visualLen(tag), visualLen(prefix)
 
 	var r string
@@ -80,8 +67,6 @@ func TabWithTag(s string, tag, prefix string, limit int) string {
 	return indent(r, tag, prefix)
 }
 
-//BUG(pirmd): wrap blindly assumes that word length is smaller than
-//the limit can we do better than that (like truncating the word)?
 func wrap(txt string, limit int) []string {
 	var c rune
 	var ws []string

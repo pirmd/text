@@ -52,7 +52,7 @@ func TestWrapAndIndent(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Tab(tc.inTxt, tc.inP, 40)
+		got := Tab(tc.inTxt, "", tc.inP, 40)
 		if got != tc.out {
 			t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%s\nGot   :\n%s\n", showTrailingSpaces(tc.out), showTrailingSpaces(got))
 		}
@@ -104,14 +104,14 @@ func TestTabWithTag(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := TabWithTag(tc.inTxt, tc.inT, tc.inP, 40)
+		got := Tab(tc.inTxt, tc.inT, tc.inP, 40)
 		if got != tc.out {
 			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inT, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
 		}
 	}
 }
 
-func TestInsertWithTag(t *testing.T) {
+func TestIndent(t *testing.T) {
 	testCases := []struct {
 		inTxt    string
 		inT, inP string
@@ -156,7 +156,7 @@ func TestInsertWithTag(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := IndentWithTag(tc.inTxt, tc.inT, tc.inP)
+		got := Indent(tc.inTxt, tc.inT, tc.inP)
 		if got != tc.out {
 			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inT, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
 		}
