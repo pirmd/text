@@ -84,9 +84,30 @@ func (stx *TextSyntax) Paragraph(s string) string {
 	return stx.br() + stx.tab(s, stx.indentLvl, "") + "\n"
 }
 
-//List returns a new list (ordered or bulleted) with the proper nested level.
-//List works in conjunction with either BulletedItem or OrderedItem.
-func (stx *TextSyntax) List(lvl int) func(...string) string {
+//BulletedList returns a new bulleted-list with the proper nested level.
+//BulletedList works in conjunction with BulletedItem.
+func (stx *TextSyntax) BulletedList(lvl int) func(...string) string {
+	oldlvl := stx.indentLvl
+	stx.indentLvl = lvl + 1
+
+	return func(items ...string) string {
+		stx.indentLvl = oldlvl
+		return strings.Join(items, "")
+	}
+}
+
+//BulletedItem returns a new bullet-list item.
+//It adds a bullet in front of the provided string according to stx.BulletList
+//and the list's level.
+//A Tab is inserted before each item according to the list level.
+func (stx *TextSyntax) BulletedItem(s string) string {
+	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
+	return stx.br() + stx.tab(s, stx.indentLvl, bullet) + "\n"
+}
+
+//OrderedList returns a new ordered-list with the proper nested level.
+//OrderedList works in conjunction with BulletedItem.
+func (stx *TextSyntax) OrderedList(lvl int) func(...string) string {
 	oldlvl := stx.indentLvl
 	stx.indentLvl = lvl + 1
 
@@ -97,17 +118,9 @@ func (stx *TextSyntax) List(lvl int) func(...string) string {
 	return func(items ...string) string {
 		stx.enumerators[stx.indentLvl] = 0
 		stx.indentLvl = oldlvl
-		return strings.Join(items, "\n")
-	}
-}
 
-//BulletedItem returns a new bullet-list item.
-//It adds a bullet in front of the provided string according to stx.BulletList
-//and the list's level.
-//A Tab is inserted before each item according to the list level.
-func (stx *TextSyntax) BulletedItem(s string) string {
-	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
-	return stx.br() + stx.tab(s, stx.indentLvl, bullet)
+		return strings.Join(items, "")
+	}
 }
 
 //OrderedItem returns a new ordered-list item.
@@ -118,7 +131,7 @@ func (stx *TextSyntax) BulletedItem(s string) string {
 func (stx *TextSyntax) OrderedItem(s string) string {
 	stx.enumerators[stx.indentLvl]++
 	enum := strconv.Itoa(stx.enumerators[stx.indentLvl]) + ". "
-	return stx.br() + stx.tab(s, stx.indentLvl, enum)
+	return stx.br() + stx.tab(s, stx.indentLvl, enum) + "\n"
 }
 
 //Define returns a term definition

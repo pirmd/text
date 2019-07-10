@@ -90,8 +90,13 @@ It can build ordered lists:
             sunt in culpa qui officia deserunt mollit anim 
             id est laborum.
 
-      ◦ It is also possible to mix with bullet list if you 
+     3. It is also possible to mix with bullet list if you 
         really want to.
+
+          ⁃ First things usually come first.
+
+          ⁃ Second things should come after the first ones.
+
 It also knows how to define terms:
 
 style

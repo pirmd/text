@@ -90,8 +90,13 @@ It can build [1mordered [3mlists[23m[22m:
             sunt in culpa qui officia deserunt mollit anim 
             id est laborum.
 
-      ◦ It is also possible to mix with bullet list if you 
+     3. It is also possible to mix with bullet list if you 
         really want to.
+
+          ⁃ First things usually come first.
+
+          ⁃ Second things should come after the first ones.
+
 It also knows how to [3mdefine[23m terms:
 
 [1mstyle[22m

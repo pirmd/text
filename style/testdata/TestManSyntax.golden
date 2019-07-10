@@ -39,30 +39,24 @@ It knows how to format \fIlists\fP:
 .TP 4
 • 
 This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.
-
 .TP 4
 • 
 It also can support sub-lists:
-
 .RS 4
 .TP 4
 ◦ 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
 .TP 4
 ◦ 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-
 .TP 4
 ◦ 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 .RE
-
 .TP 4
 • 
 It is also possible to have a list's item that contains several paragraphs.
-
 .RS 4
 .PP
 For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list
@@ -73,29 +67,33 @@ It can build \fBordered \fIlists\fP\fP:
 .TP 3
 1. 
 This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.
-
 .TP 3
 2. 
 It also can support sub-lists:
-
 .RS 8
 .TP 3
 1. 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
 .TP 3
 2. 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-
 .TP 3
 3. 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 .RE
-
-.TP 4
-◦ 
+.TP 3
+3. 
 It is also possible to mix with bullet list if you really want to.
+.RS 8
+.TP 4
+⁃ 
+First things usually come first.
+.TP 4
+⁃ 
+Second things should come after the first ones.
+
+.RE
 .PP
 It also knows how to \fIdefine\fP terms:
 .TP

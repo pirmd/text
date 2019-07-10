@@ -80,8 +80,27 @@ func (stx *ManSyntax) Paragraph(s string) string {
 	return stx.tab(".PP\n" + s + "\n")
 }
 
-//List returns a new bulleted-listx. It returns one line per list item.
-func (stx *ManSyntax) List(lvl int) func(...string) string {
+//BulletedList returns a new bulleted-list. It returns one line per list item.
+func (stx *ManSyntax) BulletedList(lvl int) func(...string) string {
+	oldlvl := stx.indentLvl
+	stx.indentLvl = lvl + 1
+
+	return func(items ...string) string {
+		stx.indentLvl = oldlvl
+		return stx.tab(strings.Join(items, ""))
+	}
+}
+
+//BulletedItem returns a new bullet-list item.
+//It adds a bullet in front of the provided string according to stx.BulletList
+//and the list's level.
+func (stx *ManSyntax) BulletedItem(s string) string {
+	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
+	return ".TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + s + "\n"
+}
+
+//OrderedList returns a new ordered-list. It returns one line per list item.
+func (stx *ManSyntax) OrderedList(lvl int) func(...string) string {
 	oldlvl := stx.indentLvl
 	stx.indentLvl = lvl + 1
 
@@ -92,16 +111,8 @@ func (stx *ManSyntax) List(lvl int) func(...string) string {
 	return func(items ...string) string {
 		stx.enumerators[stx.indentLvl] = 0
 		stx.indentLvl = oldlvl
-		return stx.tab(strings.Join(items, "\n"))
+		return stx.tab(strings.Join(items, ""))
 	}
-}
-
-//BulletedItem returns a new bullet-list item.
-//It adds a bullet in front of the provided string according to stx.BulletList
-//and the list's level.
-func (stx *ManSyntax) BulletedItem(s string) string {
-	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
-	return ".TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + s + "\n"
 }
 
 //OrderedItem returns a new ordered-list item.

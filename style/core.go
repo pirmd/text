@@ -123,8 +123,9 @@ func (stx *CoreSyntax) Paragraph(s string) string {
 	return s + "\n"
 }
 
-//List returns a new bulleted-listx. It returns one line per list item.
-func (stx *CoreSyntax) List(lvl int) func(...string) string {
+//BulletedList returns a new bulleted-list. It returns one line per list item.
+//BulletedList works in conjunction with BulletedItem.
+func (stx *CoreSyntax) BulletedList(lvl int) func(...string) string {
 	return func(items ...string) string {
 		return strings.Join(items, "\n")
 	}
@@ -135,6 +136,12 @@ func (stx *CoreSyntax) List(lvl int) func(...string) string {
 //nested-list so level is not taken into account.
 func (stx *CoreSyntax) BulletedItem(s string) string {
 	return "- " + s
+}
+
+//OrderedList returns a new ordered-list with the proper nested level.
+//OrderedList works in conjunction with OrderedItem.
+func (stx *CoreSyntax) OrderedList(lvl int) func(...string) string {
+	return stx.BulletedList(lvl)
 }
 
 //OrderedItem returns a new ordered-list item.
