@@ -5,44 +5,50 @@ import (
 	"strings"
 )
 
-var (
-	_ Styler = (*ManSyntax)(nil) //Makes sure that Mdoc implements Styler
+//XXX st *XXXSyntax -> stx *XXXSyntax
 
-	//Man is a customized style.ManSyntax Styler to write manpages.
+var (
+	_ Styler = (*ManSyntax)(nil)  //Makes sure that Man implements Styler
+
+	//Man is a customized style.ManSyntax to write manpages.
 	Man = &ManSyntax{
-		TextSyntax: &TextSyntax{
-			ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
-		},
-		ScalingWidth: 4,
+        ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
+		IndentWidth: 4,
 	}
 )
 
 //ManSyntax is a Styler that provides a sub-set of roff markup featuring common
 //used macros for building man pages
 type ManSyntax struct {
-	*TextSyntax
-	ScalingWidth int
+	*CoreSyntax
+
+    //IndentWidth is the scaling factor (number of spaces) to indent text.
+	IndentWidth int
+
+	//ListBullets list the bullets added to each list items. Bullets are chosen
+	//in the given order following the list nested-level (if nested-level is
+	//greater than bullets number it restarts from 1).
+	//If you want some spaces between the bullet and the start of text, you
+	//have to include it (avoid "\t" nevertheless).
+	ListBullets []string
+
+	indentLvl   int
+	enumerators []int
 }
 
 //Bold changes a string case to bold.
 func (st *ManSyntax) Bold(s string) string {
-	if strings.HasPrefix(s, "\\fI") {
-		return strings.Replace(s, "\\fI", "\\fBI", 1)
-	}
 	return "\\fB" + s + "\\fP"
 }
 
 //Italic changes a string case to italic.
 func (st *ManSyntax) Italic(s string) string {
-	if strings.HasPrefix(s, "\\fB") && !strings.HasPrefix(s, "\\BI") {
-		return strings.Replace(s, "\\fB", "\\fBI", 1)
-	}
 	return "\\fI" + s + "\\fP"
 }
 
 //Tab changes the tabulation level.
 //If the tabulation level is positive, it wraps then indents provided text.
-//Indenting is done using st.ScalingWidth.
+//Indenting is done using st.IndentWidth.
 func (st *ManSyntax) Tab(lvl int) func(string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
@@ -66,7 +72,6 @@ func (st *ManSyntax) Header(lvl int) func(s string) string {
 }
 
 //Metadata returns formatted metadata information (title, author(s), date)
-//Author(s) information is ignore to fit man .TH foramt.
 //The man page section need to be found in title argument.
 //XXX: Metadata(map[string]string) string
 func (st *ManSyntax) Metadata(title, authors, date string) string {
@@ -75,10 +80,7 @@ func (st *ManSyntax) Metadata(title, authors, date string) string {
 
 //Paragraph returns text as a new paragraph.
 func (st *ManSyntax) Paragraph(s string) string {
-	if st.indentLvl > 0 {
-		return ".RS " + strconv.Itoa(st.indentLvl*st.ScalingWidth) + "\n.PP\n" + s + "\n.RE\n"
-	}
-	return ".PP\n" + s + "\n"
+    return st.tab(".PP\n" + s + "\n")
 }
 
 //List returns a new bulleted-list. It returns one line per list item.
@@ -93,7 +95,7 @@ func (st *ManSyntax) List(lvl int) func(...string) string {
 	return func(items ...string) string {
 		st.enumerators[st.indentLvl] = 0
 		st.indentLvl = oldlvl
-		return ".RS " + strconv.Itoa(lvl*st.ScalingWidth) + "\n" + strings.Join(items, "\n") + "\n.RE\n"
+		return st.tab(strings.Join(items, "\n"))
 	}
 }
 
@@ -102,7 +104,7 @@ func (st *ManSyntax) List(lvl int) func(...string) string {
 //and the list's level.
 func (st *ManSyntax) BulletedItem(s string) string {
 	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
-	return ".TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + s + "\n"
+    return ".TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + s + "\n"
 }
 
 //OrderedItem returns a new ordered-list item.
@@ -112,12 +114,13 @@ func (st *ManSyntax) BulletedItem(s string) string {
 func (st *ManSyntax) OrderedItem(s string) string {
 	st.enumerators[st.indentLvl]++
 	enum := strconv.Itoa(st.enumerators[st.indentLvl]) + ". "
-	return ".TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + s + "\n"
+    return ".TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + s + "\n"
 }
 
 //Define returns a term definition
 func (st *ManSyntax) Define(term string, desc string) string {
-	return ".TP\n" + st.Bold(term) + "\n" + desc + "\n"
+    def := ".TP\n" + st.Bold(term) + "\n" + desc + "\n"
+	return st.tab(def)
 }
 
 //Table draws a table out of the provided rows (using tbl).
@@ -139,7 +142,8 @@ func (st *ManSyntax) Table(rows ...[]string) string {
 		layout = append(layout, "lx")
 	}
 
-	return ".TS\nallbox;\n" + strings.Join(layout, " ") + ".\n" + strings.Join(r, "\n") + "\n.TE\n"
+    table := ".TS\nallbox;\n" + strings.Join(layout, " ") + ".\n" + strings.Join(r, "\n") + "\n.TE\n"
+	return st.tab(table)
 }
 
 //Link is not supported in this style.
@@ -169,4 +173,11 @@ func (st *ManSyntax) Escape(s string) string {
 	}
 
 	return s
+}
+
+func (st *ManSyntax) tab(s string) string {
+    if st.indentLvl > 0 {
+        return ".RS " + strconv.Itoa(st.indentLvl*st.IndentWidth) + "\n" + s + "\n.RE\n"
+    }
+    return s
 }

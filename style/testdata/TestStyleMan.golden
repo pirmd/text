@@ -20,20 +20,22 @@ Several levels of tabulations can be used:
 .RS 4
 .PP
 (Level 1) Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
 .RE
 .RS 8
 .PP
 (Level 2) Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
 .RE
 .RS 16
 .PP
 (Level 4) Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
 .RE
 
 .SS Demonstrating lists
 .PP
 It knows how to format \fIlists\fP: 
-.RS 0
 .TP 4
 • 
 This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.
@@ -64,12 +66,10 @@ It is also possible to have a list's item that contains several paragraphs.
 .RS 4
 .PP
 For example, this paragraph that I made artificially long to verify that wrapping is working correctly inside list
-.RE
 
 .RE
 .PP
 It can build \fBordered \fIlists\fP\fP: 
-.RS 4
 .TP 3
 1. 
 This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.
@@ -96,8 +96,6 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 .TP 4
 ◦ 
 It is also possible to mix with bullet list if you really want to.
-
-.RE
 .PP
 It also knows how to \fIdefine\fP terms:
 .TP
@@ -105,9 +103,12 @@ It also knows how to \fIdefine\fP terms:
 A particular procedure by which something is done; a manner or way.
 .PP
 Even using Tabs:
+.RS 4
 .TP
 \fBlorem ipsum\fP
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+.RE
 
 .SS Demonstrating tables
 .PP
@@ -141,6 +142,7 @@ T}
 .TE
 .PP
 It is also possible to use tabs with tables:
+.RS 4
 .TS
 allbox;
 lx lx lx.
@@ -168,3 +170,5 @@ T}	T{
 Also possibly a good opportunity to check escaping *sequence*
 T}
 .TE
+
+.RE
