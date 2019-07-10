@@ -27,8 +27,8 @@ type TextSyntax struct {
 	*CoreSyntax
 
 	//TextWidth specified the maximum length of a text line
-	//If st.TextWidth is null or negative, wraping is disabled (in practice, you
-	//still want st.TextSyntaxwidth to be large enough to obtain a readable output).
+	//If stx.TextWidth is null or negative, wraping is disabled (in practice, you
+	//still want stx.TextSyntaxwidth to be large enough to obtain a readable output).
 	TextWidth int
 
 	//IndentPrefix is the string used to indent text.
@@ -54,60 +54,60 @@ type TextSyntax struct {
 
 //Tab changes the tabulation level.
 //If the tabulation level is positive, it wraps then indents provided text.
-//Wraping is done according to st.TextWidth value, if st.TextWidth is null, Tab
+//Wraping is done according to stx.TextWidth value, if stx.TextWidth is null, Tab
 //only indents and doesn't wrap the provided text.
-//Indenting is done using st.IndentPrefix string, that is repeated for each
+//Indenting is done using stx.IndentPrefix string, that is repeated for each
 //tab-level.
-func (st *TextSyntax) Tab(lvl int) func(string) string {
-	oldlvl := st.indentLvl
-	st.indentLvl = lvl
+func (stx *TextSyntax) Tab(lvl int) func(string) string {
+	oldlvl := stx.indentLvl
+	stx.indentLvl = lvl
 	return func(s string) string {
-		st.indentLvl = oldlvl
+		stx.indentLvl = oldlvl
 		return s
 	}
 }
 
 //Header returns text as a chapter's header.
-func (st *TextSyntax) Header(lvl int) func(s string) string {
+func (stx *TextSyntax) Header(lvl int) func(s string) string {
 	switch {
 	case lvl <= 0:
 		return func(s string) string { return "" }
 	case lvl == 1:
-		return func(s string) string { return st.br() + st.Upper(s) + "\n" }
+		return func(s string) string { return stx.br() + stx.Upper(s) + "\n" }
 	default:
-		return func(s string) string { return st.br() + st.TitleCase(s) }
+		return func(s string) string { return stx.br() + stx.TitleCase(s) }
 	}
 }
 
 //Paragraph returns text as a new paragraph
-func (st *TextSyntax) Paragraph(s string) string {
-	return st.br() + st.tab(s, st.indentLvl, "") + "\n"
+func (stx *TextSyntax) Paragraph(s string) string {
+	return stx.br() + stx.tab(s, stx.indentLvl, "") + "\n"
 }
 
 //List returns a new list (ordered or bulleted) with the proper nested level.
 //List works in conjunction with either BulletedItem or OrderedItem.
-func (st *TextSyntax) List(lvl int) func(...string) string {
-	oldlvl := st.indentLvl
-	st.indentLvl = lvl + 1
+func (stx *TextSyntax) List(lvl int) func(...string) string {
+	oldlvl := stx.indentLvl
+	stx.indentLvl = lvl + 1
 
-	for st.indentLvl >= len(st.enumerators) {
-		st.enumerators = append(st.enumerators, make([]int, 2)...)
+	for stx.indentLvl >= len(stx.enumerators) {
+		stx.enumerators = append(stx.enumerators, make([]int, 2)...)
 	}
 
 	return func(items ...string) string {
-		st.enumerators[st.indentLvl] = 0
-		st.indentLvl = oldlvl
+		stx.enumerators[stx.indentLvl] = 0
+		stx.indentLvl = oldlvl
 		return strings.Join(items, "\n")
 	}
 }
 
 //BulletedItem returns a new bullet-list item.
-//It adds a bullet in front of the provided string according to st.BulletList
+//It adds a bullet in front of the provided string according to stx.BulletList
 //and the list's level.
 //A Tab is inserted before each item according to the list level.
-func (st *TextSyntax) BulletedItem(s string) string {
-	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
-	return st.br() + st.tab(s, st.indentLvl, bullet)
+func (stx *TextSyntax) BulletedItem(s string) string {
+	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
+	return stx.br() + stx.tab(s, stx.indentLvl, bullet)
 }
 
 //OrderedItem returns a new ordered-list item.
@@ -115,45 +115,45 @@ func (st *TextSyntax) BulletedItem(s string) string {
 //current enumerator increment of the corresponding list's level (therefore
 //only one enumerator can be followed for a given list's level).
 //A Tab is inserted before each item according to the list level.
-func (st *TextSyntax) OrderedItem(s string) string {
-	st.enumerators[st.indentLvl]++
-	enum := strconv.Itoa(st.enumerators[st.indentLvl]) + ". "
-	return st.br() + st.tab(s, st.indentLvl, enum)
+func (stx *TextSyntax) OrderedItem(s string) string {
+	stx.enumerators[stx.indentLvl]++
+	enum := strconv.Itoa(stx.enumerators[stx.indentLvl]) + ". "
+	return stx.br() + stx.tab(s, stx.indentLvl, enum)
 }
 
 //Define returns a term definition
-func (st *TextSyntax) Define(term string, desc string) string {
-	term = st.tab(term, st.indentLvl, "") + "\n"
-	desc = st.tab(desc, st.indentLvl+1, "") + "\n"
-	return st.br() + term + desc
+func (stx *TextSyntax) Define(term string, desc string) string {
+	term = stx.tab(term, stx.indentLvl, "") + "\n"
+	desc = stx.tab(desc, stx.indentLvl+1, "") + "\n"
+	return stx.br() + term + desc
 }
 
 //Table draws a table out of the provided rows.
 //Table column width are guessed automatically and are arranged so that the table
-//fits into st.TextWidth.
-func (st *TextSyntax) Table(rows ...[]string) string {
+//fits into stx.TextWidth.
+func (stx *TextSyntax) Table(rows ...[]string) string {
 	//TODO(pirmd): ensure that IdentPrefix can work with ANSI code inside (notably
 	//here where len is used, should be text.visualLen?)
-	width := st.TextWidth - (st.indentLvl * len(st.IndentPrefix))
+	width := stx.TextWidth - (stx.indentLvl * len(stx.IndentPrefix))
 	//TODO(pirmd): introduce way to chose/define Table grid
 	table := text.DrawTable(width, " ", "-", " ", rows...)
 
-	return st.br() + st.tab(table, st.indentLvl, "") + "\n"
+	return stx.br() + stx.tab(table, stx.indentLvl, "") + "\n"
 }
 
-func (st *TextSyntax) br() string {
-	if st.needBR {
+func (stx *TextSyntax) br() string {
+	if stx.needBR {
 		return "\n"
 	}
-	st.needBR = true
+	stx.needBR = true
 	return ""
 }
 
-func (st *TextSyntax) tab(s string, lvl int, tag string) string {
-	prefix := strings.Repeat(st.IndentPrefix, lvl)
+func (stx *TextSyntax) tab(s string, lvl int, tag string) string {
+	prefix := strings.Repeat(stx.IndentPrefix, lvl)
 
-	if st.TextWidth > 0 {
-		return text.Tab(s, tag, prefix, st.TextWidth)
+	if stx.TextWidth > 0 {
+		return text.Tab(s, tag, prefix, stx.TextWidth)
 	}
 	return text.Indent(s, tag, prefix)
 }

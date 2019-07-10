@@ -76,36 +76,36 @@ func testText(st style.Styler) (s string) {
 	return
 }
 
-func TestStyleCore(t *testing.T) {
+func TestCoreSyntax(t *testing.T) {
 	out := testText(&style.CoreSyntax{})
 	verify.MatchGolden(t, out, "Styling with 'Core' style failed")
 }
 
-func TestStylePlainText(t *testing.T) {
+func TestPlainTextSyntax(t *testing.T) {
 	out := testText(style.Plaintext)
 	verify.MatchGolden(t, out, "Styling with 'Plaintext' style failed")
 }
 
-func TestStyleTerm(t *testing.T) {
+func TestTermSyntax(t *testing.T) {
 	st := style.Term
 	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
 	out := testText(st)
 	verify.MatchGolden(t, out, "Styling with 'Term' style failed")
 }
 
-func TestStyleColorTerm(t *testing.T) {
+func TestColorTermSyntax(t *testing.T) {
 	st := style.ColorTerm
 	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
 	out := testText(st)
 	verify.MatchGolden(t, out, "Styling with 'ColorTerm' style failed")
 }
 
-func TestStyleMarkdown(t *testing.T) {
+func TestMarkdownSyntax(t *testing.T) {
 	out := testText(style.Markdown)
 	verify.MatchGolden(t, out, "Styling with 'Markdown' style failed")
 }
 
-func TestStyleMan(t *testing.T) {
+func TestManSyntax(t *testing.T) {
 	out := testText(style.Man)
 	verify.MatchGolden(t, out, "Styling with 'Man' style failed")
 }
