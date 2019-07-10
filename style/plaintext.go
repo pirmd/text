@@ -88,7 +88,7 @@ func (st *TextSyntax) Paragraph(s string) string {
 //List works in conjunction with either BulletedItem or OrderedItem.
 func (st *TextSyntax) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
-	st.indentLvl = lvl
+	st.indentLvl = lvl + 1
 
 	for st.indentLvl >= len(st.enumerators) {
 		st.enumerators = append(st.enumerators, make([]int, 2)...)

@@ -84,7 +84,7 @@ func (st *ManSyntax) Paragraph(s string) string {
 //List returns a new bulleted-list. It returns one line per list item.
 func (st *ManSyntax) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
-	st.indentLvl = lvl
+	st.indentLvl = lvl + 1
 
 	for st.indentLvl >= len(st.enumerators) {
 		st.enumerators = append(st.enumerators, make([]int, 2)...)
