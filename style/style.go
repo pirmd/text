@@ -54,16 +54,18 @@ type Styler interface {
 	//Tab indents then wraps the provided text by the given indent level.
 	Tab(int) func(string) string
 
-	//Header returns text as a chapter's header
+	//Header returns text as a chapter's header.
 	Header(int) func(string) string
 
-	//Metadata returns formatted metadata information (title, author(s), date)
-	Metadata(string, string, string) string
+	//Metadata returns formatted metadata information.
+	//Usual metadata are "title", "authors", "date", "mansection".
+	Metadata(map[string]string) string
 
 	//Paragraph returns text as a new paragraph.
 	Paragraph(string) string
 
 	//List returns a new bullet list with the given nested level.
+	//XXX: BulletedList / OrderedList
 	List(int) func(...string) string
 
 	//BulletedItem returns a new bullet list item.

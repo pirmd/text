@@ -37,9 +37,10 @@ func (stx *MarkdownSyntax) Header(lvl int) func(s string) string {
 	}
 }
 
-//Metadata returns formatted metadata information (title, author(s), date)
-func (stx *MarkdownSyntax) Metadata(title, authors, date string) string {
-	return stx.br() + "% " + title + "\n% " + authors + "\n% " + date + "\n"
+//Metadata returns formatted metadata information
+//Recognized metadata are: "title", "date", "authors"
+func (stx *MarkdownSyntax) Metadata(mdata map[string]string) string {
+	return stx.br() + "% " + mdata["title"] + "\n% " + mdata["authors"] + "\n% " + mdata["date"] + "\n"
 }
 
 //Bold changes a string case to bold

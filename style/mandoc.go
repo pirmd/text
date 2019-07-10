@@ -69,11 +69,10 @@ func (stx *ManSyntax) Header(lvl int) func(s string) string {
 	}
 }
 
-//Metadata returns formatted metadata information (title, author(s), date)
-//The man page section need to be found in title argument.
-//XXX: Metadata(map[string]string) string
-func (stx *ManSyntax) Metadata(title, authors, date string) string {
-	return ".TH " + stx.Upper(title) + date + "\n"
+//Metadata returns formatted metadata information.
+//Used metadata are: "title", "date" and "mansection"
+func (stx *ManSyntax) Metadata(mdata map[string]string) string {
+	return ".TH " + stx.Upper(mdata["title"]) + " " + mdata["mansection"] + " " + mdata["date"] + "\n"
 }
 
 //Paragraph returns text as a new paragraph.

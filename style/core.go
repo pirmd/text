@@ -114,7 +114,7 @@ func (stx *CoreSyntax) Header(lvl int) func(s string) string {
 }
 
 //Metadata is not supported by this style
-func (stx *CoreSyntax) Metadata(title, authors, date string) string {
+func (stx *CoreSyntax) Metadata(map[string]string) string {
 	return ""
 }
 

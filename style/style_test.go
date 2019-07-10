@@ -11,7 +11,7 @@ func testText(st style.Styler) (s string) {
 	H := style.Chain(st.Header(1), st.Blue)
 	H2 := style.Chain(st.Header(2), st.Red)
 
-	s = st.Metadata("Test of package 'github.com/pirmd/cli/style'", "pirmd", "2019.07.09")
+	s = st.Metadata(map[string]string{"title": "github.com/pirmd/cli/style", "mansection": "1", "authors": "pirmd", "date": "2019-07-09"})
 
 	s += H("Introduction")
 	s += st.Paragraph("This small piece of text aims at demonstrating and testing package '" + st.Underline("style") + "'.")
