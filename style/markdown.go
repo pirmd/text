@@ -28,7 +28,7 @@ type MkdText struct {
 func (st *MkdText) Header(lvl int) func(s string) string {
 	switch {
 	case lvl <= 0:
-		return func(string) string { return "" }
+		return func(s string) string { return "" }
 	case lvl == 1:
 		return func(s string) string { return st.br() + "# " + st.Upper(s) + "\n" }
 	default:

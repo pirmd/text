@@ -107,7 +107,7 @@ func (st *Core) Tab(lvl int) func(string) string {
 func (st *Core) Header(lvl int) func(s string) string {
 	switch {
 	case lvl <= 0:
-		return func(string) string { return "" }
+		return func(s string) string { return "" }
 	default:
 		return func(s string) string { return s + "\n" }
 	}

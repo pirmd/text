@@ -71,7 +71,7 @@ func (st *Text) Tab(lvl int) func(string) string {
 func (st *Text) Header(lvl int) func(s string) string {
 	switch {
 	case lvl <= 0:
-		return func(string) string { return "" }
+		return func(s string) string { return "" }
 	case lvl == 1:
 		return func(s string) string { return st.br() + st.Upper(s) + "\n" }
 	default:
@@ -128,7 +128,7 @@ func (st *Text) Define(term string, desc string) string {
 	return st.br() + term + desc
 }
 
-//Table draws a table out of the rpovided rows.
+//Table draws a table out of the provided rows.
 //Table column width are guessed automatically and are arranged so that the table
 //fits into st.TextWidth.
 func (st *Text) Table(rows ...[]string) string {

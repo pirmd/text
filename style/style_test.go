@@ -105,3 +105,9 @@ func TestStyleMarkdown(t *testing.T) {
 	out := testText(st)
 	verify.MatchGolden(t, out, "Styling with 'Markdown' style failed")
 }
+
+func TestStyleMan(t *testing.T) {
+	st := style.Man
+	out := testText(st)
+	verify.MatchGolden(t, out, "Styling with 'Man' style failed")
+}
