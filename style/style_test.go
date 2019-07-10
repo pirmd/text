@@ -77,7 +77,7 @@ func testText(st style.Styler) (s string) {
 }
 
 func TestStyleCore(t *testing.T) {
-	out := testText(&style.Core{})
+	out := testText(&style.CoreSyntax{})
 	verify.MatchGolden(t, out, "Styling with 'Core' style failed")
 }
 
@@ -101,13 +101,11 @@ func TestStyleColorTerm(t *testing.T) {
 }
 
 func TestStyleMarkdown(t *testing.T) {
-	st := style.Markdown
-	out := testText(st)
+	out := testText(style.Markdown)
 	verify.MatchGolden(t, out, "Styling with 'Markdown' style failed")
 }
 
 func TestStyleMan(t *testing.T) {
-	st := style.Man
-	out := testText(st)
+	out := testText(style.Man)
 	verify.MatchGolden(t, out, "Styling with 'Man' style failed")
 }

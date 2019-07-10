@@ -10,7 +10,7 @@ var (
 
 	//Man is a customized style.ManSyntax Styler to write manpages.
 	Man = &ManSyntax{
-		Text: &Text{
+		TextSyntax: &TextSyntax{
 			ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 		},
 		ScalingWidth: 4,
@@ -20,7 +20,7 @@ var (
 //ManSyntax is a Styler that provides a sub-set of roff markup featuring common
 //used macros for building man pages
 type ManSyntax struct {
-	*Text
+	*TextSyntax
 	ScalingWidth int
 }
 

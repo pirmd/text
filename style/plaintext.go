@@ -8,27 +8,27 @@ import (
 )
 
 var (
-	_ Styler = (*Text)(nil) //Makes sure that Text implements Styler
+	_ Styler = (*TextSyntax)(nil) //Makes sure that TextSyntax implements Styler
 
-	//Plaintext is a customized style.Text Styler to write plain text. It
+	//Plaintext is a customized style.TextSyntax Styler to write plain text. It
 	//allows for maximum 80 chars per line, indenting is made of 4 spaces and
 	//list bullets are made of unicode hyphen and bullet.
-	Plaintext = &Text{
+	Plaintext = &TextSyntax{
 		TextWidth:    80,
 		IndentPrefix: "    ",
 		ListBullets:  []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}
 )
 
-//Text implements Styler interface to provide basic formatting to write plain
+//TextSyntax implements Styler interface to provide basic formatting to write plain
 //texts.  It supports text indenting and wraping as well as table but does not
 //provide color nor text emphasis supports.
-type Text struct {
-	*Core
+type TextSyntax struct {
+	*CoreSyntax
 
 	//TextWidth specified the maximum length of a text line
 	//If st.TextWidth is null or negative, wraping is disabled (in practice, you
-	//still want st.Textwidth to be large enough to obtain a readable output).
+	//still want st.TextSyntaxwidth to be large enough to obtain a readable output).
 	TextWidth int
 
 	//IndentPrefix is the string used to indent text.
@@ -58,7 +58,7 @@ type Text struct {
 //only indents and doesn't wrap the provided text.
 //Indenting is done using st.IndentPrefix string, that is repeated for each
 //tab-level.
-func (st *Text) Tab(lvl int) func(string) string {
+func (st *TextSyntax) Tab(lvl int) func(string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
 	return func(s string) string {
@@ -68,7 +68,7 @@ func (st *Text) Tab(lvl int) func(string) string {
 }
 
 //Header returns text as a chapter's header.
-func (st *Text) Header(lvl int) func(s string) string {
+func (st *TextSyntax) Header(lvl int) func(s string) string {
 	switch {
 	case lvl <= 0:
 		return func(s string) string { return "" }
@@ -80,13 +80,13 @@ func (st *Text) Header(lvl int) func(s string) string {
 }
 
 //Paragraph returns text as a new paragraph
-func (st *Text) Paragraph(s string) string {
+func (st *TextSyntax) Paragraph(s string) string {
 	return st.br() + st.tab(s, st.indentLvl, "") + "\n"
 }
 
 //List returns a new list (ordered or bulleted) with the proper nested level.
 //List works in conjunction with either BulletedItem or OrderedItem.
-func (st *Text) List(lvl int) func(...string) string {
+func (st *TextSyntax) List(lvl int) func(...string) string {
 	oldlvl := st.indentLvl
 	st.indentLvl = lvl
 
@@ -105,7 +105,7 @@ func (st *Text) List(lvl int) func(...string) string {
 //It adds a bullet in front of the provided string according to st.BulletList
 //and the list's level.
 //A Tab is inserted before each item according to the list level.
-func (st *Text) BulletedItem(s string) string {
+func (st *TextSyntax) BulletedItem(s string) string {
 	bullet := st.ListBullets[st.indentLvl%len(st.ListBullets)]
 	return st.br() + st.tab(s, st.indentLvl, bullet)
 }
@@ -115,14 +115,14 @@ func (st *Text) BulletedItem(s string) string {
 //current enumerator increment of the corresponding list's level (therefore
 //only one enumerator can be followed for a given list's level).
 //A Tab is inserted before each item according to the list level.
-func (st *Text) OrderedItem(s string) string {
+func (st *TextSyntax) OrderedItem(s string) string {
 	st.enumerators[st.indentLvl]++
 	enum := strconv.Itoa(st.enumerators[st.indentLvl]) + ". "
 	return st.br() + st.tab(s, st.indentLvl, enum)
 }
 
 //Define returns a term definition
-func (st *Text) Define(term string, desc string) string {
+func (st *TextSyntax) Define(term string, desc string) string {
 	term = st.tab(term, st.indentLvl, "") + "\n"
 	desc = st.tab(desc, st.indentLvl+1, "") + "\n"
 	return st.br() + term + desc
@@ -131,7 +131,7 @@ func (st *Text) Define(term string, desc string) string {
 //Table draws a table out of the provided rows.
 //Table column width are guessed automatically and are arranged so that the table
 //fits into st.TextWidth.
-func (st *Text) Table(rows ...[]string) string {
+func (st *TextSyntax) Table(rows ...[]string) string {
 	//TODO(pirmd): ensure that IdentPrefix can work with ANSI code inside (notably
 	//here where len is used, should be text.visualLen?)
 	width := st.TextWidth - (st.indentLvl * len(st.IndentPrefix))
@@ -141,7 +141,7 @@ func (st *Text) Table(rows ...[]string) string {
 	return st.br() + st.tab(table, st.indentLvl, "") + "\n"
 }
 
-func (st *Text) br() string {
+func (st *TextSyntax) br() string {
 	if st.needBR {
 		return "\n"
 	}
@@ -149,7 +149,7 @@ func (st *Text) br() string {
 	return ""
 }
 
-func (st *Text) tab(s string, lvl int, tag string) string {
+func (st *TextSyntax) tab(s string, lvl int, tag string) string {
 	prefix := strings.Repeat(st.IndentPrefix, lvl)
 
 	if st.TextWidth > 0 {
