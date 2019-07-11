@@ -109,8 +109,9 @@ Basic column This one is here                  Last but not least shows
              that colums with several lines                                     
              work too                                                           
                                                                                 
-             This second row is here to test   Also possibly a good opportunity 
-             multi-lines rows format           to check escaping *sequence*     
+             This second row is here to test   Also possibly a second chance to 
+             multi-lines rows format           verify that multi-lines is       
+                                               working                          
 ------------ --------------------------------- ---------------------------------
 
 It is also possible to use tabs with tables:
@@ -123,7 +124,7 @@ It is also possible to use tabs with tables:
                  that colums with several lines                                 
                  work too                                                       
                                                                                 
-                 This second row is here to test Also possibly a good           
-                 multi-lines rows format         opportunity to check escaping  
-                                                 *sequence*                     
+                 This second row is here to test Also possibly a second chance  
+                 multi-lines rows format         to verify that multi-lines is  
+                                                 working                        
     ------------ ------------------------------- -------------------------------

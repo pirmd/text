@@ -33,9 +33,9 @@ Column1 | Column2 | Column3
 Basic column | This one is here
 to demonstrate
 that colums with several lines work too | Last but not least shows formating within the table
- | This second row is here to test multi-lines rows format | Also possibly a good opportunity to check escaping *sequence*It is also possible to use tabs with tables:
+ | This second row is here to test multi-lines rows format | Also possibly a second chance to verify that multi-lines is workingIt is also possible to use tabs with tables:
 Column1 | Column2 | Column3
 Basic column | This one is here
 to demonstrate
 that colums with several lines work too | Last but not least shows formating within the table
- | This second row is here to test multi-lines rows format | Also possibly a good opportunity to check escaping *sequence*
+ | This second row is here to test multi-lines rows format | Also possibly a second chance to verify that multi-lines is working

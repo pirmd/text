@@ -135,7 +135,7 @@ T{
 T}	T{
 This second row is here to test multi-lines rows format
 T}	T{
-Also possibly a good opportunity to check escaping *sequence*
+Also possibly a second chance to verify that multi-lines is working
 T}
 .TE
 .PP
@@ -165,7 +165,7 @@ T{
 T}	T{
 This second row is here to test multi-lines rows format
 T}	T{
-Also possibly a good opportunity to check escaping *sequence*
+Also possibly a second chance to verify that multi-lines is working
 T}
 .TE
 

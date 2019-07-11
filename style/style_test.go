@@ -65,14 +65,14 @@ func testText(st style.Styler) (s string) {
 	s += st.Table(
 		[]string{"Column1", "Column2", "Column3"},
 		[]string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Last but not least shows " + st.Bold("formating") + " within the table"},
-		[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a good opportunity to check escaping *sequence*"},
+		[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a second chance to verify that multi-lines is working"},
 	)
 	s += st.Paragraph("It is also possible to use tabs with tables:")
 	s += st.Tab(1)(
 		st.Table(
 			[]string{"Column1", "Column2", "Column3"},
 			[]string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Last but not least shows " + st.Bold("formating") + " within the table"},
-			[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a good opportunity to check escaping *sequence*"},
+			[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a second chance to verify that multi-lines is working"},
 		),
 	)
 
