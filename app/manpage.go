@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"regexp"
 	"strings"
+	"time"
 
 	"github.com/pirmd/cli/style"
 )
@@ -20,15 +20,14 @@ const ManSection = "1"
 //PrintManpage outputs to w the command's documentation in a manpage-like
 //format.  It does not recurse over sub-commands if any, so that they are not
 //fully documented in this page and need to be generated separatly.
-func PrintManpage(w io.Writer, c *Command, st *style.Styler) {
-	stMan := st.WithAutostyler(style.LightMarkup.Extend(style.Markup{
-		regexp.MustCompile(`\s((?:[^\s]+?)\([1-7]\))\s`):        style.FmtBold,
-		regexp.MustCompile(fmt.Sprintf(`\s(%s)\s`, fmtName(c))): style.FmtBold,
+func PrintManpage(w io.Writer, c *Command, st style.Styler) {
+	fmt.Fprintf(w, st.Metadata(map[string]string{
+		"title":      fmtName(c),
+		"mansection": ManSection,
+		"date":       time.Now().Format("2006-01-02"),
 	}))
 
-	fmt.Fprintf(w, st.DocHeader(st.Upper("%s %s \"%[1]s\\-%s\"", fmtName(c), ManSection, c.Version)))
-
-	printLongUsage(w, c, stMan)
+	printLongUsage(w, c, st)
 
 	var seeAlso []string
 	for _, cmd := range c.cmds {
@@ -37,8 +36,8 @@ func PrintManpage(w io.Writer, c *Command, st *style.Styler) {
 		}
 	}
 	if len(seeAlso) > 0 {
-		fmt.Fprintf(w, stMan.Header("See Also"))
-		fmt.Fprintf(w, stMan.Paragraph(strings.Join(seeAlso, ",")))
+		fmt.Fprintf(w, st.Header(1)("See Also"))
+		fmt.Fprintf(w, st.Paragraph(strings.Join(seeAlso, ",")))
 	}
 }
 

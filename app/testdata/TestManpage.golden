@@ -1,74 +1,64 @@
-.TH CLI.TEST 1 "CLI.TEST\-1"
+.TH CLI.TEST 1 2019-07-12
 
 .SH Name
 .PP
-cli.test \- A test for my minimalist cli app building lib
+cli.test - A test for my minimalist cli app building lib
 
 .SH Synopsis
 .PP
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fIstring\fP
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBhelp\fP
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBversion\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest\fP \fItest\_arg\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP
-\fBcli.test\fP [\-\-\fBbool\fP] [\-\-\fBflag\fP=\fIFLAG\fP] [\-\-\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [\-\-\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31\_arg\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest4\fP \fItest4\_arg\fP ...
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fIstring\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBhelp\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBversion\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest\fP \fItest_arg\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest2\fP \fItest2_arg1\fP \fItest2_arg2\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31_arg\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest4\fP \fItest4_arg\fP ...
 
 .SH Description
 .PP
-cli.test is mainly here to test and demonstrate the set\-up of a commandline application using the small \fBcli\fP library.
+cli.test is mainly here to test and demonstrate the set-up of a commandline application using the small *cli* library.
 
-Like many other test involving text issuance, using the famous \\fIlorem ipsum\\fP pattern is a must.
+Like many other test involving text issuance, using the famous _lorem ipsum_ pattern is a must.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 .SH Options
-
 .TP
-\fB\-\-\fBbool\fP\fP
+\fB--\fBbool\fP\fP
 A boolean flag
-
 .TP
-\fB\-\-\fBflag\fP=\fIFLAG\fP\fP
+\fB--\fBflag\fP=\fIFLAG\fP\fP
 A string flag
-
 .TP
-\fB\-\-\fBenum\fP=\fIgood|bad|ugly\fP\fP
+\fB--\fBenum\fP=\fIgood|bad|ugly\fP\fP
 An enum flag
 
 .SH Commands
-
 .TP
 \fB\fBhelp\fP\fP
 Show usage information.
-
 .TP
 \fB\fBversion\fP\fP
 Show version information.
-
 .TP
-\fB\fBtest\fP \fItest\_arg\fP\fP
-Many of you know about \\fIlorem ipsum\\fP but few know what it means. So this sub\-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.
-
+\fB\fBtest\fP \fItest_arg\fP\fP
+Many of you know about _lorem ipsum_ but few know what it means. So this sub-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.
 .TP
-\fB\fBtest2\fP \fItest2\\fIarg1\fP \fItest2\\fParg2\fP\fP
-Test a second sub\-command
-
+\fB\fBtest2\fP \fItest2_arg1\fP \fItest2_arg2\fP\fP
+Test a second sub-command
 .TP
-\fB\fBtest3\fP [<flags>] \fBhelp\fP|\fBtest31\fP \fItest31\_arg\fP\fP
-Test another sub\-command that has a sub\-subcommand \fBTest31\fP
-
+\fB\fBtest3\fP [<flags>] \fBhelp\fP|\fBtest31\fP \fItest31_arg\fP\fP
+Test another sub-command that has a sub-subcommand *Test31*
 .TP
-\fB\fBtest4\fP \fItest4\_arg\fP ...\fP
-Test another sub\-command with unlimited args
+\fB\fBtest4\fP \fItest4_arg\fP ...\fP
+Test another sub-command with unlimited args
 
 .SH Arguments
-
 .TP
 \fB\fIstring\fP\fP
 An argument that should be a string
 
 .SH See Also
 .PP
-cli.test\-test3(1)
+cli.test-test3(1)

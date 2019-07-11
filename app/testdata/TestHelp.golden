@@ -1,71 +1,70 @@
-
 NAME
 
-    cli.test - A test for my minimalist cli app building lib
+cli.test - A test for my minimalist cli app building lib
 
 SYNOPSIS
 
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [3mstring[23m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mhelp[22m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mversion[22m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest[22m [3mtest_arg[23m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest2[22m [3mtest2[3marg1[23m 
-    [3mtest2[23marg2[23m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest3[22m 
-    [--[1mstringflag[22m=[3mSTRINGFLAG[23m] [1mhelp[22m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest3[22m 
-    [--[1mstringflag[22m=[3mSTRINGFLAG[23m] [1mtest31[22m [3mtest31_arg[23m
-    [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest4[22m [3mtest4_arg[23m ...
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [3mstring[23m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mhelp[22m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mversion[22m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest[22m [3mtest_arg[23m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest2[22m [3mtest2_arg1[23m 
+[3mtest2_arg2[23m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest3[22m 
+[--[1mstringflag[22m=[3mSTRINGFLAG[23m] [1mhelp[22m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest3[22m 
+[--[1mstringflag[22m=[3mSTRINGFLAG[23m] [1mtest31[22m [3mtest31_arg[23m
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [--[1menum[22m=[3mgood|bad|ugly[23m] [1mtest4[22m [3mtest4_arg[23m ...
 
 DESCRIPTION
 
-    cli.test is mainly here to test and demonstrate the set-up of a commandline 
-    application using the small [1mcli[22m library.
-    
-    Like many other test involving text issuance, using the famous [3mlorem ipsum[23m 
-    pattern is a must.
-    
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo 
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse 
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat 
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+cli.test is mainly here to test and demonstrate the set-up of a commandline 
+application using the small *cli* library.
+
+Like many other test involving text issuance, using the famous _lorem ipsum_ 
+pattern is a must.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis 
+nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
+fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in 
+culpa qui officia deserunt mollit anim id est laborum.
 
 OPTIONS
 
-[1m--[1mbool[22m[22m:
+[1m--[1mbool[22m[22m
     A boolean flag
 
-[1m--[1mflag[22m=[3mFLAG[23m[22m:
+[1m--[1mflag[22m=[3mFLAG[23m[22m
     A string flag
 
-[1m--[1menum[22m=[3mgood|bad|ugly[23m[22m:
+[1m--[1menum[22m=[3mgood|bad|ugly[23m[22m
     An enum flag
 
 COMMANDS
 
-[1m[1mhelp[22m[22m:
+[1m[1mhelp[22m[22m
     Show usage information.
 
-[1m[1mversion[22m[22m:
+[1m[1mversion[22m[22m
     Show version information.
 
-[1m[1mtest[22m [3mtest_arg[23m[22m:
-    Many of you know about [3mlorem ipsum[23m but few know what it means. So this 
+[1m[1mtest[22m [3mtest_arg[23m[22m
+    Many of you know about _lorem ipsum_ but few know what it means. So this 
     sub-command's description is a perfect occasion to clarify that, while it 
     was popularized in the XVI century, it originates from a text from Ciceron.
 
-[1m[1mtest2[22m [3mtest2[3marg1[23m [3mtest2[23marg2[23m[22m:
+[1m[1mtest2[22m [3mtest2_arg1[23m [3mtest2_arg2[23m[22m
     Test a second sub-command
 
-[1m[1mtest3[22m [<flags>] [1mhelp[22m|[1mtest31[22m [3mtest31_arg[23m[22m:
-    Test another sub-command that has a sub-subcommand [1mTest31[22m
+[1m[1mtest3[22m [<flags>] [1mhelp[22m|[1mtest31[22m [3mtest31_arg[23m[22m
+    Test another sub-command that has a sub-subcommand *Test31*
 
-[1m[1mtest4[22m [3mtest4_arg[23m ...[22m:
+[1m[1mtest4[22m [3mtest4_arg[23m ...[22m
     Test another sub-command with unlimited args
 
 ARGUMENTS
 
-[1m[3mstring[23m[22m:
+[1m[3mstring[23m[22m
     An argument that should be a string
