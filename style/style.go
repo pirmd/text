@@ -1,6 +1,9 @@
 package style
 
-//Styler represents any type that knows how to style text
+//CurrentStyler is the current selected Styler Default to the Term styler
+var CurrentStyler = Term
+
+//Styler represents any type that knows how to format texts.
 type Styler interface {
 	//Upper changes a string case to upper case
 	Upper(string) string
