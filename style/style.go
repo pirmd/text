@@ -1,7 +1,7 @@
 package style
 
 //CurrentStyler is the current selected Styler Default to the Term styler
-var CurrentStyler = Term
+var CurrentStyler Styler = Term
 
 //Styler represents any type that knows how to format texts.
 type Styler interface {
