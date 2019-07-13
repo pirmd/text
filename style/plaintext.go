@@ -44,8 +44,8 @@ type TextSyntax struct {
 	//have to include it (avoid "\t" nevertheless).
 	ListBullets []string
 
-	indentLvl   int
-	enumerators []int
+	indentLvl int
+	nestLvl   int
 
 	//If true, adds a line break before paragraphs, headers or lists. It is
 	//automatically set-up the first time one any of these formats is used.
@@ -85,53 +85,64 @@ func (stx *TextSyntax) Paragraph(s string) string {
 }
 
 //BulletedList returns a new bulleted-list with the proper nested level.
-//BulletedList works in conjunction with BulletedItem.
-func (stx *TextSyntax) BulletedList(lvl int) func(...string) string {
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl + 1
-
-	return func(items ...string) string {
-		stx.indentLvl = oldlvl
-		return strings.Join(items, "")
-	}
-}
-
-//BulletedItem returns a new bullet-list item.
 //It adds a bullet in front of the provided string according to stx.BulletList
 //and the list's level.
 //A Tab is inserted before each item according to the list level.
-func (stx *TextSyntax) BulletedItem(s string) string {
-	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
-	return stx.br() + stx.tab(s, stx.indentLvl, bullet) + "\n"
-}
+func (stx *TextSyntax) BulletedList(lvl int) func(...string) string {
+	stx.nestLvl++
 
-//OrderedList returns a new ordered-list with the proper nested level.
-//OrderedList works in conjunction with BulletedItem.
-func (stx *TextSyntax) OrderedList(lvl int) func(...string) string {
 	oldlvl := stx.indentLvl
 	stx.indentLvl = lvl + 1
 
-	for stx.indentLvl >= len(stx.enumerators) {
-		stx.enumerators = append(stx.enumerators, make([]int, 2)...)
-	}
+	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
 
 	return func(items ...string) string {
-		stx.enumerators[stx.indentLvl] = 0
-		stx.indentLvl = oldlvl
+		var s string
+		for i, item := range items {
+			if i == 0 {
+				s = stx.tab(item, stx.indentLvl, bullet)
+			} else {
+				s = s + "\n" + stx.tab(item, stx.indentLvl, bullet)
+			}
+			if !strings.HasSuffix(s, "\n") {
+				s += "\n"
+			}
+		}
 
-		return strings.Join(items, "")
+		stx.indentLvl = oldlvl
+		stx.nestLvl--
+		return stx.br() + s
 	}
 }
 
-//OrderedItem returns a new ordered-list item.
-//It adds an enumerator in front of the provided string according to the
-//current enumerator increment of the corresponding list's level (therefore
-//only one enumerator can be followed for a given list's level).
+//OrderedList returns a new ordered-list with the proper nested level.
+//It adds an enumerator in front of the provided string according.
 //A Tab is inserted before each item according to the list level.
-func (stx *TextSyntax) OrderedItem(s string) string {
-	stx.enumerators[stx.indentLvl]++
-	enum := strconv.Itoa(stx.enumerators[stx.indentLvl]) + ". "
-	return stx.br() + stx.tab(s, stx.indentLvl, enum) + "\n"
+func (stx *TextSyntax) OrderedList(lvl int) func(...string) string {
+	stx.nestLvl++
+
+	oldlvl := stx.indentLvl
+	stx.indentLvl = lvl + 1
+
+	return func(items ...string) string {
+		var s string
+		for i, item := range items {
+			enum := strconv.Itoa(i+1) + ". "
+
+			if i == 0 {
+				s = stx.tab(item, stx.indentLvl, enum)
+			} else {
+				s = s + "\n" + stx.tab(item, stx.indentLvl, enum)
+			}
+			if !strings.HasSuffix(s, "\n") {
+				s += "\n"
+			}
+		}
+
+		stx.indentLvl = oldlvl
+		stx.nestLvl--
+		return stx.br() + s
+	}
 }
 
 //Define returns a term definition
@@ -166,6 +177,11 @@ func (stx *TextSyntax) tab(s string, lvl int, tag string) string {
 	prefix := strings.Repeat(stx.IndentPrefix, lvl)
 
 	if stx.TextWidth > 0 {
+		if stx.nestLvl != 0 {
+			width := stx.TextWidth - (stx.nestLvl-1)*len(stx.IndentPrefix)
+			prefix = strings.Repeat(stx.IndentPrefix, lvl-stx.nestLvl)
+			return text.Tab(s, tag, prefix, width)
+		}
 		return text.Tab(s, tag, prefix, stx.TextWidth)
 	}
 	return text.Indent(s, tag, prefix)

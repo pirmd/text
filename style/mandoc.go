@@ -30,8 +30,7 @@ type ManSyntax struct {
 	//have to include it (avoid "\t" nevertheless).
 	ListBullets []string
 
-	indentLvl   int
-	enumerators []int
+	indentLvl int
 }
 
 //Bold changes a string case to bold.
@@ -80,49 +79,41 @@ func (stx *ManSyntax) Paragraph(s string) string {
 	return stx.tab(".PP\n" + s + "\n")
 }
 
-//BulletedList returns a new bulleted-list. It returns one line per list item.
+//BulletedList returns a new bulleted-list.
+//It adds a bullet in front of the provided string according to stx.BulletList
+//and the list's level.
 func (stx *ManSyntax) BulletedList(lvl int) func(...string) string {
 	oldlvl := stx.indentLvl
 	stx.indentLvl = lvl + 1
 
+	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
 	return func(items ...string) string {
+		var s string
+		for _, item := range items {
+			s = s + "\n.TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + item + "\n"
+		}
+
 		stx.indentLvl = oldlvl
-		return stx.tab(strings.Join(items, ""))
+		return stx.tab(s)
 	}
 }
 
-//BulletedItem returns a new bullet-list item.
-//It adds a bullet in front of the provided string according to stx.BulletList
-//and the list's level.
-func (stx *ManSyntax) BulletedItem(s string) string {
-	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
-	return ".TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + s + "\n"
-}
-
 //OrderedList returns a new ordered-list. It returns one line per list item.
+//It adds an enumerator in front of the provided string.
 func (stx *ManSyntax) OrderedList(lvl int) func(...string) string {
 	oldlvl := stx.indentLvl
 	stx.indentLvl = lvl + 1
 
-	for stx.indentLvl >= len(stx.enumerators) {
-		stx.enumerators = append(stx.enumerators, make([]int, 2)...)
-	}
-
 	return func(items ...string) string {
-		stx.enumerators[stx.indentLvl] = 0
-		stx.indentLvl = oldlvl
-		return stx.tab(strings.Join(items, ""))
-	}
-}
+		var s string
+		for i, item := range items {
+			enum := strconv.Itoa(i+1) + ". "
+			s = s + "\n.TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + item + "\n"
+		}
 
-//OrderedItem returns a new ordered-list item.
-//It adds an enumerator in front of the provided string according to the
-//current enumerator increment of the corresponding list's level (therefore
-//only one enumerator can be followed for a given list's level).
-func (stx *ManSyntax) OrderedItem(s string) string {
-	stx.enumerators[stx.indentLvl]++
-	enum := strconv.Itoa(stx.enumerators[stx.indentLvl]) + ". "
-	return ".TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + s + "\n"
+		stx.indentLvl = oldlvl
+		return stx.tab(s)
+	}
 }
 
 //Define returns a term definition

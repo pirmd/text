@@ -1,6 +1,7 @@
 package style
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -123,32 +124,46 @@ func (stx *CoreSyntax) Paragraph(s string) string {
 	return s + "\n"
 }
 
-//BulletedList returns a new bulleted-list. It returns one line per list item.
-//BulletedList works in conjunction with BulletedItem.
+//BulletedList returns a new bulleted-list.
+//It adds an hyphen in front of each item. This style does not support
+//nested-list so level is not taken into account.
 func (stx *CoreSyntax) BulletedList(lvl int) func(...string) string {
 	return func(items ...string) string {
-		return strings.Join(items, "\n")
+		var s string
+		for i, item := range items {
+			if i == 0 {
+				s = "- " + item
+			} else {
+				s = s + "\n" + "- " + item
+			}
+			if !strings.HasSuffix(s, "\n") {
+				s += "\n"
+			}
+		}
+
+		return "\n" + s
 	}
 }
 
-//BulletedItem returns a new bullet-list item.
-//It adds an hyphen in front of each item. This style does not support
-//nested-list so level is not taken into account.
-func (stx *CoreSyntax) BulletedItem(s string) string {
-	return "- " + s
-}
-
 //OrderedList returns a new ordered-list with the proper nested level.
-//OrderedList works in conjunction with OrderedItem.
-func (stx *CoreSyntax) OrderedList(lvl int) func(...string) string {
-	return stx.BulletedList(lvl)
-}
-
-//OrderedItem returns a new ordered-list item.
-//It adds a "#" in front of each item. This style does not support
+//It adds an enum in front of each item. This style does not support
 //nested-list so level is not taken into account.
-func (stx *CoreSyntax) OrderedItem(s string) string {
-	return "# " + s
+func (stx *CoreSyntax) OrderedList(lvl int) func(...string) string {
+	return func(items ...string) string {
+		var s string
+		for i, item := range items {
+			if i == 0 {
+				s = "1. " + item
+			} else {
+				s = s + "\n" + strconv.Itoa(i+1) + ". " + item
+			}
+			if !strings.HasSuffix(s, "\n") {
+				s += "\n"
+			}
+		}
+
+		return "\n" + s
+	}
 }
 
 //Define returns a term definition
