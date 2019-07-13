@@ -17,6 +17,10 @@ import (
 //should be most of the time 1
 const ManSection = "1"
 
+//manDate contains the manpage creation date. It is manage through a global
+//variable to be tweaked during test stage.
+var manDate = time.Now().Format("2006-01-02")
+
 //PrintManpage outputs to w the command's documentation in a manpage-like
 //format.  It does not recurse over sub-commands if any, so that they are not
 //fully documented in this page and need to be generated separatly.
@@ -24,7 +28,7 @@ func PrintManpage(w io.Writer, c *Command, st style.Styler) {
 	fmt.Fprintf(w, st.Metadata(map[string]string{
 		"title":      fmtName(c),
 		"mansection": ManSection,
-		"date":       time.Now().Format("2006-01-02"),
+		"date":       manDate,
 	}))
 
 	printLongUsage(w, c, st)
