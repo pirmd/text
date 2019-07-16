@@ -30,13 +30,13 @@ func testText(st style.Styler) (s string) {
 
 	s += H2("Demonstrating lists")
 	s += st.Paragraph("It knows how to format " + st.Italic("lists") + ": ")
-	s += st.BulletedList(0)(
+	s += st.BulletedList()(
 		"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.",
-		"It also can support sub-lists:\n"+st.BulletedList(1)(
+		"It also can support sub-lists:\n"+st.BulletedList()(
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
 			"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-			"And sub-sub-ub-lists:\n"+st.BulletedList(2)(
+			"And sub-sub-ub-lists:\n"+st.BulletedList()(
 				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 				"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
 				"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -47,14 +47,14 @@ func testText(st style.Styler) (s string) {
 	)
 
 	s += st.Paragraph("It can build " + st.Bold("ordered"+" "+st.Italic("lists")) + ": ")
-	s += st.OrderedList(0)(
+	s += st.OrderedList()(
 		"This very long and detailed sentence is here to demonstrate that list can be formatted and wrapped. It should hopefully be so long that it will not fulfill the maximum number of authorized chars per line is reached.",
-		"It also can support sub-lists:\n"+st.OrderedList(1)(
+		"It also can support sub-lists:\n"+st.OrderedList()(
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
 			"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 		),
-		"It is also possible to mix with bullet list if you really want to.\n"+st.BulletedList(1)(
+		"It is also possible to mix with bullet list if you really want to.\n"+st.BulletedList()(
 			"First things usually come first.",
 			"Second things should come after the first ones.",
 		),

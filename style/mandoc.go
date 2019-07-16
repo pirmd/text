@@ -79,12 +79,11 @@ func (stx *ManSyntax) Paragraph(s string) string {
 	return stx.tab(".PP\n" + s + "\n")
 }
 
-//BulletedList returns a new bulleted-list.
-//It adds a bullet in front of the provided string according to stx.BulletList
-//and the list's level.
-func (stx *ManSyntax) BulletedList(lvl int) func(...string) string {
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl + 1
+//BulletedList returns a new bulleted-list (each list item has a leading
+//bullet).
+//It automatically indents each item.
+func (stx *ManSyntax) BulletedList() func(items ...string) string {
+	stx.indentLvl++
 
 	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
 	return func(items ...string) string {
@@ -93,16 +92,16 @@ func (stx *ManSyntax) BulletedList(lvl int) func(...string) string {
 			s = s + "\n.TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + item + "\n"
 		}
 
-		stx.indentLvl = oldlvl
+		stx.indentLvl--
 		return stx.tab(s)
 	}
 }
 
-//OrderedList returns a new ordered-list. It returns one line per list item.
-//It adds an enumerator in front of the provided string.
-func (stx *ManSyntax) OrderedList(lvl int) func(...string) string {
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl + 1
+//OrderedList returns a new ordered-list (each list item has a leading
+//auto-incrementing enumerator).
+//It automatically indents each item.
+func (stx *ManSyntax) OrderedList() func(items ...string) string {
+	stx.indentLvl++
 
 	return func(items ...string) string {
 		var s string
@@ -111,7 +110,7 @@ func (stx *ManSyntax) OrderedList(lvl int) func(...string) string {
 			s = s + "\n.TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + item + "\n"
 		}
 
-		stx.indentLvl = oldlvl
+		stx.indentLvl--
 		return stx.tab(s)
 	}
 }

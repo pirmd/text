@@ -124,10 +124,10 @@ func (stx *CoreSyntax) Paragraph(s string) string {
 	return s + "\n"
 }
 
-//BulletedList returns a new bulleted-list.
-//It adds an hyphen in front of each item. This style does not support
-//nested-list so level is not taken into account.
-func (stx *CoreSyntax) BulletedList(lvl int) func(...string) string {
+//BulletedList returns a new bulleted-list (each list item has a leading
+//hyphen).
+//This style does not support nested-list.
+func (stx *CoreSyntax) BulletedList() func(items ...string) string {
 	return func(items ...string) string {
 		var s string
 		for i, item := range items {
@@ -145,10 +145,10 @@ func (stx *CoreSyntax) BulletedList(lvl int) func(...string) string {
 	}
 }
 
-//OrderedList returns a new ordered-list with the proper nested level.
-//It adds an enum in front of each item. This style does not support
-//nested-list so level is not taken into account.
-func (stx *CoreSyntax) OrderedList(lvl int) func(...string) string {
+//OrderedList returns a new ordered-list (each list item has a leading
+//auto-incrementing enumerator).
+//This style does not support nested-list.
+func (stx *CoreSyntax) OrderedList() func(items ...string) string {
 	return func(items ...string) string {
 		var s string
 		for i, item := range items {

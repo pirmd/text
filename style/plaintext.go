@@ -84,15 +84,12 @@ func (stx *TextSyntax) Paragraph(s string) string {
 	return stx.br() + stx.tab(s, stx.indentLvl, "") + "\n"
 }
 
-//BulletedList returns a new bulleted-list with the proper nested level.
-//It adds a bullet in front of the provided string according to stx.BulletList
-//and the list's level.
-//A Tab is inserted before each item according to the list level.
-func (stx *TextSyntax) BulletedList(lvl int) func(...string) string {
+//BulletedList returns a new bulleted-list (each list item has a leading
+//bullet).
+//It automatically indents each item.
+func (stx *TextSyntax) BulletedList() func(items ...string) string {
 	stx.nestLvl++
-
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl + 1
+	stx.indentLvl++
 
 	bullet := stx.ListBullets[stx.indentLvl%len(stx.ListBullets)]
 
@@ -109,20 +106,18 @@ func (stx *TextSyntax) BulletedList(lvl int) func(...string) string {
 			}
 		}
 
-		stx.indentLvl = oldlvl
+		stx.indentLvl--
 		stx.nestLvl--
 		return stx.br() + s
 	}
 }
 
-//OrderedList returns a new ordered-list with the proper nested level.
-//It adds an enumerator in front of the provided string according.
-//A Tab is inserted before each item according to the list level.
-func (stx *TextSyntax) OrderedList(lvl int) func(...string) string {
+//OrderedList returns a new ordered-list (each list item has a leading
+//auto-incrementing enumerator).
+//It automatically indents each item.
+func (stx *TextSyntax) OrderedList() func(items ...string) string {
 	stx.nestLvl++
-
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl + 1
+	stx.indentLvl++
 
 	return func(items ...string) string {
 		var s string
@@ -139,7 +134,7 @@ func (stx *TextSyntax) OrderedList(lvl int) func(...string) string {
 			}
 		}
 
-		stx.indentLvl = oldlvl
+		stx.indentLvl--
 		stx.nestLvl--
 		return stx.br() + s
 	}
@@ -177,7 +172,7 @@ func (stx *TextSyntax) tab(s string, lvl int, tag string) string {
 	prefix := strings.Repeat(stx.IndentPrefix, lvl)
 
 	if stx.TextWidth > 0 {
-		if stx.nestLvl != 0 {
+		if stx.nestLvl > 0 {
 			width := stx.TextWidth - (stx.nestLvl-1)*len(stx.IndentPrefix)
 			prefix = strings.Repeat(stx.IndentPrefix, lvl-stx.nestLvl)
 			return text.Tab(s, tag, prefix, width)

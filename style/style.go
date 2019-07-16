@@ -67,11 +67,13 @@ type Styler interface {
 	//Paragraph returns text as a new paragraph.
 	Paragraph(string) string
 
-	//BulletedList returns a new bullet list with the given nested level.
-	BulletedList(int) func(...string) string
+	//BulletedList returns a new bulleted-list (each list item has a leading
+	//bullet).
+	BulletedList() func(...string) string
 
-	//OrderedList returns a new ordered list with the given nested level.
-	OrderedList(int) func(...string) string
+	//OrderedList returns a new ordered-list (each list item has a leading
+	//auto-incrementing enumerator).
+	OrderedList() func(...string) string
 
 	//Define returns a term definition.
 	Define(string, string) string
