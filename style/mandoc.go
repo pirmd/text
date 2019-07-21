@@ -62,7 +62,11 @@ func (stx *ManSyntax) BulletedList() func(items ...string) string {
 	return func(items ...string) string {
 		var s string
 		for _, item := range items {
-			s = s + "\n.TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + item + "\n"
+			s = s + "\n.TP " + strconv.Itoa(len(bullet)) + "\n" + bullet + "\n" + item
+
+			if !strings.HasSuffix(s, "\n") {
+				s += "\n"
+			}
 		}
 
 		stx.indentLvl--
@@ -80,7 +84,11 @@ func (stx *ManSyntax) OrderedList() func(items ...string) string {
 		var s string
 		for i, item := range items {
 			enum := strconv.Itoa(i+1) + ". "
-			s = s + "\n.TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + item + "\n"
+			s = s + "\n.TP " + strconv.Itoa(len(enum)) + "\n" + enum + "\n" + item
+
+			if !strings.HasSuffix(s, "\n") {
+				s += "\n"
+			}
 		}
 
 		stx.indentLvl--
@@ -148,6 +156,9 @@ func (stx *ManSyntax) Escape(s string) string {
 
 func (stx *ManSyntax) tab(s string) string {
 	if stx.indentLvl > 0 {
+		if strings.HasSuffix(s, "\n") {
+			return ".RS " + strconv.Itoa(stx.indentLvl*stx.TabWidth) + "\n" + s + ".RE\n"
+		}
 		return ".RS " + strconv.Itoa(stx.indentLvl*stx.TabWidth) + "\n" + s + "\n.RE\n"
 	}
 	return s
