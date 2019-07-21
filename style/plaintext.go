@@ -47,7 +47,7 @@ type TextSyntax struct {
 
 	//If true, adds a line break before paragraphs, headers or lists. It is
 	//automatically set-up the first time one any of these formats is used.
-	needBR bool
+	needLeadingBr bool
 }
 
 //Tab increases the tabulation level for the provided text.
@@ -153,10 +153,10 @@ func (stx *TextSyntax) Table(rows ...[]string) string {
 }
 
 func (stx *TextSyntax) br() string {
-	if stx.needBR {
+	if stx.needLeadingBr {
 		return "\n"
 	}
-	stx.needBR = true
+	stx.needLeadingBr = true
 	return ""
 }
 
