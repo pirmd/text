@@ -6,6 +6,8 @@ import (
 )
 
 func TestMkdTextEscaping(t *testing.T) {
+	st := NewMarkdown()
+
 	testCases := []struct {
 		in  string
 		out string
@@ -16,10 +18,10 @@ func TestMkdTextEscaping(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Markdown.Escape(tc.in)
+		got := st.Escape(tc.in)
 		verify.EqualString(t, got, tc.out, "escape markdown: '%s'", tc.in)
 
-		gotgot := Markdown.Escape(tc.in)
+		gotgot := st.Escape(tc.in)
 		verify.EqualString(t, gotgot, tc.out, "escape markdown (second pass): '%s'", tc.in)
 	}
 }

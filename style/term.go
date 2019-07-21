@@ -6,27 +6,31 @@ import (
 
 var (
 	_ Styler = (*ColorTextSyntax)(nil) //Makes sure that ColorTextSyntax implements Styler
+)
 
-	//Term is a customized style.TextSyntax Style to write plain text to the
-	//terminal. It extends textSyntax by adapting text maximum length to the
-	//terminal width. If terminal width cannot be detected, it will fallback to
-	//a 80 maximum chars per line.
-	Term = &TextSyntax{
+//NewTerm is a predifined style.TextSyntax Style to write plain text to the
+//terminal. It extends textSyntax by adapting text maximum length to the
+//terminal width. If terminal width cannot be detected, it will fallback to a
+//80 maximum chars per line.
+func NewTerm() *TextSyntax {
+	return &TextSyntax{
 		TextWidth:   termwidth(),
 		TabWidth:    4,
 		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}
+}
 
-	//ColorTerm is a customized style.ColorTextSyntax Style to write plain text
-	//in color to the terminal. It extends TextSyntax by adapting text maximum
-	//length to the terminal width. If terminal width cannot be detected, it
-	//will fallback to a 80 maximum chars per line.
-	ColorTerm = &ColorTextSyntax{&TextSyntax{
+//NewColorterm is a predifined style.ColorTextSyntax Style to write plain text in
+//color to the terminal. It extends TextSyntax by adapting text maximum length
+//to the terminal width. If terminal width cannot be detected, it will fallback
+//to a 80 maximum chars per line.
+func NewColorterm() *ColorTextSyntax {
+	return &ColorTextSyntax{&TextSyntax{
 		TextWidth:   termwidth(),
 		TabWidth:    4,
 		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}}
-)
+}
 
 //ColorTextSyntax implements Styler interface to provide basic formatting to write
 //plain texts using ANSI colors. It supports in addition to ANSI colors and

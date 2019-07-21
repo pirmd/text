@@ -15,7 +15,7 @@ func TestManpage(t *testing.T) {
 
 	//Ensure that manpage date will remain the same whenever the test is run
 	manDate = "2019-07-12"
-	PrintManpage(out, testApp, style.Man)
+	PrintManpage(out, testApp, style.NewMan())
 
 	verify.MatchGolden(t, out.String(), "Manpage message is incorrectly formatted")
 }

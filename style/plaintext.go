@@ -9,16 +9,18 @@ import (
 
 var (
 	_ Styler = (*TextSyntax)(nil) //Makes sure that TextSyntax implements Styler
+)
 
-	//Plaintext is a customized style.TextSyntax Styler to write plain text. It
-	//allows for maximum 80 chars per line, indenting is made of 4 spaces and
-	//list bullets are made of unicode hyphen and bullet.
-	Plaintext = &TextSyntax{
+//NewPlaintext is a pre-defined style.TextSyntax Styler to write plain text. It
+//allows for maximum 80 chars per line, indenting is made of 4 spaces and list
+//bullets are made of unicode hyphen and bullet.
+func NewPlaintext() *TextSyntax {
+	return &TextSyntax{
 		TextWidth:   80,
 		TabWidth:    4,
 		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}
-)
+}
 
 //TextSyntax implements Styler interface to provide basic formatting to write plain
 //texts.  It supports text indenting and wraping as well as table but does not

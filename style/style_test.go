@@ -100,30 +100,30 @@ func TestCoreSyntax(t *testing.T) {
 }
 
 func TestPlainTextSyntax(t *testing.T) {
-	out := testText(style.Plaintext)
+	out := testText(style.NewPlaintext())
 	verify.MatchGolden(t, out, "Styling with 'Plaintext' style failed")
 }
 
 func TestTermSyntax(t *testing.T) {
-	st := style.Term
+	st := style.NewTerm()
 	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
 	out := testText(st)
 	verify.MatchGolden(t, out, "Styling with 'Term' style failed")
 }
 
 func TestColorTermSyntax(t *testing.T) {
-	st := style.ColorTerm
+	st := style.NewColorterm()
 	st.TextWidth = 60 //Fix size for testing purpose otherwise, might have varying resluts
 	out := testText(st)
 	verify.MatchGolden(t, out, "Styling with 'ColorTerm' style failed")
 }
 
 func TestMarkdownSyntax(t *testing.T) {
-	out := testText(style.Markdown)
+	out := testText(style.NewMarkdown())
 	verify.MatchGolden(t, out, "Styling with 'Markdown' style failed")
 }
 
 func TestManSyntax(t *testing.T) {
-	out := testText(style.Man)
+	out := testText(style.NewMan())
 	verify.MatchGolden(t, out, "Styling with 'Man' style failed")
 }

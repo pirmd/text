@@ -64,6 +64,6 @@ func GenerateManpage(c *Command) error {
 	}
 
 	fmt.Printf("Generating manpage for command '%s' to file '%s'\n", c.name, fname)
-	PrintManpage(f, c, style.Man)
+	PrintManpage(f, c, style.NewMan())
 	return nil
 }

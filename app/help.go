@@ -50,7 +50,7 @@ func GenerateHelpFile(c *Command) error {
 	}
 
 	fmt.Printf("Generating readme for command '%s' to file '%s'\n", c.name, fname)
-	PrintLongUsage(f, c, style.Markdown)
+	PrintLongUsage(f, c, style.NewMarkdown())
 	return nil
 }
 

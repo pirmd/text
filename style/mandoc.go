@@ -7,17 +7,21 @@ import (
 
 var (
 	_ Styler = (*ManSyntax)(nil) //Makes sure that Man implements Styler
-
-	//Man is a customized style.ManSyntax to write manpages.
-	Man = &ManSyntax{&TextSyntax{
-		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
-		TabWidth:    4,
-	}}
 )
+
+//NewMan is a predefined style.ManSyntax to write manpages.
+func NewMan() *ManSyntax {
+	return &ManSyntax{&TextSyntax{
+		TabWidth:    4,
+		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
+	}}
+}
 
 //ManSyntax is a Styler that provides a sub-set of roff markup featuring common
 //used macros for building man pages
-type ManSyntax struct{ *TextSyntax }
+type ManSyntax struct {
+	*TextSyntax
+}
 
 //Bold changes a string case to bold.
 func (stx *ManSyntax) Bold(s string) string {

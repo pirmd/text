@@ -6,6 +6,8 @@ import (
 )
 
 func TestMandocEscaping(t *testing.T) {
+	st := NewMan()
+
 	testCases := []struct {
 		in  string
 		out string
@@ -17,10 +19,10 @@ func TestMandocEscaping(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Man.Escape(tc.in)
+		got := st.Escape(tc.in)
 		verify.EqualString(t, got, tc.out, "escape man (second pass): '%s'", tc.in)
 
-		gotgot := Man.Escape(got)
+		gotgot := st.Escape(got)
 		verify.EqualString(t, gotgot, tc.out, "escape man (second pass): '%s'", got)
 	}
 }

@@ -6,17 +6,18 @@ import (
 
 var (
 	_ Styler = (*MarkdownSyntax)(nil) //Makes sure that MarkdownSyntax implements Styler
+)
 
-	//Markdown is a customized style.MarkdownSyntax Styler to write plain text using
-	//the markdown idiom.
-	//Text wrapping is activated (80 chars maximum per line) so that reading
-	//directly markdown text is easier to the eye.
-	Markdown = &MarkdownSyntax{&TextSyntax{
+//NewMarkdown is a predefined style.MarkdownSyntax Styler to write plain text
+//using the markdown idiom.  Text wrapping is activated (80 chars maximum per
+//line) so that reading directly markdown text is easier to the eye.
+func NewMarkdown() *MarkdownSyntax {
+	return &MarkdownSyntax{&TextSyntax{
 		TextWidth:   80,
 		TabWidth:    4,
 		ListBullets: []string{"- ", "* ", "+ "},
 	}}
-)
+}
 
 //MarkdownSyntax implements Styler interface to provide formatting to write plain
 //texts using the markdown idiom.
