@@ -12,9 +12,9 @@ var (
 	//Text wrapping is activated (80 chars maximum per line) so that reading
 	//directly markdown text is easier to the eye.
 	Markdown = &MarkdownSyntax{&TextSyntax{
-		TextWidth:    80,
-		IndentPrefix: "    ",
-		ListBullets:  []string{"- ", "* ", "+ "},
+		TextWidth:   80,
+		TabWidth:    4,
+		ListBullets: []string{"- ", "* ", "+ "},
 	}}
 )
 

@@ -14,9 +14,9 @@ var (
 	//allows for maximum 80 chars per line, indenting is made of 4 spaces and
 	//list bullets are made of unicode hyphen and bullet.
 	Plaintext = &TextSyntax{
-		TextWidth:    80,
-		IndentPrefix: "    ",
-		ListBullets:  []string{"\u2043 ", "\u2022 ", "\u25E6 "},
+		TextWidth:   80,
+		TabWidth:    4,
+		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}
 )
 
@@ -31,11 +31,9 @@ type TextSyntax struct {
 	//still want stx.TextSyntaxwidth to be large enough to obtain a readable output).
 	TextWidth int
 
-	//IndentPrefix is the string used to indent text.
-	//Use of "\t" is not recommended as it does not cohabite correctly with
-	//wrapping func that cannot guess a '\t' length.
-	//An empty string disable indenting and tabulation-like features.
-	IndentPrefix string
+	//TabWidth is the number of spaces added in front of text for each
+	//tabulation's level
+	TabWidth int
 
 	//ListBullets list the bullets added to each list items. Bullets are chosen
 	//in the given order following the list nested-level (if nested-level is
@@ -52,17 +50,13 @@ type TextSyntax struct {
 	needBR bool
 }
 
-//Tab changes the tabulation level.
-//If the tabulation level is positive, it wraps then indents provided text.
+//Tab increases the tabulation level for the provided text.
 //Wraping is done according to stx.TextWidth value, if stx.TextWidth is null, Tab
 //only indents and doesn't wrap the provided text.
-//Indenting is done using stx.IndentPrefix string, that is repeated for each
-//tab-level.
-func (stx *TextSyntax) Tab(lvl int) func(string) string {
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl
+func (stx *TextSyntax) Tab() func(string) string {
+	stx.indentLvl++
 	return func(s string) string {
-		stx.indentLvl = oldlvl
+		stx.indentLvl--
 		return s
 	}
 }
@@ -151,9 +145,7 @@ func (stx *TextSyntax) Define(term string, desc string) string {
 //Table column width are guessed automatically and are arranged so that the table
 //fits into stx.TextWidth.
 func (stx *TextSyntax) Table(rows ...[]string) string {
-	//TODO(pirmd): ensure that IdentPrefix can work with ANSI code inside (notably
-	//here where len is used, should be text.visualLen?)
-	width := stx.TextWidth - (stx.indentLvl * len(stx.IndentPrefix))
+	width := stx.TextWidth - (stx.indentLvl * stx.TabWidth)
 	//TODO(pirmd): introduce way to chose/define Table grid
 	table := text.DrawTable(width, " ", "-", " ", rows...)
 
@@ -169,12 +161,12 @@ func (stx *TextSyntax) br() string {
 }
 
 func (stx *TextSyntax) tab(s string, lvl int, tag string) string {
-	prefix := strings.Repeat(stx.IndentPrefix, lvl)
+	prefix := strings.Repeat(" ", lvl*stx.TabWidth)
 
 	if stx.TextWidth > 0 {
 		if stx.nestLvl > 0 {
-			width := stx.TextWidth - (stx.nestLvl-1)*len(stx.IndentPrefix)
-			prefix = strings.Repeat(stx.IndentPrefix, lvl-stx.nestLvl)
+			width := stx.TextWidth - (stx.nestLvl-1)*stx.TabWidth
+			prefix = strings.Repeat(" ", (lvl-stx.nestLvl)*stx.TabWidth)
 			return text.Tab(s, tag, prefix, width)
 		}
 		return text.Tab(s, tag, prefix, stx.TextWidth)

@@ -98,7 +98,7 @@ func (stx *CoreSyntax) Crossout(s string) string {
 }
 
 //Tab does nothing (this style does not support text indenting/wrapping)
-func (stx *CoreSyntax) Tab(lvl int) func(string) string {
+func (stx *CoreSyntax) Tab() func(string) string {
 	return func(s string) string {
 		return s
 	}

@@ -22,7 +22,7 @@ func PrintSimpleUsage(w io.Writer, c *Command, st style.Styler) {
 
 	fmt.Fprintf(w, st.Header(1)("Synopsis:"))
 	for _, s := range fmtSynopsis(c, st) {
-		fmt.Fprintf(w, st.Tab(1)(st.Paragraph(s)))
+		fmt.Fprintf(w, st.Tab()(st.Paragraph(s)))
 	}
 }
 

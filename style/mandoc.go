@@ -9,29 +9,15 @@ var (
 	_ Styler = (*ManSyntax)(nil) //Makes sure that Man implements Styler
 
 	//Man is a customized style.ManSyntax to write manpages.
-	Man = &ManSyntax{
+	Man = &ManSyntax{&TextSyntax{
 		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
-		IndentWidth: 4,
-	}
+		TabWidth:    4,
+	}}
 )
 
 //ManSyntax is a Styler that provides a sub-set of roff markup featuring common
 //used macros for building man pages
-type ManSyntax struct {
-	*CoreSyntax
-
-	//IndentWidth is the scaling factor (number of spaces) to indent text.
-	IndentWidth int
-
-	//ListBullets list the bullets added to each list items. Bullets are chosen
-	//in the given order following the list nested-level (if nested-level is
-	//greater than bullets number it restarts from 1).
-	//If you want some spaces between the bullet and the start of text, you
-	//have to include it (avoid "\t" nevertheless).
-	ListBullets []string
-
-	indentLvl int
-}
+type ManSyntax struct{ *TextSyntax }
 
 //Bold changes a string case to bold.
 func (stx *ManSyntax) Bold(s string) string {
@@ -41,19 +27,6 @@ func (stx *ManSyntax) Bold(s string) string {
 //Italic changes a string case to italic.
 func (stx *ManSyntax) Italic(s string) string {
 	return "\\fI" + s + "\\fP"
-}
-
-//Tab changes the tabulation level.
-//If the tabulation level is positive, it wraps then indents provided text.
-//Indenting is done using stx.IndentWidth.
-func (stx *ManSyntax) Tab(lvl int) func(string) string {
-	oldlvl := stx.indentLvl
-	stx.indentLvl = lvl
-
-	return func(s string) string {
-		stx.indentLvl = oldlvl
-		return s
-	}
 }
 
 //Header returns text as a chapter's header
@@ -175,7 +148,7 @@ func (stx *ManSyntax) Escape(s string) string {
 
 func (stx *ManSyntax) tab(s string) string {
 	if stx.indentLvl > 0 {
-		return ".RS " + strconv.Itoa(stx.indentLvl*stx.IndentWidth) + "\n" + s + "\n.RE\n"
+		return ".RS " + strconv.Itoa(stx.indentLvl*stx.TabWidth) + "\n" + s + "\n.RE\n"
 	}
 	return s
 }

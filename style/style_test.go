@@ -24,9 +24,17 @@ func testText(st style.Styler) (s string) {
 	s += st.Paragraph("Section " + st.Underline("Introduction") + " already demonstrates useful styles from package 'styles', this section completes them with most of the others possibilities.")
 	s += st.Paragraph("Notably, package " + st.Underline("style") + " can print in " + st.Red("red") + " or " + st.Bold(st.Green("green bold")) + " (if chosen style supports it).")
 	s += st.Paragraph("Several levels of tabulations can be used:")
-	s += st.Tab(1)(st.Paragraph("(Level 1) Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
-	s += st.Tab(2)(st.Paragraph("(Level 2) Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."))
-	s += st.Tab(4)(st.Paragraph("(Level 4) Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."))
+	s += st.Tab()(
+		st.Paragraph("(Level 1) Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.") +
+			st.Tab()(
+				st.Paragraph("(Level 2) Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.")+
+					st.Tab()(
+						st.Tab()(
+							st.Paragraph("(Level 4) Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+						),
+					),
+			),
+	)
 
 	s += H2("Demonstrating lists")
 	s += st.Paragraph("It knows how to format " + st.Italic("lists") + ": ")
@@ -63,7 +71,9 @@ func testText(st style.Styler) (s string) {
 	s += st.Paragraph("It also knows how to " + st.Italic("define") + " terms:")
 	s += st.Define("style", "A particular procedure by which something is done; a manner or way.")
 	s += st.Paragraph("Even using Tabs:")
-	s += st.Tab(1)(st.Define("lorem ipsum", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."))
+	s += st.Tab()(
+		st.Define("lorem ipsum", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+	)
 
 	s += H2("Demonstrating tables")
 	s += st.Paragraph("Package 'style' supports drawing tables for most basic cases. Using Tab to align tables should be done carefully as table way to guess optimum columns size does not take into account the tabulation")
@@ -73,7 +83,7 @@ func testText(st style.Styler) (s string) {
 		[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a second chance to verify that multi-lines is working"},
 	)
 	s += st.Paragraph("It is also possible to use tabs with tables:")
-	s += st.Tab(1)(
+	s += st.Tab()(
 		st.Table(
 			[]string{"Column1", "Column2", "Column3"},
 			[]string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Last but not least shows " + st.Bold("formating") + " within the table"},

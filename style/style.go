@@ -54,8 +54,8 @@ type Styler interface {
 	//Crossout changes a string to be strikethrough
 	Crossout(string) string
 
-	//Tab indents then wraps the provided text by the given indent level.
-	Tab(int) func(string) string
+	//Tab increases the tabulation level (indents then wraps the provided text)
+	Tab() func(string) string
 
 	//Header returns text as a chapter's header.
 	Header(int) func(string) string

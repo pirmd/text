@@ -12,9 +12,9 @@ var (
 	//terminal width. If terminal width cannot be detected, it will fallback to
 	//a 80 maximum chars per line.
 	Term = &TextSyntax{
-		TextWidth:    termwidth(),
-		IndentPrefix: "    ",
-		ListBullets:  []string{"\u2043 ", "\u2022 ", "\u25E6 "},
+		TextWidth:   termwidth(),
+		TabWidth:    4,
+		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}
 
 	//ColorTerm is a customized style.ColorTextSyntax Style to write plain text
@@ -22,9 +22,9 @@ var (
 	//length to the terminal width. If terminal width cannot be detected, it
 	//will fallback to a 80 maximum chars per line.
 	ColorTerm = &ColorTextSyntax{&TextSyntax{
-		TextWidth:    termwidth(),
-		IndentPrefix: "    ",
-		ListBullets:  []string{"\u2043 ", "\u2022 ", "\u25E6 "},
+		TextWidth:   termwidth(),
+		TabWidth:    4,
+		ListBullets: []string{"\u2043 ", "\u2022 ", "\u25E6 "},
 	}}
 )
 
