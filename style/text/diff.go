@@ -247,6 +247,9 @@ Loop:
 		}
 
 		for n := iR; n < lenR; n++ {
+			if n != iR && n < lenL && left[n] == right[n] {
+				break
+			}
 			if left[iL] == right[n] {
 				for p := iR; p < n; p++ {
 					d.OnlyRight(right[p])
@@ -259,6 +262,9 @@ Loop:
 		}
 
 		for n := iL; n < lenL; n++ {
+			if n != iL && n < lenR && left[n] == right[n] {
+				break
+			}
 			if left[n] == right[iR] {
 				for p := iL; p < n; p++ {
 					d.OnlyLeft(left[p])
