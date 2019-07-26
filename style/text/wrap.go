@@ -125,14 +125,15 @@ func wrap(txt string, limit int) []string {
 
 func indent(s string, firstPrefix, prefix string) string {
 	var indented string
+	var isNewLine bool
 
-	lastRune := len(s) - 1
-
-	for i, c := range s {
-		indented += string(c)
-		if c == '\n' && i != lastRune {
-			indented += prefix
+	for _, c := range s {
+		//add indent prefix if we have a non-empty newline
+		if isNewLine && c != '\n' {
+			indented = indented + prefix
 		}
+		indented += string(c)
+		isNewLine = (c == '\n')
 	}
 
 	return firstPrefix + indented

@@ -44,40 +44,40 @@ It knows how to format [3mlists[23m:
   maximum number of authorized chars per line is reached.
 
 • It also can support sub-lists:
-  
+
   ◦ Lorem ipsum dolor sit amet, consectetur adipiscing 
     elit, sed do eiusmod tempor incididunt ut labore et 
     dolore magna aliqua.
-  
+
   ◦ Ut enim ad minim veniam, quis nostrud exercitation 
     ullamco laboris nisi ut aliquip ex ea commodo 
     consequat. Duis aute irure dolor in reprehenderit in 
     voluptate velit esse cillum dolore eu fugiat nulla 
     pariatur.
-  
+
   ◦ Excepteur sint occaecat cupidatat non proident, sunt 
     in culpa qui officia deserunt mollit anim id est 
     laborum.
-  
+
   ◦ And sub-sub-ub-lists:
-    
+
     ⁃ Lorem ipsum dolor sit amet, consectetur adipiscing
       elit, sed do eiusmod tempor incididunt ut labore 
       et dolore magna aliqua.
-    
+
     ⁃ Ut enim ad minim veniam, quis nostrud exercitation
       ullamco laboris nisi ut aliquip ex ea commodo 
       consequat. Duis aute irure dolor in reprehenderit 
       in voluptate velit esse cillum dolore eu fugiat 
       nulla pariatur.
-    
+
     ⁃ Excepteur sint occaecat cupidatat non proident, 
       sunt in culpa qui officia deserunt mollit anim id 
       est laborum.
 
 • It is also possible to have a list's item that contains 
   several paragraphs.
-  
+
   For example, this paragraph that I made artificially long 
   to
   verify that wrapping is working correctly inside list.
@@ -90,26 +90,26 @@ It can build [1mordered [3mlists[23m[22m:
    maximum number of authorized chars per line is reached.
 
 2. It also can support sub-lists:
-   
+
    1. Lorem ipsum dolor sit amet, consectetur adipiscing 
       elit, sed do eiusmod tempor incididunt ut labore et 
       dolore magna aliqua.
-   
+
    2. Ut enim ad minim veniam, quis nostrud exercitation 
       ullamco laboris nisi ut aliquip ex ea commodo 
       consequat. Duis aute irure dolor in reprehenderit in 
       voluptate velit esse cillum dolore eu fugiat nulla 
       pariatur.
-   
+
    3. Excepteur sint occaecat cupidatat non proident, sunt 
       in culpa qui officia deserunt mollit anim id est 
       laborum.
 
 3. It is also possible to mix with bullet list if you really
    want to.
-   
+
    ◦ First things usually come first.
-   
+
    ◦ Second things should come after the first ones.
 
 It also knows how to [3mdefine[23m terms:
