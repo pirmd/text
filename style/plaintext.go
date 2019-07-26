@@ -155,7 +155,7 @@ func (stx *TextSyntax) Table(rows ...[]string) string {
 }
 
 func (stx *TextSyntax) br() string {
-	if stx.needLeadingBr {
+	if stx.nestLvl != 0 || stx.needLeadingBr {
 		return "\n"
 	}
 	stx.needLeadingBr = true
