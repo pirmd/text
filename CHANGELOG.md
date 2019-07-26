@@ -33,6 +33,7 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
   accepting non visible chars (like AINSI colors).
   It also modified text.Indent() and text.Tab() api: prefix is a string and not
   a []byte
+- cli/app: allow command exxecution if no args have been specified by user
 
 
 ## [0.1.0] - 2019-05-11

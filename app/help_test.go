@@ -39,6 +39,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 	testCmd4 := testApp.NewCommand("test4", "Test another sub-command with unlimited args")
 	_ = testCmd4.NewStringsArg("test4_arg", "Test an arg with unlimited number of strings")
 
+	testCmd5 := testApp.NewCommand("test5", "Test another sub-command with optional args")
+	_ = testCmd5.NewStringsArg("test5_arg", "Test an optional arg")
+	testCmd5.CanRunWithoutArg = true
+
 	return testApp
 }
 

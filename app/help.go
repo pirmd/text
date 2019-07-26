@@ -139,9 +139,22 @@ func fmtCmd(c *Command, st style.Styler) (s string) {
 		s = fmt.Sprintf("%s %s", s, sc)
 	}
 
-	for _, arg := range c.args {
-		s = fmt.Sprintf("%s %s", s, fmtArg(arg, st))
+	var sa string
+	for i, arg := range c.args {
+		if i == 0 {
+			sa = fmtArg(arg, st)
+		} else {
+			sa = fmt.Sprintf("%s %s", sa, fmtArg(arg, st))
+		}
 	}
+	if sa != "" {
+		if c.CanRunWithoutArg {
+			s = fmt.Sprintf("%s [%s]", s, sa)
+		} else {
+			s = fmt.Sprintf("%s %s", s, sa)
+		}
+	}
+
 	return
 }
 

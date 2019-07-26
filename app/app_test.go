@@ -130,6 +130,38 @@ func TestCumulativeArg(t *testing.T) {
 	}
 }
 
+func TestCmdlineNoArgs(t *testing.T) {
+	testApp := New("testApp", "A test for my minimalist cli app building lib")
+	testArgInt64 := testApp.NewInt64Arg("int64", "Test int64 arg")
+	testApp.CanRunWithoutArg = true
+
+	t.Run("Simple arg parsing", func(t *testing.T) {
+		*testArgInt64 = 0
+		testApp.cmdline = []string{"42"}
+
+		if err := testApp.parseArgs(); err != nil {
+			t.Fatalf("Parsing of %#v failed: %v", testApp.cmdline, err)
+		}
+
+		if *testArgInt64 != 42 {
+			t.Errorf("Int64 arg is not recognized (int is %d)", *testArgInt64)
+		}
+	})
+
+	t.Run("Wrong arg number/order/type", func(t *testing.T) {
+		*testArgInt64 = 7
+
+		testApp.cmdline = []string{}
+		if err := testApp.parseArgs(); err != nil {
+			t.Fatalf("Parsing of %#v without args failed: %v", testApp.cmdline, err)
+		}
+
+		if *testArgInt64 != 7 {
+			t.Errorf("Parsing empty args list failed: arg does not fallback to its default value (int is %d)", *testArgInt64)
+		}
+	})
+}
+
 func TestEnumFlag(t *testing.T) {
 	testApp := New("testApp", "A test for my minimalist cli app building lib")
 	testFlagBool := testApp.NewBoolFlag("bool", "Test Boolean flag")

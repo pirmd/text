@@ -34,6 +34,10 @@ type Command struct {
 	//Execute is the function called to run the command
 	Execute func() error
 
+	//CanRunWithoutArg authorizes the command to be executed even if no
+	//specified args are not provided from the command line.
+	CanRunWithoutArg bool
+
 	name     string
 	fullname string //fullname is the complete 'path' to the command (space-separated parent's commands names)
 	flags    options
@@ -234,6 +238,10 @@ func (c *Command) parseFlags() error {
 }
 
 func (c *Command) parseArgs() error {
+	if c.CanRunWithoutArg && len(c.cmdline) == 0 {
+		return nil
+	}
+
 	if len(c.args) > len(c.cmdline) {
 		return fmt.Errorf("Bad command or invalid number of arguments")
 	}
