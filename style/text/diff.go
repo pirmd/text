@@ -23,7 +23,8 @@ const (
 )
 
 var (
-	//Diff does not highlight differences
+	//Diff does not highlight differences, only indicates where differences
+	//are.
 	Diff = DiffHighlighter{
 		SameL:   func(s string) string { return s },
 		DiffL:   func(s string) string { return s },
@@ -32,6 +33,22 @@ var (
 
 		SameR:   func(s string) string { return s },
 		DiffR:   func(s string) string { return s },
+		LackR:   func(s string) string { return "" },
+		ExcessR: func(s string) string { return s },
+
+		Symbols: [...]string{"=", "<>", "-", "+"},
+	}
+
+	//DiffShowNonPrintable does not highlight differences but shows spaces,
+	//tabs and non printable runes.
+	DiffShowNonPrintable = DiffHighlighter{
+		SameL:   func(s string) string { return s },
+		DiffL:   func(s string) string { return showNonPrintableRune(s) },
+		LackL:   func(s string) string { return "" },
+		ExcessL: func(s string) string { return s },
+
+		SameR:   func(s string) string { return s },
+		DiffR:   func(s string) string { return showNonPrintableRune(s) },
 		LackR:   func(s string) string { return "" },
 		ExcessR: func(s string) string { return s },
 
@@ -372,4 +389,22 @@ func stringify(v interface{}) string {
 		}
 		return string(b)
 	}
+}
+
+func showNonPrintableRune(s string) string {
+	return strings.Map(func(r rune) rune {
+		if r == '\t' {
+			return '\u21e5'
+		}
+
+		if unicode.IsSpace(r) {
+			return '\u00B7'
+		}
+
+		if !unicode.IsPrint(r) {
+			return '\ufffd'
+		}
+
+		return r
+	}, s)
 }
