@@ -47,7 +47,7 @@ func (t *Table) SetMaxWidth(w int) *Table {
 //columns and horizontal separating captions' row from table content (before
 //and after first row, after last row) and between rows.
 //
-//An empty seperator means no separation at all.
+//An empty separator means no separation at all.
 func (t *Table) SetGrid(sepV, sepC, sepH string) *Table {
 	t.sepV, t.sepC, t.sepH = sepV, sepC, sepH
 	return t
