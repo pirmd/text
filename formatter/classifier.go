@@ -21,8 +21,7 @@ type Classifier interface {
 //FormatterTypeField (default to Type) if the object is a map or a struct or
 //the golang object's type representation.
 func TypeOf(v interface{}) string {
-	classifier, ok := v.(Classifier)
-	if ok {
+	if classifier, ok := v.(Classifier); ok {
 		return classifier.Type()
 	}
 
