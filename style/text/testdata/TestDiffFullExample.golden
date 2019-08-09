@@ -1,19 +1,19 @@
-Ceci est un test pour trouver une bonne façon                   <> Ceci est un test pour trouver une [31m(très) [0mbonne façon                 
+Ceci est un test pour trouver une bonne façon                   <> Ceci est un test pour trouver une [4;31m(très) [0mbonne façon                 
 de représenter les diférences entre deux textes ou deux chaînes =  de représenter les diférences entre deux textes ou deux chaînes      
 de caractères.                                                  =  de caractères.                                                       
                                                                 =                                                                       
-                                                                +  [31mIl s'agirait ensuite de l'inclure dans le package verify pour obtenir[0m
-                                                                +  [31mun chouette outil de test.[0m                                           
+                                                                +  [4;31mIl s'agirait ensuite de l'inclure dans le package verify pour obtenir[0m
+                                                                +  [4;31mun chouette outil de test.[0m                                           
                                                                 +                                                                       
 Happy end.                                                      =  Happy end.                                                           
                                                                 =                                                                       
 
-Ceci est un test pour trouver une [31m(très) [0mbonne façon                  <> Ceci est un test pour trouver une bonne façon                  
+Ceci est un test pour trouver une [4;31m(très) [0mbonne façon                  <> Ceci est un test pour trouver une bonne façon                  
 de représenter les diférences entre deux textes ou deux chaînes       =  de représenter les diférences entre deux textes ou deux chaînes
 de caractères.                                                        =  de caractères.                                                 
                                                                       =                                                                 
-[31mIl s'agirait ensuite de l'inclure dans le package verify pour obtenir[0m -                                                                 
-[31mun chouette outil de test.[0m                                            -                                                                 
+[4;31mIl s'agirait ensuite de l'inclure dans le package verify pour obtenir[0m -                                                                 
+[4;31mun chouette outil de test.[0m                                            -                                                                 
                                                                       -                                                                 
 Happy end.                                                            =  Happy end.                                                     
                                                                       =                                                                 

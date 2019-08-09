@@ -73,14 +73,14 @@ var (
 	//ColorDiff highlights differences in colors
 	ColorDiff = DiffHighlighter{
 		SameL:   func(s string) string { return s },
-		DiffL:   func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
+		DiffL:   func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
 		LackL:   func(s string) string { return "" },
-		ExcessL: func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
+		ExcessL: func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
 
 		SameR:   func(s string) string { return s },
-		DiffR:   func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
+		DiffR:   func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
 		LackR:   func(s string) string { return "" },
-		ExcessR: func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
+		ExcessR: func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
 
 		Symbols: [...]string{"=", "<>", "-", "+"},
 	}
