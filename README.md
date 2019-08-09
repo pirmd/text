@@ -11,7 +11,7 @@ It is separate in sub-packages:
    (plaintext, (non-)colored term,  mandoc, markdown). It can be extended
 
  - `style/text`: contains text manipulation functions (like identation,
-   wraping, columnize,...) that can differenciate printable from non-printable
+   wraping, columnize,...) that can differentiate printable from non-printable
    sequences (like ANSI colored sequences).  Tables formatting helpers are
    proposed as well as text diff formatting
 

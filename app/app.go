@@ -117,13 +117,13 @@ func (c *Command) NewStringFlagToVar(p *string, name, usage string) {
 	c.flags.StringVar(p, name, usage)
 }
 
-//NewEnumFlag creates a new enum flag that only accept a specifed list of
+//NewEnumFlag creates a new enum flag that only accept a specified list of
 //values
 func (c *Command) NewEnumFlag(name, usage string, values []string) *string {
 	return c.flags.Enum(name, usage, values)
 }
 
-//NewEnumFlagToVar creates a new enum flag that only accept a specifed list of
+//NewEnumFlagToVar creates a new enum flag that only accept a specified list of
 //values and linked it to the given var
 func (c *Command) NewEnumFlagToVar(p *string, name, usage string, values []string) {
 	c.flags.EnumVar(p, name, usage, values)
@@ -150,7 +150,7 @@ func (c *Command) NewStringsArg(name, usage string) *[]string {
 //NewStringsArgToVar creates a new strings (slice of strings) arg that is
 //linked to the given var This arg is cumulative in that it will consume all
 //the remaining command line arguments to feed a slice of strings. It shall be
-//the last argument of teh command otherwise command line parsing wil panic
+//the last argument of the command otherwise command line parsing wil panic
 func (c *Command) NewStringsArgToVar(p *[]string, name, usage string) {
 	c.args.StringsVar(p, name, usage)
 }

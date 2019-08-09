@@ -15,7 +15,7 @@ func testText(st style.Styler) (s string) {
 
 	s += H("Introduction")
 	s += st.Paragraph("This small piece of text aims at demonstrating and testing package '" + st.Underline("style") + "'.")
-	s += st.Paragraph("It is writen by a " + st.Bold("non-native") + " English speaker, so pardon any faults.")
+	s += st.Paragraph("It is written by a " + st.Bold("non-native") + " English speaker, so pardon any faults.")
 	s += st.Paragraph("All details can be found in " + st.Link(st.Img("GoDoc", "https://godoc.org/github.com/pirmd/cli/style?status.svg"), "https://godoc.org/github.com/pirmd/cli/style"))
 
 	s += H("Examples of available styles")

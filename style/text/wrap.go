@@ -5,8 +5,8 @@ import (
 	"unicode"
 )
 
-//Indent inserts a name/bullet/number at the begining of the string, then
-//indents it (add prefix at the begining and before any new line).
+//Indent inserts a name/bullet/number at the beginning of the string, then
+//indents it (add prefix at the beginning and before any new line).
 //
 //Tag is superposed to the indent prefix to obtain the first line prefix, if
 //tag length is greater than prefix, prefix is completed by trailing spaces.

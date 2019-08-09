@@ -10,7 +10,7 @@
 //           extended
 //
 // . style/text: contains text manipulation functions (like identation, wraping,
-//               columnize,...) that can differenciate printable from non-printable
+//               columnize,...) that can differentiate printable from non-printable
 //               sequences (like ANSI colored sequences).
 //               table formatting helpers are proposed as well as text diff formatting
 //

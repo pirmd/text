@@ -30,7 +30,7 @@ func TestCmdlineFlags(t *testing.T) {
 		*testFlagBool, *testFlagString = false, ""
 		testApp.cmdline = []string{"--unknown"}
 		if err := testApp.parseFlags(); err == nil {
-			t.Errorf("Parsing succeed dispite malformed command line")
+			t.Errorf("Parsing succeed despite malformed command line")
 		}
 
 		if *testFlagString != "" {
