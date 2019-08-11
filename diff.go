@@ -350,7 +350,7 @@ func (d *diff) Compact() *diff {
 	for i := range d.T {
 		if i > 0 && d.T[i] != curT {
 			t, l, r = append(t, curT), append(l, curL), append(r, curR)
-			curT, curL, curR = d.T[i], "", ""
+			curL, curR = "", ""
 		}
 		curT, curL, curR = d.T[i], curL+d.L[i], curR+d.R[i]
 	}
@@ -378,9 +378,9 @@ func splitInWords(s string) (split []string) {
 }
 
 func stringify(v interface{}) string {
-	switch v.(type) {
+	switch v := v.(type) {
 	case string:
-		return v.(string)
+		return v
 
 	default:
 		b, err := json.MarshalIndent(v, "", "  ")
