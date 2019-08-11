@@ -188,7 +188,7 @@ func (c *Command) Run() error {
 	}
 
 	if c.Execute == nil {
-		return fmt.Errorf("Bad command or invalid number of arguments")
+		return fmt.Errorf("bad command or invalid number of arguments")
 	}
 
 	if err := c.parseArgs(); err != nil {
@@ -215,22 +215,22 @@ func (c *Command) parseFlags() error {
 		split := strings.Split(c.cmdline[0], "=")
 		flag := c.flags.Get(strings.TrimPrefix(split[0], "--"))
 		if flag == nil {
-			return fmt.Errorf("Invalid flag %q (in %q)", split[0], c.cmdline[0])
+			return fmt.Errorf("invalid flag %q (in %q)", split[0], c.cmdline[0])
 		}
 		switch len(split) {
 		case 1:
 			if !flag.IsBool() {
-				return fmt.Errorf("Invalid boolean flag %q", split[0])
+				return fmt.Errorf("invalid boolean flag %q", split[0])
 			}
 			if err := flag.Set("true"); err != nil {
-				return fmt.Errorf("Invalid boolean flag %q", split[0])
+				return fmt.Errorf("invalid boolean flag %q", split[0])
 			}
 		case 2:
 			if err := flag.Set(split[1]); err != nil {
-				return fmt.Errorf("Invalid value %q for flag %q", split[1], split[0])
+				return fmt.Errorf("invalid value %q for flag %q", split[1], split[0])
 			}
 		default:
-			return fmt.Errorf("Invalid flag assignment in %q: too many '='", c.cmdline[0])
+			return fmt.Errorf("invalid flag assignment in %q: too many '='", c.cmdline[0])
 		}
 		c.cmdline = c.cmdline[1:]
 	}
@@ -243,12 +243,12 @@ func (c *Command) parseArgs() error {
 	}
 
 	if len(c.args) > len(c.cmdline) {
-		return fmt.Errorf("Bad command or invalid number of arguments")
+		return fmt.Errorf("bad command or invalid number of arguments")
 	}
 
 	for i, a := range c.args {
 		if err := a.Set(c.cmdline[i]); err != nil {
-			return fmt.Errorf("Invalid value %q for argument %s: %v", c.cmdline[i], a.name, err)
+			return fmt.Errorf("invalid value %q for argument %s: %v", c.cmdline[i], a.name, err)
 		}
 
 		if a.IsCumulative() {
@@ -258,7 +258,7 @@ func (c *Command) parseArgs() error {
 
 			for j := i + 1; j < len(c.cmdline); j++ {
 				if err := a.Set(c.cmdline[j]); err != nil {
-					return fmt.Errorf("Invalid value %q for argument %s: %v", c.cmdline[j], a.name, err)
+					return fmt.Errorf("invalid value %q for argument %s: %v", c.cmdline[j], a.name, err)
 				}
 			}
 		}

@@ -148,7 +148,7 @@ func (t *Table) addHorizontalGrid(rows []string, colLen []int) []string {
 			rowsWithGrid = append([]string{sepC, rows[0], sepC, rows[1]}, rowsWithGrid...)
 			rowsWithGrid = append(rowsWithGrid, sepC)
 		} else {
-			rowsWithGrid = append([]string{sepC, rows[0], sepC})
+			rowsWithGrid = []string{sepC, rows[0], sepC}
 		}
 	} else {
 		if t.sepH != "" && len(rows) > 1 {
@@ -239,9 +239,9 @@ func colMaxLen(maxWidth int, sepLen int, cells [][]string) []int {
 }
 
 func findMaxColWidth(colLen []int, maxWidth int) int {
-	var fn func([]int, int, int) ([]int, int, int) //recursive function that gradually select columns that remains over size limits
+	var fn func([]int, int) ([]int, int, int) //recursive function that gradually select columns that remains over size limits
 
-	fn = func(colLen []int, maxWidth int, maxCol int) (overLimit []int, width int, max int) {
+	fn = func(colLen []int, maxWidth int) (overLimit []int, width int, max int) {
 		max, width = maxWidth/len(colLen), maxWidth
 
 		for _, l := range colLen {
@@ -252,18 +252,15 @@ func findMaxColWidth(colLen []int, maxWidth int) int {
 			}
 		}
 
-		switch {
-		case len(overLimit) == 0: //All columns are already of the right size
-			maxCol = max
-		case len(overLimit) < len(colLen): //We have found new under-limits items, try again with remaining space
-			overLimit, width, max = fn(overLimit, width, max)
-			//default: we have found no new under-limit item, have to stop
+		if len(overLimit) > 0 && len(overLimit) < len(colLen) {
+			//We have found new under-limits items, try again with remaining space
+			overLimit, width, max = fn(overLimit, width)
 		}
 
 		return
 	}
 
-	_, _, max := fn(colLen, maxWidth, maxWidth/len(colLen))
+	_, _, max := fn(colLen, maxWidth)
 	return max
 }
 

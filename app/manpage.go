@@ -25,7 +25,7 @@ var manDate = time.Now().Format("2006-01-02")
 //format.  It does not recurse over sub-commands if any, so that they are not
 //fully documented in this page and need to be generated separatly.
 func PrintManpage(w io.Writer, c *Command, st style.Styler) {
-	fmt.Fprintf(w, st.Metadata(map[string]string{
+	fmt.Fprint(w, st.Metadata(map[string]string{
 		"title":      fmtName(c),
 		"mansection": ManSection,
 		"date":       manDate,
@@ -40,8 +40,8 @@ func PrintManpage(w io.Writer, c *Command, st style.Styler) {
 		}
 	}
 	if len(seeAlso) > 0 {
-		fmt.Fprintf(w, st.Header(1)("See Also"))
-		fmt.Fprintf(w, st.Paragraph(strings.Join(seeAlso, ",")))
+		fmt.Fprint(w, st.Header(1)("See Also"))
+		fmt.Fprint(w, st.Paragraph(strings.Join(seeAlso, ",")))
 	}
 }
 

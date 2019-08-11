@@ -13,16 +13,16 @@ import (
 
 //PrintSimpleVersion outputs to w a command's minimal usage message
 func PrintSimpleVersion(w io.Writer, c *Command, st style.Styler) {
-	fmt.Fprintf(w, st.Paragraph(fmtName(c)+" "+c.Version+" - "+c.Usage))
+	fmt.Fprint(w, st.Paragraph(fmtName(c)+" "+c.Version+" - "+c.Usage))
 }
 
 //PrintSimpleUsage outputs to w a command's minimal usage message
 func PrintSimpleUsage(w io.Writer, c *Command, st style.Styler) {
 	PrintSimpleVersion(w, c, st)
 
-	fmt.Fprintf(w, st.Header(1)("Synopsis:"))
+	fmt.Fprint(w, st.Header(1)("Synopsis:"))
 	for _, s := range fmtSynopsis(c, st) {
-		fmt.Fprintf(w, st.Tab()(st.Paragraph(s)))
+		fmt.Fprint(w, st.Tab()(st.Paragraph(s)))
 	}
 }
 
@@ -55,34 +55,34 @@ func GenerateHelpFile(c *Command) error {
 }
 
 func printLongUsage(w io.Writer, c *Command, st style.Styler) {
-	fmt.Fprintf(w, st.Header(1)("Name"))
-	fmt.Fprintf(w, st.Paragraph(fmtName(c)+" - "+c.Usage))
+	fmt.Fprint(w, st.Header(1)("Name"))
+	fmt.Fprint(w, st.Paragraph(fmtName(c)+" - "+c.Usage))
 
-	fmt.Fprintf(w, st.Header(1)("Synopsis"))
-	fmt.Fprintf(w, st.Paragraph(strings.Join(fmtSynopsis(c, st), "\n")))
+	fmt.Fprint(w, st.Header(1)("Synopsis"))
+	fmt.Fprint(w, st.Paragraph(strings.Join(fmtSynopsis(c, st), "\n")))
 
-	fmt.Fprintf(w, st.Header(1)("Description"))
-	fmt.Fprintf(w, st.Paragraph(description(c)))
+	fmt.Fprint(w, st.Header(1)("Description"))
+	fmt.Fprint(w, st.Paragraph(description(c)))
 
 	for i, flag := range c.flags {
 		if i == 0 {
-			fmt.Fprintf(w, st.Header(1)("Options"))
+			fmt.Fprint(w, st.Header(1)("Options"))
 		}
-		fmt.Fprintf(w, st.Define(fmtFlag(flag, st), flag.Usage))
+		fmt.Fprint(w, st.Define(fmtFlag(flag, st), flag.Usage))
 	}
 
 	for i, cmd := range c.cmds {
 		if i == 0 {
-			fmt.Fprintf(w, st.Header(1)("Commands"))
+			fmt.Fprint(w, st.Header(1)("Commands"))
 		}
-		fmt.Fprintf(w, st.Define(fmtCmd(cmd, st), description(cmd)))
+		fmt.Fprint(w, st.Define(fmtCmd(cmd, st), description(cmd)))
 	}
 
 	for i, arg := range c.args {
 		if i == 0 {
-			fmt.Fprintf(w, st.Header(1)("Arguments"))
+			fmt.Fprint(w, st.Header(1)("Arguments"))
 		}
-		fmt.Fprintf(w, st.Define(st.Italic(arg.name), arg.Usage))
+		fmt.Fprint(w, st.Define(st.Italic(arg.name), arg.Usage))
 	}
 }
 
