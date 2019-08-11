@@ -8,18 +8,18 @@ It is separate in sub-packages:
    buiding.
 
  - `style`: contains functions to decorate a text using several idioms
-   (plaintext, (non-)colored term,  mandoc, markdown). It can be extended
+   (plaintext, (non-)colored term,  mandoc, markdown). It can be extended.
 
  - `style/text`: contains text manipulation functions (like identation,
    wraping, columnize,...) that can differentiate printable from non-printable
    sequences (like ANSI colored sequences).  Tables formatting helpers are
-   proposed as well as text diff formatting
+   proposed as well as text diff formatting.
 
  - `formatter`: contains functions to quickly build a string out of an object.
    It can be useful to pretty print a familly of objects, adopting a given
    formatting scheme based on their type.
 
- - `input`: contains functions to input or edit text from cli
+ - `input`: contains functions to input or edit text from cli.
 
 # INSTALLATION
 Everything should work fine using go standard commands (`build`, `get`,

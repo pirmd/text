@@ -4,14 +4,14 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html)
 
-## [Unreleased]
+## [0.2.0] - 2019-08-11
 ### Added
 - cli/app: add function to generate a help file in markdown format for a
   command 
 - cli/app: add default support to print a version information taken from 'git
   describe and rev-parse' and set-up using 'ldflags -X' directive. Provides a
   simple shell script to facilitate the build/install directive for that purpose.
-  This behaviour can be overwriten as wished
+  This behaviour can be overwriten as wished.
 - cli/input: add function to fire up a tool for a user to manually merge
   files/data
 - cli/style: add new styling functions: NoLeadingSpace, NoTrailingSpace and
@@ -34,7 +34,6 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
   It also modified text.Indent() and text.Tab() api: prefix is a string and not
   a []byte
 - cli/app: allow command exxecution if no args have been specified by user
-
 
 ## [0.1.0] - 2019-05-11
 ### Added
