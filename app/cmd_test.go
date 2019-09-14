@@ -242,12 +242,12 @@ func TestCmdlineNoArgs(t *testing.T) {
 		Usage: "A test for my minimalist cli app building lib",
 		Args: Options{
 			&Option{
-				Name:  "int64",
-				Usage: "Test int64 arg",
-				Var:   &testArgInt64,
+				Name:     "int64",
+				Usage:    "Test int64 arg",
+				Var:      &testArgInt64,
+				Optional: true,
 			},
 		},
-		CanRunWithoutArg: true,
 	}
 
 	t.Run("Simple arg parsing", func(t *testing.T) {

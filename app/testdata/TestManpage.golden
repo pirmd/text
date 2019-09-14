@@ -14,7 +14,7 @@ cli.test - A test for my minimalist cli app building lib
 \fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
 \fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31_arg\fP
 \fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest4\fP \fItest4_arg\fP ...
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest5\fP \fItest5_arg\fP ...
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest5\fP [\fItest5_arg\fP ...]
 
 .SH Description
 .PP

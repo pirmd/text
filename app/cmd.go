@@ -46,11 +46,6 @@ type Command struct {
 	//Execute is the function called to run the command
 	Execute func() error
 
-	//CanRunWithoutArg authorizes the command to be executed even if no
-	//args are not provided from the command line.
-	// Do better than that
-	CanRunWithoutArg bool
-
 	//ShowHelp is a function that displays help about the command. It will be
 	//associated with the "help" sub-command if not nil.  you can also directly
 	//alter this behavious by declaring directly any further SubCommands or
@@ -213,15 +208,19 @@ func (c *Command) parseFlags() error {
 }
 
 func (c *Command) parseArgs() error {
-	if c.CanRunWithoutArg && len(c.cmdline) == 0 {
-		return nil
-	}
-
-	if len(c.Args) > len(c.cmdline) {
-		return fmt.Errorf("bad command or invalid number of arguments")
-	}
-
 	for i, a := range c.Args {
+		if i >= len(c.cmdline) {
+			if a.Optional {
+				if i != len(c.Args)-1 {
+					panic("arguments " + a.Name + " is optional but is not the last argument of the command " + c.Name)
+				}
+
+				break
+			}
+
+			return fmt.Errorf("bad command or invalid number of arguments")
+		}
+
 		if err := a.value().Set(c.cmdline[i]); err != nil {
 			return fmt.Errorf("invalid value %q for argument %s: %v", c.cmdline[i], a.Name, err)
 		}

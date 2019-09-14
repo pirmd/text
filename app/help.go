@@ -2,8 +2,6 @@ package app
 
 //help gathers functions that generate text documentation about a given app.command
 
-//XXX: document Config (?)
-
 import (
 	"fmt"
 	"io"
@@ -132,12 +130,17 @@ func fmtFlag(flag *Option, st style.Styler) string {
 }
 
 func fmtArg(arg *Option, st style.Styler) string {
-	switch {
-	case arg.isCumulative():
-		return fmt.Sprintf("%s ...", st.Italic(arg.Name))
-	default:
-		return st.Italic(arg.Name)
+	a := st.Italic(arg.Name)
+
+	if arg.isCumulative() {
+		a = fmt.Sprintf("%s ...", a)
 	}
+
+	if arg.Optional {
+		a = fmt.Sprintf("[%s]", a)
+	}
+
+	return a
 }
 
 func fmtCmd(c *Command, st style.Styler) (s string) {
@@ -160,20 +163,8 @@ func fmtCmd(c *Command, st style.Styler) (s string) {
 		s = fmt.Sprintf("%s %s", s, sc)
 	}
 
-	var sa string
-	for i, arg := range c.Args {
-		if i == 0 {
-			sa = fmtArg(arg, st)
-		} else {
-			sa = fmt.Sprintf("%s %s", sa, fmtArg(arg, st))
-		}
-	}
-	if sa != "" {
-		if c.CanRunWithoutArg {
-			s = fmt.Sprintf("%s [%s]", s, sa)
-		} else {
-			s = fmt.Sprintf("%s %s", s, sa)
-		}
+	for _, arg := range c.Args {
+		s = fmt.Sprintf("%s %s", s, fmtArg(arg, st))
 	}
 
 	return

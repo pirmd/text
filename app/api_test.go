@@ -9,11 +9,11 @@ func TestAPI(t *testing.T) {
 
 	testApp := New("testApp", "A test for my minimalist cli app building lib")
 	testAppFlag := testApp.NewBoolFlag("bool", "Test bool flag")
-	testArgString := testApp.NewStringArg("string", "Test String arg")
+	testArgString := testApp.NewStringArg("string", "Test String arg", false)
 	testApp.Execute = func() error { testResult += *testArgString; return nil }
 
 	testCmd := testApp.NewCommand("test", "Test a new sub-command")
-	testCmdArg := testCmd.NewStringArg("test_arg", "Test String arg of sub-command")
+	testCmdArg := testCmd.NewStringArg("test_arg", "Test String arg of sub-command", false)
 	testCmd.Execute = func() error { testResult += *testCmdArg; return nil }
 
 	t.Run("Without Subcommand", func(t *testing.T) {

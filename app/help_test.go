@@ -20,27 +20,26 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 	_ = testApp.NewBoolFlag("bool", "A boolean flag")
 	_ = testApp.NewStringFlag("flag", "A string flag")
-	_ = testApp.NewStringArg("string", "An argument that should be a string")
+	_ = testApp.NewStringArg("string", "An argument that should be a string", false)
 
 	testCmd := testApp.NewCommand("test", "Demonstrate a sub-command")
 	testCmd.Description = `Many of you know about _lorem ipsum_ but few know what it means. So this sub-command's description is a perfect occasion to clarify that, while it was popularized in the XVI century, it originates from a text from Ciceron.`
-	_ = testCmd.NewStringArg("test_arg", "Test String arg of sub-command")
+	_ = testCmd.NewStringArg("test_arg", "Test String arg of sub-command", false)
 
 	testCmd2 := testApp.NewCommand("test2", "Test a second sub-command")
-	_ = testCmd2.NewStringArg("test2_arg1", "Test String arg of sub-command")
-	_ = testCmd2.NewStringArg("test2_arg2", "Test String arg of sub-command")
+	_ = testCmd2.NewStringArg("test2_arg1", "Test String arg of sub-command", false)
+	_ = testCmd2.NewStringArg("test2_arg2", "Test String arg of sub-command", false)
 
 	testCmd3 := testApp.NewCommand("test3", "Test another sub-command that has a sub-subcommand *Test31*")
 	_ = testCmd3.NewStringFlag("stringflag", "Test31 String flag of sub-command")
 	testCmd31 := testCmd3.NewCommand("test31", "Test a sub-sub-command")
-	_ = testCmd31.NewInt64Arg("test31_arg", "Test Int64 arg of a sub-sub-command")
+	_ = testCmd31.NewInt64Arg("test31_arg", "Test Int64 arg of a sub-sub-command", false)
 
 	testCmd4 := testApp.NewCommand("test4", "Test another sub-command with unlimited args")
-	_ = testCmd4.NewStringsArg("test4_arg", "Test an arg with unlimited number of strings")
+	_ = testCmd4.NewStringsArg("test4_arg", "Test an arg with unlimited number of strings", false)
 
 	testCmd5 := testApp.NewCommand("test5", "Test another sub-command with optional args")
-	_ = testCmd5.NewStringsArg("test5_arg", "Test an optional arg")
-	testCmd5.CanRunWithoutArg = true
+	_ = testCmd5.NewStringsArg("test5_arg", "Test an optional arg", true)
 
 	return testApp
 }

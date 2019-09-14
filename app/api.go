@@ -41,11 +41,12 @@ func (c *Command) NewFlagToVar(p interface{}, name, usage string) {
 //NewArgToVar creates a new arg that is linked to the given var.
 //Arg's type (int64, string, strings, bool) is guessed after the linked
 //variable type.
-func (c *Command) NewArgToVar(p interface{}, name, usage string) {
+func (c *Command) NewArgToVar(p interface{}, name, usage string, optional bool) {
 	c.Args.append(&Option{
-		Name:  name,
-		Usage: usage,
-		Var:   p,
+		Name:     name,
+		Usage:    usage,
+		Var:      p,
+		Optional: optional,
 	})
 }
 
@@ -74,24 +75,24 @@ func (c *Command) NewStringFlagToVar(p *string, name, usage string) {
 }
 
 //NewStringArg creates a new string arg
-func (c *Command) NewStringArg(name, usage string) *string {
+func (c *Command) NewStringArg(name, usage string, optional bool) *string {
 	p := new(string)
-	c.NewArgToVar(p, name, usage)
+	c.NewArgToVar(p, name, usage, optional)
 	return p
 }
 
 //NewStringArgToVar creates a new string arg that is linked to the given var
-func (c *Command) NewStringArgToVar(p *string, name, usage string) {
-	c.NewArgToVar(p, name, usage)
+func (c *Command) NewStringArgToVar(p *string, name, usage string, optional bool) {
+	c.NewArgToVar(p, name, usage, optional)
 }
 
 //NewStringsArg creates a new strings (slice of strings) arg.
 //This arg is cumulative in that it will consume all the remaining command line
 //arguments to feed a slice of strings. It shall be the last argument of the
 //command otherwise command line parsing wil panic
-func (c *Command) NewStringsArg(name, usage string) *[]string {
+func (c *Command) NewStringsArg(name, usage string, optional bool) *[]string {
 	p := new([]string)
-	c.NewArgToVar(p, name, usage)
+	c.NewArgToVar(p, name, usage, optional)
 	return p
 }
 
@@ -99,18 +100,18 @@ func (c *Command) NewStringsArg(name, usage string) *[]string {
 //linked to the given var This arg is cumulative in that it will consume all
 //the remaining command line arguments to feed a slice of strings. It shall be
 //the last argument of the command otherwise command line parsing wil panic
-func (c *Command) NewStringsArgToVar(p *[]string, name, usage string) {
-	c.NewArgToVar(p, name, usage)
+func (c *Command) NewStringsArgToVar(p *[]string, name, usage string, optional bool) {
+	c.NewArgToVar(p, name, usage, optional)
 }
 
 //NewInt64Arg creates a new int64 arg
-func (c *Command) NewInt64Arg(name, usage string) *int64 {
+func (c *Command) NewInt64Arg(name, usage string, optional bool) *int64 {
 	p := new(int64)
-	c.NewArgToVar(p, name, usage)
+	c.NewArgToVar(p, name, usage, optional)
 	return p
 }
 
 //NewInt64ArgToVar creates a new int64 arg that is linked to the given var
-func (c *Command) NewInt64ArgToVar(p *int64, name, usage string) {
-	c.NewArgToVar(p, name, usage)
+func (c *Command) NewInt64ArgToVar(p *int64, name, usage string, optional bool) {
+	c.NewArgToVar(p, name, usage, optional)
 }

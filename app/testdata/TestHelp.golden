@@ -13,7 +13,7 @@ SYNOPSIS
 [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [1mtest3[22m [--[1mstringflag[22m=[3mSTRINGFLAG[23m] [1mtest31[22m 
 [3mtest31_arg[23m
 [1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [1mtest4[22m [3mtest4_arg[23m ...
-[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [1mtest5[22m [3mtest5_arg[23m ...
+[1mcli.test[22m [--[1mbool[22m] [--[1mflag[22m=[3mFLAG[23m] [1mtest5[22m [[3mtest5_arg[23m ...]
 
 DESCRIPTION
 

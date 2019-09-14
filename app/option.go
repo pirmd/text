@@ -11,7 +11,15 @@ type Option struct {
 
 	//Var is the variable that will contain the Option actual value after
 	//command line has been parsed.
+	//Supported values are: int64, string and []strings
+	//If args is of type []string, it should be the last of the accepted
+	//arguments' list otherwise the parsing will panic.
 	Var interface{}
+
+	//Optional indicate sthat the arguments can be omitted. It is actually
+	//working if args is the last of the accepted arguments' list otherwise the
+	//parsing will panic.
+	Optional bool
 }
 
 func (o *Option) value() value {
