@@ -60,6 +60,14 @@ func PrintLongUsage(w io.Writer, c *Command, st style.Styler) {
 			fmt.Fprint(w, st.Define(st.Italic(arg.Name), arg.Usage))
 		}
 	}
+
+	if c.Config != nil {
+		fmt.Fprint(w, st.Header(1)("Files"))
+
+		for _, file := range c.Config.Path {
+			fmt.Fprint(w, st.Define(st.Italic(file.Name), file.Usage))
+		}
+	}
 }
 
 //ShowVersion prints to os.Stderr a short information about command's version

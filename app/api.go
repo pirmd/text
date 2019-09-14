@@ -97,7 +97,7 @@ func (c *Command) NewStringsArg(name, usage string, optional bool) *[]string {
 }
 
 //NewStringsArgToVar creates a new strings (slice of strings) arg that is
-//linked to the given var This arg is cumulative in that it will consume all
+//linked to the given var. This arg is cumulative in that it will consume all
 //the remaining command line arguments to feed a slice of strings. It shall be
 //the last argument of the command otherwise command line parsing wil panic
 func (c *Command) NewStringsArgToVar(p *[]string, name, usage string, optional bool) {
@@ -114,4 +114,13 @@ func (c *Command) NewInt64Arg(name, usage string, optional bool) *int64 {
 //NewInt64ArgToVar creates a new int64 arg that is linked to the given var
 func (c *Command) NewInt64ArgToVar(p *int64, name, usage string, optional bool) {
 	c.NewArgToVar(p, name, usage, optional)
+}
+
+//UseConfig creates a new configuration
+func (c *Command) UseConfig(cfg interface{}, unmarshaller func([]byte, interface{}) error, path []ConfigFile) {
+	c.Config = &Config{
+		Var:          cfg,
+		Unmarshaller: unmarshaller,
+		Path:         path,
+	}
 }

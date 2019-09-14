@@ -43,6 +43,10 @@ type Command struct {
 	//SubCommands contains the set of command's sub-commands
 	SubCommands Commands
 
+	//Config contains directive to manage command's configuration.
+	//If Config is nil, the managemnt of command's configuration is disable.
+	Config *Config
+
 	//Execute is the function called to run the command
 	Execute func() error
 
@@ -62,9 +66,14 @@ type Command struct {
 	cmdline []string
 }
 
-// Run executes the command after having parsed the command line
+// Run executes the command after having parsed the command line and load the
+// configuration.
 func (c *Command) Run(args []string) error {
 	c.cmdline = args
+
+	if c.Config != nil {
+		c.Config.Load()
+	}
 
 	if err := c.parseFlags(); err != nil {
 		return err
