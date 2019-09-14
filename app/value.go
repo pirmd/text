@@ -14,6 +14,22 @@ type value interface {
 	String() string
 }
 
+//TODO(pirmd): see if it can be generated with 'go generate'
+func newValue(v interface{}) value {
+	switch p := v.(type) {
+	case *int64:
+		return newInt64Value(p)
+	case *bool:
+		return newBoolValue(p)
+	case *string:
+		return newStringValue(p)
+	case *[]string:
+		return newStringsValue(p)
+	default:
+		panic(fmt.Sprintf("cannot create value: %+v is not of a known type (%[1]T)", v))
+	}
+}
+
 type boolValue bool
 
 func newBoolValue(p *bool) *boolValue {
@@ -75,32 +91,4 @@ func (s *stringsValue) Set(value string) error {
 
 func (s *stringsValue) String() string {
 	return fmt.Sprintf("%v", *s)
-}
-
-//enumValue is a value whose value should be in a given set of strings
-type enumValue struct {
-	value   *string
-	options []string
-}
-
-func newEnumValue(p *string, options ...string) *enumValue {
-	return &enumValue{
-		value:   p,
-		options: options,
-	}
-}
-
-func (e *enumValue) Set(value string) error {
-	for _, v := range e.options {
-		if v == value {
-			*e.value = value
-			return nil
-		}
-	}
-
-	return fmt.Errorf("enum value must be one of %v, got '%s'", e.options, value)
-}
-
-func (e *enumValue) String() string {
-	return *e.value
 }

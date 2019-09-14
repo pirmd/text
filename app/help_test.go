@@ -20,7 +20,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 	_ = testApp.NewBoolFlag("bool", "A boolean flag")
 	_ = testApp.NewStringFlag("flag", "A string flag")
-	_ = testApp.NewEnumFlag("enum", "An enum flag", []string{"good", "bad", "ugly"})
 	_ = testApp.NewStringArg("string", "An argument that should be a string")
 
 	testCmd := testApp.NewCommand("test", "Demonstrate a sub-command")

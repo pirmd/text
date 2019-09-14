@@ -31,11 +31,12 @@ func PrintManpage(w io.Writer, c *Command, st style.Styler) {
 		"date":       manDate,
 	}))
 
-	printLongUsage(w, c, st)
+	PrintLongUsage(w, c, st)
 
 	var seeAlso []string
-	for _, cmd := range c.cmds {
-		if len(cmd.cmds) > 0 {
+	for _, cmd := range c.SubCommands { //no need to use c.visitSubCommands as no manpages are expected for 'help' or 'version' anyway
+		if len(cmd.SubCommands) > 0 {
+			cmd.parents = append(cmd.parents, c)
 			seeAlso = append(seeAlso, fmtName(cmd)+"("+ManSection+")")
 		}
 	}
@@ -49,21 +50,23 @@ func PrintManpage(w io.Writer, c *Command, st style.Styler) {
 //over sub-commands - if any - to generate their own manpages.
 func GenerateManpage(c *Command) error {
 	fname := fmtName(c) + "." + ManSection
+
 	f, err := os.Create(fname)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	for _, cmd := range c.cmds {
-		if len(cmd.cmds) > 0 {
+	PrintManpage(f, c, style.NewMan())
+
+	for _, cmd := range c.SubCommands { //no need to use c.visitSubCommands as no manpages are expected for 'help' or 'version' anyway
+		if len(cmd.SubCommands) > 0 {
+			cmd.parents = append(cmd.parents, c)
 			if err := GenerateManpage(cmd); err != nil {
 				return err
 			}
 		}
 	}
 
-	fmt.Printf("Generating manpage for command '%s' to file '%s'\n", c.name, fname)
-	PrintManpage(f, c, style.NewMan())
 	return nil
 }

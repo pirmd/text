@@ -6,15 +6,15 @@ cli.test - A test for my minimalist cli app building lib
 
 .SH Synopsis
 .PP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fIstring\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBhelp\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBversion\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest\fP \fItest_arg\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest2\fP \fItest2_arg1\fP \fItest2_arg2\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31_arg\fP
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest4\fP \fItest4_arg\fP ...
-\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] [--\fBenum\fP=\fIgood|bad|ugly\fP] \fBtest5\fP \fItest5_arg\fP ...
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fIstring\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBhelp\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBversion\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest\fP \fItest_arg\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest2\fP \fItest2_arg1\fP \fItest2_arg2\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBhelp\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest3\fP [--\fBstringflag\fP=\fISTRINGFLAG\fP] \fBtest31\fP \fItest31_arg\fP
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest4\fP \fItest4_arg\fP ...
+\fBcli.test\fP [--\fBbool\fP] [--\fBflag\fP=\fIFLAG\fP] \fBtest5\fP \fItest5_arg\fP ...
 
 .SH Description
 .PP
@@ -31,9 +31,6 @@ A boolean flag
 .TP
 \fB--\fBflag\fP=\fIFLAG\fP\fP
 A string flag
-.TP
-\fB--\fBenum\fP=\fIgood|bad|ugly\fP\fP
-An enum flag
 
 .SH Commands
 .TP
