@@ -35,10 +35,10 @@ type Command struct {
 	Version string
 
 	//Flags contains the set of command's flags
-	Flags Options
+	Flags Flags
 
 	//Args contains the set of command's arguments
-	Args Options
+	Args Args
 
 	//SubCommands contains the set of command's sub-commands
 	SubCommands Commands
@@ -252,6 +252,11 @@ func (c *Command) parseArgs() error {
 
 // Commands represents a set of commands and sub-commands
 type Commands []*Command
+
+//Add a command to a commands set
+func (c *Commands) Add(newcmd *Command) {
+	c.append(newcmd)
+}
 
 func (c *Commands) get(name string) *Command {
 	for _, cmd := range *c {

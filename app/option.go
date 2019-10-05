@@ -1,5 +1,17 @@
 package app
 
+//Flag is a command line flag
+type Flag = Option
+
+//Flags is a set of Flag
+type Flags = Options
+
+//Arg is a command line arg
+type Arg = Option
+
+//Args is a set of Arg
+type Args = Options
+
 //Option reresents any comand line's flag or arg
 type Option struct {
 	//Name of the opton. If option is a flag it will be triggered using
@@ -36,8 +48,13 @@ func (o *Option) isCumulative() bool {
 	return ok
 }
 
-//Options represnets a set of flags or args
+//Options represents a set of flags or args
 type Options []*Option
+
+//Add adds a new option to an options set
+func (o *Options) Add(opt *Option) {
+	o.append(opt)
+}
 
 func (o *Options) get(name string) *Option {
 	for _, opt := range *o {

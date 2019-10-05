@@ -16,16 +16,16 @@ func TestSimpleApp(t *testing.T) {
 		Name:  "echo",
 		Usage: "a simple test app that echo input args in different fashions",
 
-		Flags: Options{
-			&Option{
+		Flags: Flags{
+			&Flag{
 				Name:  "upper",
 				Usage: "Print in uppercase",
 				Var:   &upper,
 			},
 		},
 
-		Args: Options{
-			&Option{
+		Args: Args{
+			&Arg{
 				Name:  "message",
 				Usage: "Message to echo",
 				Var:   &message,
@@ -68,13 +68,13 @@ func TestCmdlineFlags(t *testing.T) {
 	testApp := &Command{
 		Name:  "testApp",
 		Usage: "A test for my minimalist cli app building lib",
-		Flags: Options{
-			&Option{
+		Flags: Flags{
+			&Flag{
 				Name:  "bool",
 				Usage: "Test Boolean flag",
 				Var:   &testFlagBool,
 			},
-			&Option{
+			&Flag{
 				Name:  "string",
 				Usage: "Test String flag",
 				Var:   &testFlagString,
@@ -130,13 +130,13 @@ func TestCmdlineArg(t *testing.T) {
 	testApp := &Command{
 		Name:  "testApp",
 		Usage: "A test for my minimalist cli app building lib",
-		Args: Options{
-			&Option{
+		Args: Args{
+			&Arg{
 				Name:  "int64",
 				Usage: "Test int64 arg",
 				Var:   &testArgInt64,
 			},
-			&Option{
+			&Arg{
 				Name:  "string",
 				Usage: "Test string arg",
 				Var:   &testArgString,
@@ -206,13 +206,13 @@ func TestCumulativeArg(t *testing.T) {
 	testApp := &Command{
 		Name:  "testApp",
 		Usage: "A test for my minimalist cli app building lib",
-		Args: Options{
-			&Option{
+		Args: Args{
+			&Arg{
 				Name:  "int64",
 				Usage: "Test int64 arg",
 				Var:   &testArgInt64,
 			},
-			&Option{
+			&Arg{
 				Name:  "string",
 				Usage: "Test strings arg",
 				Var:   &testArgStrings,
@@ -240,7 +240,7 @@ func TestCmdlineNoArgs(t *testing.T) {
 	testApp := &Command{
 		Name:  "testApp",
 		Usage: "A test for my minimalist cli app building lib",
-		Args: Options{
+		Args: Args{
 			&Option{
 				Name:     "int64",
 				Usage:    "Test int64 arg",
@@ -286,15 +286,15 @@ func TestSubCommandsParsing(t *testing.T) {
 	testApp := &Command{
 		Name:  "testApp",
 		Usage: "A test for my minimalist cli app building lib",
-		Flags: Options{
-			&Option{
+		Flags: Flags{
+			&Flag{
 				Name:  "bool",
 				Usage: "Test bool flag",
 				Var:   &testAppFlag,
 			},
 		},
-		Args: Options{
-			&Option{
+		Args: Args{
+			&Arg{
 				Name:  "string",
 				Usage: "Test String arg",
 				Var:   &testArgString,
@@ -308,8 +308,8 @@ func TestSubCommandsParsing(t *testing.T) {
 			&Command{
 				Name:  "test",
 				Usage: "Test a sub-command",
-				Args: Options{
-					&Option{
+				Args: Args{
+					&Arg{
 						Name:  "test_arg",
 						Usage: "Test string arg of sub-command test",
 						Var:   &testCmdArg,
