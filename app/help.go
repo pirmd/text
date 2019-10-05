@@ -64,7 +64,7 @@ func PrintLongUsage(w io.Writer, c *Command, st style.Styler) {
 	if c.Config != nil {
 		fmt.Fprint(w, st.Header(1)("Files"))
 
-		for _, file := range c.Config.Path {
+		for _, file := range c.Config.Files {
 			fmt.Fprint(w, st.Define(st.Italic(file.Name), file.Usage))
 		}
 	}

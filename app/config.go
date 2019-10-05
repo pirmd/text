@@ -7,7 +7,7 @@ import (
 )
 
 //TODO(pirmd): If command is called using --config FILE flag, configuration will be read
-//from FILE and Path will be ignored.
+//from FILE and Config.Files will be ignored.
 
 //ConfigFile represents a configuration file description (location and usage)
 type ConfigFile struct {
@@ -25,26 +25,26 @@ type Config struct {
 	//It defaults to json.Unmarshal.
 	Unmarshaller func([]byte, interface{}) error
 
-	//Path contains the list of path to the configuration file(s) to read from.
-	//Config will be read from path in the same order than the slice (giving
+	//Files contains the list of configuration file(s) to read from.  Config
+	//will be read from this files set in the same order than the slice (giving
 	//preference to latest path).
-	//If a file within Path does not exist, config loading will ignore it and
+	//If a file within Files does not exist, config loading will ignore it and
 	//move to the next one if any.  As a result, having loaded the
 	//configuration from a config file is not mandatory (no valid config file
 	//from Path will not triger any feedback/error), it is expected either to
 	//test for nil/improper config from the main cmd.Execute routine or
 	//provided a config with reasonable defaults.
-	Path []ConfigFile
+	Files []ConfigFile
 }
 
-//Load loads config look in order for each file in configuration's path. Any
-//non-existing file in configuration's Path is silently ignored.
+//Load loads config look in order for each file in configuration's files set. Any
+//non-existing file in configuration's Files is silently ignored.
 func (cfg *Config) Load() error {
 	if cfg.Unmarshaller == nil {
 		cfg.Unmarshaller = json.Unmarshal
 	}
 
-	for _, rc := range cfg.Path {
+	for _, rc := range cfg.Files {
 		if err := cfg.loadFromFile(rc.Name); err != nil {
 			return err
 		}
