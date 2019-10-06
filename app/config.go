@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 //TODO(pirmd): If command is called using --config FILE flag, configuration will be read
@@ -11,8 +12,30 @@ import (
 
 //ConfigFile represents a configuration file description (location and usage)
 type ConfigFile struct {
-	Name  string
+	//Name is the path to the configuration file
+	Name string
+	//Usage is a short description of what this configuration file is about
 	Usage string
+}
+
+//DefaultConfigFiles returns a commonly used ConfigFile that is to say an rc
+//files from user's config dir (if any).
+func DefaultConfigFiles() []ConfigFile {
+	appName := filepath.Base(os.Args[0])
+
+	//TODO(pirmd): switch together with go1.13 usrCfgDir, err := os.UserConfigDir()
+	usrCfgDir, err := os.UserHomeDir()
+	if err != nil {
+		return []ConfigFile{}
+	}
+
+	return []ConfigFile{
+		{
+			Name: filepath.Join(usrCfgDir, "."+appName),
+			//TODO(pirmd) : Name: filepath.Join(usrCfgDir, filepath.Base(os.Args[0]))
+			Usage: "Per-user configuration file for " + appName,
+		},
+	}
 }
 
 //Config represents a set of Command's configuration information
