@@ -117,7 +117,7 @@ func (c *Command) NewInt64ArgToVar(p *int64, name, usage string, optional bool) 
 }
 
 //UseConfig creates a new configuration
-func (c *Command) UseConfig(cfg interface{}, unmarshaller func([]byte, interface{}) error, files []ConfigFile) {
+func (c *Command) UseConfig(cfg interface{}, unmarshaller func([]byte, interface{}) error, files []*ConfigFile) {
 	c.Config = &Config{
 		Var:          cfg,
 		Unmarshaller: unmarshaller,

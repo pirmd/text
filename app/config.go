@@ -76,7 +76,7 @@ type Config struct {
 	//from Path will not triger any feedback/error), it is expected either to
 	//test for nil/improper config from the main cmd.Execute routine or
 	//provided a config with reasonable defaults.
-	Files []ConfigFile
+	Files []*ConfigFile
 }
 
 //Load loads config look in order for each file in configuration's files set. Any
