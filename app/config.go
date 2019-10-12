@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"github.com/kirsle/configdir"
 )
 
 //TODO(pirmd): If command is called using --config FILE flag, configuration will be read
@@ -20,22 +22,39 @@ type ConfigFile struct {
 
 //DefaultConfigFiles returns a commonly used ConfigFile that is to say an rc
 //files from user's config dir (if any).
-func DefaultConfigFiles() []ConfigFile {
+func DefaultConfigFiles() []*ConfigFile {
+	return []*ConfigFile{
+		DefaultSystemConfigFile(),
+		DefaultUserConfigFile(),
+	}
+}
+
+//DefaultUserConfigFile returns a commonly used ConfigFile that points to
+//per-user config file
+func DefaultUserConfigFile() *ConfigFile {
 	appName := filepath.Base(os.Args[0])
 
-	//TODO(pirmd): switch together with go1.13 usrCfgDir, err := os.UserConfigDir()
-	usrCfgDir, err := os.UserHomeDir()
-	if err != nil {
-		return []ConfigFile{}
+	//TODO(pirmd): switch to go1.13 usrCfgDir, err := os.UserConfigDir()
+	cfgDir := configdir.LocalConfig()
+
+	return &ConfigFile{
+		Name:  filepath.Join(cfgDir, appName),
+		Usage: "Per-user configuration file for " + appName,
+	}
+}
+
+//DefaultSystemConfigFile returns a commonly used ConfigFile that points to a
+//system-wide config file
+func DefaultSystemConfigFile() *ConfigFile {
+	appName := filepath.Base(os.Args[0])
+	if cfgDir := configdir.SystemConfig(); len(cfgDir) > 0 {
+		return &ConfigFile{
+			Name:  filepath.Join(cfgDir[0], "."+appName),
+			Usage: "System-wide configuration file for " + appName,
+		}
 	}
 
-	return []ConfigFile{
-		{
-			Name: filepath.Join(usrCfgDir, "."+appName),
-			//TODO(pirmd) : Name: filepath.Join(usrCfgDir, filepath.Base(os.Args[0]))
-			Usage: "Per-user configuration file for " + appName,
-		},
-	}
+	return &ConfigFile{}
 }
 
 //Config represents a set of Command's configuration information
