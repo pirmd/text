@@ -65,7 +65,9 @@ func (cfg *Config) Load() error {
 }
 
 func (cfg *Config) load(b []byte) error {
-	return cfg.Unmarshaller(b, cfg.Var)
+	bexpanded := []byte(os.ExpandEnv(string(b)))
+
+	return cfg.Unmarshaller(bexpanded, cfg.Var)
 }
 
 //DefaultConfigFiles returns a commonly used ConfigFile that is to say an rc

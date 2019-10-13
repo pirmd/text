@@ -2,13 +2,15 @@ package app
 
 import (
 	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/pirmd/verify"
 )
 
 type TestStruct struct {
-	TestSucceed bool `json:"succeed"`
+	Success bool   `json:"success"`
+	Gobin   string `json:"gobin"`
 }
 
 func TestConfigUnmarshalling(t *testing.T) {
@@ -16,17 +18,18 @@ func TestConfigUnmarshalling(t *testing.T) {
 		in   string
 		want TestStruct
 	}{
-		{in: `{ "succeed": true }`, want: TestStruct{TestSucceed: true}},
-	}
-
-	cfg := TestStruct{}
-
-	cmdCfg := Config{
-		Unmarshaller: json.Unmarshal,
-		Var:          &cfg,
+		{in: `{ "success": true }`, want: TestStruct{Success: true}},
+		{in: `{ "gobin": "$GOBIN" }`, want: TestStruct{Gobin: os.Getenv("GOBIN")}},
 	}
 
 	for _, tc := range testCases {
+		cfg := TestStruct{}
+
+		cmdCfg := Config{
+			Unmarshaller: json.Unmarshal,
+			Var:          &cfg,
+		}
+
 		if err := cmdCfg.load([]byte(tc.in)); err != nil {
 			t.Errorf("cannot read config '%s': %s", tc.in, err)
 		}
