@@ -1,12 +1,11 @@
 package app
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"github.com/kirsle/configdir"
+	"github.com/pirmd/cli/app/configdir"
 )
 
 //TODO(pirmd): If command is called using --config FILE flag, configuration will be read
@@ -18,43 +17,6 @@ type ConfigFile struct {
 	Name string
 	//Usage is a short description of what this configuration file is about
 	Usage string
-}
-
-//DefaultConfigFiles returns a commonly used ConfigFile that is to say an rc
-//files from user's config dir (if any).
-func DefaultConfigFiles() []*ConfigFile {
-	return []*ConfigFile{
-		DefaultSystemConfigFile(),
-		DefaultUserConfigFile(),
-	}
-}
-
-//DefaultUserConfigFile returns a commonly used ConfigFile that points to
-//per-user config file
-func DefaultUserConfigFile() *ConfigFile {
-	appName := filepath.Base(os.Args[0])
-
-	//TODO(pirmd): switch to go1.13 usrCfgDir, err := os.UserConfigDir()
-	cfgDir := configdir.LocalConfig()
-
-	return &ConfigFile{
-		Name:  filepath.Join(cfgDir, appName),
-		Usage: "Per-user configuration file for " + appName,
-	}
-}
-
-//DefaultSystemConfigFile returns a commonly used ConfigFile that points to a
-//system-wide config file
-func DefaultSystemConfigFile() *ConfigFile {
-	appName := filepath.Base(os.Args[0])
-	if cfgDir := configdir.SystemConfig(); len(cfgDir) > 0 {
-		return &ConfigFile{
-			Name:  filepath.Join(cfgDir[0], "."+appName),
-			Usage: "System-wide configuration file for " + appName,
-		}
-	}
-
-	return &ConfigFile{}
 }
 
 //Config represents a set of Command's configuration information
@@ -79,15 +41,22 @@ type Config struct {
 	Files []*ConfigFile
 }
 
-//Load loads config look in order for each file in configuration's files set. Any
-//non-existing file in configuration's Files is silently ignored.
+//Load loads config from configuration's files set, looking at each file
+//location one by one. Any non-existing file in configuration's Files is
+//silently ignored.
+//If no Unmarshaller is defined, the function will panic.
 func (cfg *Config) Load() error {
 	if cfg.Unmarshaller == nil {
-		cfg.Unmarshaller = json.Unmarshal
+		panic("no Unmarshaller is defined")
 	}
 
 	for _, rc := range cfg.Files {
-		if err := cfg.loadFromFile(rc.Name); err != nil {
+		b, err := ioutil.ReadFile(rc.Name)
+		if err != nil && !os.IsNotExist(err) {
+			return err
+		}
+
+		if err := cfg.load(b); err != nil {
 			return err
 		}
 	}
@@ -95,14 +64,33 @@ func (cfg *Config) Load() error {
 	return nil
 }
 
-func (cfg *Config) loadFromFile(path string) error {
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return err
-	}
+func (cfg *Config) load(b []byte) error {
+	return cfg.Unmarshaller(b, cfg.Var)
+}
 
-	return cfg.Unmarshaller(b, &cfg.Var)
+//DefaultConfigFiles returns a commonly used ConfigFile that is to say an rc
+//files from user's config dir (if any).
+func DefaultConfigFiles(rc string) []*ConfigFile {
+	return []*ConfigFile{
+		DefaultSystemConfigFile(rc),
+		DefaultUserConfigFile(rc),
+	}
+}
+
+//DefaultUserConfigFile returns a commonly used ConfigFile that points to
+//per-user config file
+func DefaultUserConfigFile(rc string) *ConfigFile {
+	return &ConfigFile{
+		Name:  filepath.Join(configdir.PerUser, filepath.Base(os.Args[0]), rc),
+		Usage: "Per-user configuration location",
+	}
+}
+
+//DefaultSystemConfigFile returns a commonly used ConfigFile that points to a
+//system-wide config file
+func DefaultSystemConfigFile(rc string) *ConfigFile {
+	return &ConfigFile{
+		Name:  filepath.Join(configdir.SystemWide, filepath.Base(os.Args[0]), rc),
+		Usage: "System-wide configuration location",
+	}
 }
