@@ -73,14 +73,36 @@ var (
 	//ColorDiff highlights differences in colors
 	ColorDiff = DiffHighlighter{
 		SameL:   func(s string) string { return s },
-		DiffL:   func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
+		DiffL:   func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
 		LackL:   func(s string) string { return "" },
-		ExcessL: func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
+		ExcessL: func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
 
 		SameR:   func(s string) string { return s },
-		DiffR:   func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
+		DiffR:   func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
 		LackR:   func(s string) string { return "" },
-		ExcessR: func(s string) string { return fmt.Sprintf("\x1b[4;31m%s\x1b[0m", s) }, //Red underline (can detect space)
+		ExcessR: func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
+
+		Symbols: [...]string{"=", "<>", "-", "+"},
+	}
+
+	//ColorDiffNonPrintable highlights differences in color and shows spaces,
+	//tabs and non printable runes.
+	ColorDiffNonPrintable = DiffHighlighter{
+		SameL: func(s string) string { return s },
+		DiffL: func(s string) string {
+			snp := showNonPrintableRune(s)
+			return fmt.Sprintf("\x1b[31m%s\x1b[0m", snp) //Red
+		},
+		LackL:   func(s string) string { return "" },
+		ExcessL: func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
+
+		SameR: func(s string) string { return s },
+		DiffR: func(s string) string {
+			snp := showNonPrintableRune(s)
+			return fmt.Sprintf("\x1b[31m%s\x1b[0m", snp) //Red
+		},
+		LackR:   func(s string) string { return "" },
+		ExcessR: func(s string) string { return fmt.Sprintf("\x1b[31m%s\x1b[0m", s) }, //Red
 
 		Symbols: [...]string{"=", "<>", "-", "+"},
 	}
