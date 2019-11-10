@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html)
 
-## Unreleased (yet)
+## [0.3.0] - 2019-11-10
 ### Added
 - cli/app: now support basic config files management
 ### Modified
