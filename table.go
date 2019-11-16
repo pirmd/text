@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pirmd/cli/style/termsize"
+	"github.com/pirmd/style/termsize"
 )
 
 const (
