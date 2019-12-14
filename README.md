@@ -4,13 +4,33 @@
 
 `text` provides text manipulation functions (like indentation, wrapping,
 columnize,...) that can differentiate printable from non-printable sequences
-(like ANSI colored sequences). Tables formatting helpers are proposed as well
-as text diff formatting.
+(like ANSI colored sequences).
+
+`text` provides helpers to format tables and to print diff between text.
 
 ## EXAMPLE
 
 ```go
 package main
+
+import (
+    "fmt"
+
+    "github.com/pirmd/text"
+    "github.com/pirmd/text/ansi"
+)
+
+func Example() {
+    tab := text.NewTable().SetMaxWidth(80).SetGrid(" ", "-", " ")
+
+     tab.Rows(
+         []string{"Column1", "Column2", "Column3"},
+         []string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Any " + ansi.SetBold("formatted") + " string can be inserted too without beaking the table."},
+         []string{"", "This second row is here to test multi-lines rows format", "Also possibly a second chance to verify that multi-lines is working"},
+     )
+
+     fmt.Println(tab.Draw())
+}
 
 ```
 

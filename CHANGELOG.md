@@ -8,8 +8,8 @@ Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.htm
 ## Modified
 - gather all logic related to ANSI escape sequence management in a dedicated
   sub-module 
-- improve wrap, truncate, justify... function to cleanly terminate interrupted
-  ANSI sequences
+- improve table, wrap, truncate, justify... and affiliated functions to cleanly
+  terminate interrupted ANSI sequences
 
 ## [0.3.1] - 2019-11-11
 ## Removed
