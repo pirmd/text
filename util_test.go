@@ -12,7 +12,7 @@ func TestVisualLen(t *testing.T) {
 		out int
 	}{
 		{"abc", 3},
-		{"敬具", 2},
+		{"敬具", 4},
 		{"a\x00bc", 3},
 		{"\x1b[35ma\x00bc\x1b[0m", 3},
 	}

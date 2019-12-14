@@ -1,7 +1,7 @@
 package text
 
 import (
-	"unicode"
+	"github.com/mattn/go-runewidth"
 
 	"github.com/pirmd/text/ansi"
 )
@@ -92,12 +92,6 @@ func interruptANSI(s []string) {
 	}
 }
 
-//XXX: introduce go-runeWidth tool from mattn
 func runeWidth(c rune) int {
-	switch {
-	case !unicode.IsMark(c) && unicode.IsGraphic(c):
-		return 1
-	default:
-		return 0
-	}
+	return runewidth.RuneWidth(c)
 }

@@ -1,3 +1,5 @@
+github.com/mattn/go-runewidth v0.0.7 h1:Ei8KR0497xHyKJPAv59M1dkC+rOZCMBJ+t3fZ+twI54=
+github.com/mattn/go-runewidth v0.0.7/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/pirmd/cli v0.3.0 h1:OW0248GRk/79lePS3g+Wqpua3BziEKPagBZ/ta0uGmQ=
 github.com/pirmd/cli v0.3.0/go.mod h1:MCAlgqKKTt8c0KK9tggXepX6mqo0ztZm6t2R5nNbZKY=
 github.com/pirmd/style v0.0.0-20191111161546-75d3e2c2f9e7 h1:LXAK7uIM+v7TQM0yPosM96QhL3y/9JY0CTxf3Sgr7P0=
