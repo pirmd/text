@@ -2,70 +2,56 @@ package text
 
 import (
 	"unicode"
+
+	"github.com/pirmd/text/ansi"
 )
 
-const ansiEscResetSeq = "\x1b[0m"
-
-//TODO(pirmd): these functions calculate length of a text that contains ANSI
-//            escape sequences that modify the text's style (color / bold and cie)
-//            it will not filter properly the string if other ANSI sequences are
-//            used, which should not be a problem for common use cases of this module.
-
+// visualLen calculates the length of string ignoring any ANSI escape sequences
 func visualLen(s string) int {
-	var isEscSeq bool
-	var length int
-
-	for _, c := range s {
-		switch {
-		case c == '\x1b' || c == '\x9b':
-			isEscSeq = true
-
-		case isEscSeq && c == 'm':
-			isEscSeq = false
-
-		case !isEscSeq && !unicode.IsMark(c) && unicode.IsGraphic(c):
-			length++
+	var l int
+	_ = ansi.Walk(s, func(c rune, esc string) error {
+		if c > -1 {
+			l += runeWidth(c)
 		}
-	}
+		return nil
+	})
 
-	return length
+	return l
 }
 
-//TODO(pirmd): when an ansi escape sequence is found, an ansi reset sequence
-//is appended to the final truncated even if there is no specific need (reset
-//sequence already exists)
+// visualTruncate truncates the string so that its "visible" length is lower or equal
+// to the provided limit.
+//
+// When needed, Truncate terminates the string by an ansi.Reset sequence to
+// inhibate any visual effects coming from the truncation step.
+func visualTruncate(s string, limit int) (trunc string) {
+	var l int
+	var sgr ansi.Sequence
 
-func visualTruncate(s string, size int) string {
-	var isEscSeq, hasEscSeq bool
-	var length int
-
-	for i, c := range s {
-		switch {
-		case c == '\x1b' || c == '\x9b':
-			isEscSeq = true
-
-		case isEscSeq && c == 'm':
-			isEscSeq, hasEscSeq = false, true
-
-		case !isEscSeq && !unicode.IsMark(c) && unicode.IsGraphic(c):
-			length++
+	_ = ansi.Walk(s, func(c rune, esc string) error {
+		if c > -1 {
+			trunc += string(c)
+			l += runeWidth(c)
 		}
 
-		if length == size {
-			i++
-			if i == len(s) {
-				return s
-			}
-			if hasEscSeq {
-				return s[:i] + ansiEscResetSeq
-			}
-			return s[:i]
+		if esc != "" {
+			trunc += esc
+			sgr.Combine(esc)
 		}
-	}
 
-	return s
+		if l >= limit {
+			return ansi.ErrStopWalk
+		}
+
+		return nil
+	})
+
+	return trunc + sgr.Reset()
 }
 
+// visualPad completes a string with provided rune until its "visible" lentgh
+// reaches the provided limit.  If the string visible size is already above
+// imit, Pad returns it as-is
 func visualPad(s string, size int, padRune rune) string {
 	var pad []rune
 	for i := visualLen(s); i < size; i++ {
@@ -74,7 +60,7 @@ func visualPad(s string, size int, padRune rune) string {
 	return s + string(pad)
 }
 
-//visualRepeat repeats s until given size is reached
+// visualRepeat repeats s until given size is reached
 func visualRepeat(s string, size int) string {
 	l := visualLen(s)
 	r := s
@@ -85,4 +71,33 @@ func visualRepeat(s string, size int) string {
 		r = r + s
 	}
 	return visualTruncate(r, size)
+}
+
+// interruptANSI interrupts at each line any ANSI SGR rendition and continue it
+// at the next line (usefull to work with text in column to avoid voiding
+// neighbourgh text)
+func interruptANSI(s []string) {
+	var sgr ansi.Sequence
+
+	for i, line := range s {
+		curSGR := sgr
+		_ = ansi.Walk(line, func(c rune, esc string) error {
+			if c == -1 {
+				curSGR.Combine(esc)
+			}
+			return nil
+		})
+		s[i] = sgr.Esc() + s[i] + curSGR.Reset()
+		sgr = curSGR
+	}
+}
+
+//XXX: introduce go-runeWidth tool from mattn
+func runeWidth(c rune) int {
+	switch {
+	case !unicode.IsMark(c) && unicode.IsGraphic(c):
+		return 1
+	default:
+		return 0
+	}
 }

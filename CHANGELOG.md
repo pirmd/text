@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html).
 
+## [unrelesaed]
+## Modified
+- gather all logic related to ANSI escape sequence management in a dedicated
+  sub-module 
+- improve wrap, truncate, justify... function to cleanly terminate interrupted
+  ANSI sequences
+
 ## [0.3.1] - 2019-11-11
 ## Removed
 - separate text from rest of github.com/pirmd/cli and

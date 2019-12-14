@@ -23,7 +23,7 @@ func TestWrap(t *testing.T) {
 	for _, tc := range testCases {
 		got := Wrap(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("Wrap failed for '%s'.\nWanted:\n'%s'\nGot   :\n'%s'\n", tc.in, showTrailingSpaces(tc.out), showTrailingSpaces(got))
+			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}
 	}
 }
@@ -54,7 +54,7 @@ func TestWrapAndIndent(t *testing.T) {
 	for _, tc := range testCases {
 		got := Tab(tc.inTxt, "", tc.inP, 40)
 		if got != tc.out {
-			t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%s\nGot   :\n%s\n", showTrailingSpaces(tc.out), showTrailingSpaces(got))
+			t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%#v\nGot   :\n%#v\n", tc.out, got)
 		}
 	}
 }
@@ -106,7 +106,7 @@ func TestTabWithTag(t *testing.T) {
 	for _, tc := range testCases {
 		got := Tab(tc.inTxt, tc.inT, tc.inP, 40)
 		if got != tc.out {
-			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inT, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
+			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%#v\nGot   :\n%#v\n", tc.inT, tc.inP, tc.out, got)
 		}
 	}
 }
@@ -158,12 +158,15 @@ func TestIndent(t *testing.T) {
 	for _, tc := range testCases {
 		got := Indent(tc.inTxt, tc.inT, tc.inP)
 		if got != tc.out {
-			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%s\nGot   :\n%s\n", tc.inT, tc.inP, showTrailingSpaces(tc.out), showTrailingSpaces(got))
+			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%#v\nGot   :\n%#v\n", tc.inT, tc.inP, tc.out, got)
 		}
 	}
 }
 
-func showTrailingSpaces(s string) string {
-	lines := strings.Split(s, "\n")
-	return strings.Join(lines, "|\n")
+func BenchmarkWrap(b *testing.B) {
+	in := strings.Repeat("\x1b[31mbonjour\x1b[m ", 20)
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		Wrap(in, len(in)/20)
+	}
 }

@@ -12,14 +12,14 @@ func TestTruncate(t *testing.T) {
 	}{
 		{"Coucou", 10, "Coucou"},
 		{"This is a long sentence", 10, "This is a…"},
-		{"This \x1b[34mis\x1b[0m a long sentence in color", 10, "This \x1b[34mis\x1b[0m a\x1b[0m…"},
+		{"This \x1b[34mis\x1b[0m a long sentence in color", 10, "This \x1b[34mis\x1b[0m a…"},
 		{"This \x1b[34mis a long sentence in\x1b[0m color", 10, "This \x1b[34mis a\x1b[0m…"},
 	}
 
 	for _, tc := range testCases {
 		got := Truncate(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("Truncate failed for '%s'.\nWanted: %s\nGot   : %s\n", tc.in, tc.out, got)
+			t.Errorf("Truncate failed for %#v.\nWanted: %#v\nGot   : %#v\n", tc.in, tc.out, got)
 		}
 	}
 }
@@ -32,14 +32,14 @@ func TestExactSize(t *testing.T) {
 	}{
 		{"Coucou", 10, "Coucou    "},
 		{"This is a long sentence", 10, "This is a…"},
-		{"This \x1b[34mis\x1b[0m a long sentence in color", 10, "This \x1b[34mis\x1b[0m a\x1b[0m…"},
+		{"This \x1b[34mis\x1b[0m a long sentence in color", 10, "This \x1b[34mis\x1b[0m a…"},
 		{"This \x1b[34mis a long sentence in\x1b[0m color", 10, "This \x1b[34mis a\x1b[0m…"},
 	}
 
 	for _, tc := range testCases {
 		got := ExactSize(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("Truncate failed for '%s'.\nWanted: %s\nGot   : %s\n", tc.in, tc.out, got)
+			t.Errorf("Truncate failed for %#v.\nWanted: %#v\nGot   : %#v\n", tc.in, tc.out, got)
 		}
 	}
 }
