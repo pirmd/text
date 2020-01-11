@@ -37,7 +37,7 @@ func NewTable() *Table {
 	}
 }
 
-// SetMaxWidth manully set the table maximum width
+// SetMaxWidth manually set the table maximum width
 func (t *Table) SetMaxWidth(w int) *Table {
 	t.maxWidth = w
 	return t
