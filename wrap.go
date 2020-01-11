@@ -26,15 +26,8 @@ func Indent(s string, tag, prefix string) string {
 }
 
 // Wrap wraps a text by ensuring that each of its line's "visible" length is
-// lower or equal to the provided limit.
-//
-// Wrap is pretty bad when called multiple times as it cannot differenciate line breaks
-// coming from previous wrapping from line breaks introduced by the end-user in the
-// first place. It is therefore better to avoid multiple calls to Wrap
-//
-// BUG: Wrap works at word limits (space) so it does not behaves properly for words
-// longer than the limit (it does not split words so it feedbacks  line longer than
-// limit)
+// lower or equal to the provided limit. Wrap works at word limits (space). If
+// a word is encountered that is longer than the limit, it is truncated.
 func Wrap(txt string, limit int) string {
 	return strings.Join(wrap(txt, limit), "\n")
 }
@@ -118,8 +111,16 @@ func wrap(s string, limit int) (ws []string) {
 			word, wordlen = "", 0
 
 		default:
+			if wordlen += runeWidth(c); wordlen > limit {
+				// word is longer than the limit, we truncated it
+				if line != "" {
+					ws = append(ws, line)
+				}
+				ws = append(ws, word)
+				word, wordlen = "" , runeWidth(c)
+			}
 			word += string(c)
-			wordlen += runeWidth(c)
+
 		}
 
 		return nil
@@ -132,7 +133,10 @@ func wrap(s string, limit int) (ws []string) {
 	case l > limit && linelen == 0:
 		ws = append(ws, word)
 	case l > limit:
-		ws = append(ws, line, word)
+		if line != "" {
+			ws = append(ws, line)
+		}
+		ws = append(ws, word)
 	default:
 		ws = append(ws, line+word)
 	}

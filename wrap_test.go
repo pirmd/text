@@ -18,6 +18,7 @@ func TestWrap(t *testing.T) {
 		{"This is a long sentence", 10, "This is a \nlong \nsentence"},
 		{"This \x1b[34mis\x1b[0m a long sentence", 10, "This \x1b[34mis\x1b[0m a \nlong \nsentence"},
 		{"This \x1b[34mis a long sentence\x1b[0m", 10, "This \x1b[34mis a \nlong \nsentence\x1b[0m"},
+		{"Supercalifragilisticexpialidocious", 10, "Supercalif\nragilistic\nexpialidoc\nious"},
 	}
 
 	for _, tc := range testCases {
