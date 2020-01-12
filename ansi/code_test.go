@@ -49,7 +49,7 @@ func TestAdd(t *testing.T) {
 		},
 
 		{
-			[]Code{cRed, cBold, cBlue, cBoldOff},
+			[]Code{cRed, cBold, cBlue, cNormal},
 			Sequence{cBlue},
 		},
 	}
@@ -87,12 +87,12 @@ func TestCombine(t *testing.T) {
 		},
 
 		{
-			[]string{Red, Bold, Blue, BoldOff},
+			[]string{Red, Bold, Blue, Normal},
 			Sequence{cBlue},
 		},
 
 		{
-			[]string{Red, Bold, "\x1b[A", Blue, BoldOff},
+			[]string{Red, Bold, "\x1b[A", Blue, Normal},
 			Sequence{cBlue},
 		},
 	}

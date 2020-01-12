@@ -14,7 +14,8 @@ const (
 	Conceal    = "\x1b[8m"
 	CrossedOut = "\x1b[9m"
 
-	BoldOff       = "\x1b[21m"
+	DoublyUnderlined = "\x1b[21m"
+
 	Normal        = "\x1b[22m"
 	ItalicOff     = "\x1b[23m"
 	UnderlineOff  = "\x1b[24m"
@@ -90,7 +91,6 @@ func BGColor24bit(r, g, b string) string {
 
 // SetBold sets provided string to Bold
 func SetBold(s string) string {
-	//XXX: return Bold + s + BoldOff
 	return Bold + s + Normal
 }
 
