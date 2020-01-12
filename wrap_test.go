@@ -18,7 +18,8 @@ func TestWrap(t *testing.T) {
 		{"This is a long sentence", 10, "This is a \nlong \nsentence"},
 		{"This \x1b[34mis\x1b[0m a long sentence", 10, "This \x1b[34mis\x1b[0m a \nlong \nsentence"},
 		{"This \x1b[34mis a long sentence\x1b[0m", 10, "This \x1b[34mis a \nlong \nsentence\x1b[0m"},
-		{"Supercalifragilisticexpialidocious", 10, "Supercalif\nragilistic\nexpialidoc\nious"},
+		{"Supercalifragilisticexpialidocious\nChim Chim Cher-ee", 10, "Supercalif\nragilistic\nexpialidoc\nious\nChim Chim \nCher-ee"},
+		{"description: This edition contains Alice's Adventures in Wonderland. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom.\nauthor: Lewis Caroll", 58, "description: This edition contains Alice's Adventures in \nWonderland. Tweedledum and Tweedledee, the Mad Hatter, the\nCheshire Cat, the Red Queen and the White Rabbit all make \ntheir appearances, and are now familiar figures in \nwriting, conversation and idiom.\nauthor: Lewis Caroll"},
 	}
 
 	for _, tc := range testCases {

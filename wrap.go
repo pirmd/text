@@ -87,11 +87,14 @@ func wrap(s string, limit int) (ws []string) {
 		case c == '\n':
 			if linelen+wordlen <= limit {
 				line += word
-				word, wordlen = "", 0
+			} else {
+				ws = append(ws, line)
+				line = word
 			}
 
 			ws = append(ws, line)
 			line, linelen = "", 0
+			word, wordlen = "", 0
 
 		case unicode.IsSpace(c):
 			switch l := linelen + wordlen; {
