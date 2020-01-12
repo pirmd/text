@@ -5,6 +5,9 @@ Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html).
 
 ## [unrelesaed]
+## Added
+- remove broken diff algorithms and replace it by a brand new diff sub-module
+  that supports LCS and Patience diff.
 ## Modified
 - gather all logic related to ANSI escape sequence management in a dedicated
   sub-module 
