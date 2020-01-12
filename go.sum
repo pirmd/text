@@ -2,6 +2,7 @@ github.com/antzucaro/matchr v0.0.0-20191224151129-ab6ba461ddec h1:uurd2LiNfcarvG
 github.com/antzucaro/matchr v0.0.0-20191224151129-ab6ba461ddec/go.mod h1:v3ZDlfVAL1OrkKHbGSFFK60k0/7hruHPDq2XMs9Gu6U=
 github.com/mattn/go-runewidth v0.0.7 h1:Ei8KR0497xHyKJPAv59M1dkC+rOZCMBJ+t3fZ+twI54=
 github.com/mattn/go-runewidth v0.0.7/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
+github.com/pirmd/cli v0.2.0/go.mod h1:O0KX5M95fQFSeWLPP4kq4LrZHWgS1+G9FwitmBF9T64=
 github.com/pirmd/cli v0.3.0 h1:OW0248GRk/79lePS3g+Wqpua3BziEKPagBZ/ta0uGmQ=
 github.com/pirmd/cli v0.3.0/go.mod h1:MCAlgqKKTt8c0KK9tggXepX6mqo0ztZm6t2R5nNbZKY=
 github.com/pirmd/style v0.3.1 h1:kuIxpKaMEQMUYaM81Bzs6h4OLxDlqcNgR0ZYJpnS7/0=
@@ -9,3 +10,5 @@ github.com/pirmd/style v0.3.1/go.mod h1:h1p0xPt7IAJwf08x84VYK3i3VhzJUhqzuEf2ofe0
 github.com/pirmd/text v0.0.0-20191111165610-e9760a07aba4/go.mod h1:FBNvItiLIoO/jhO8dO35YtMt0wxxuIPBZnDKPxKh75U=
 github.com/pirmd/verify v0.2.0 h1:woyyRGbgZp4SnWGsMco3BCVwTfomkFZl/+xRKiGZ5FM=
 github.com/pirmd/verify v0.2.0/go.mod h1:/McQWCtPnQ52qjQCYc0JKdwFyTxd5oRfwtCUq9m+eG0=
+github.com/pirmd/verify v0.3.0 h1:P2HPGIPz/M9s2XMLjCtAcpJ9ndrTpbqN5aOxo9auDrI=
+github.com/pirmd/verify v0.3.0/go.mod h1:mGtcZ/bkSilRDPsyIb8gz5cq8d+3GmkTZpSK7nNVuzs=
