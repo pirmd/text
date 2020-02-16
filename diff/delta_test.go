@@ -11,27 +11,27 @@ import (
 func TestResultPrettyPrint(t *testing.T) {
 	testCases := []struct {
 		in                  Result
-		wanta, wantb, wantt string
+		wantL, wantR, wantT []string
 	}{
 		{
 			Result{&diff{IsSame, "a"}, &diff{IsInserted, "b"}, &diff{IsSame, "c"}},
-			"ac",
-			"abc",
-			"=+=",
+			[]string{"a", "", "c"},
+			[]string{"a", "b", "c"},
+			[]string{"=", "+", "="},
 		},
 
 		{
 			Result{Result{&diff{IsSame, "a"}, &diff{IsInserted, "b"}, &diff{IsSame, "c"}}},
-			"ac",
-			"abc",
-			"+",
+			[]string{"ac"},
+			[]string{"abc"},
+			[]string{"+"},
 		},
 
 		{
 			Result{&diff{IsSame, "ab\n"}, &diff{IsInserted, "cd\n"}, &diff{IsSame, "ef"}},
-			"ab\n\nef",
-			"ab\ncd\nef",
-			"=\n+\n=",
+			[]string{"ab\n", "", "ef"},
+			[]string{"ab\n", "cd\n", "ef"},
+			[]string{"=", "+", "="},
 		},
 
 		{
@@ -40,9 +40,9 @@ func TestResultPrettyPrint(t *testing.T) {
 				Result{&diff{IsDeleted, "dc"}, &diff{IsInserted, "cd"}, &diff{IsSame, "\n"}},
 				&diff{IsSame, "ef"},
 			},
-			"ab\ndc\nef",
-			"ab\ncd\nef",
-			"=\n<>\n=",
+			[]string{"ab\n", "dc\n", "ef"},
+			[]string{"ab\n", "cd\n", "ef"},
+			[]string{"=", "<>", "="},
 		},
 
 		{
@@ -51,9 +51,9 @@ func TestResultPrettyPrint(t *testing.T) {
 				Result{&diff{IsDeleted, "dc"}, &diff{IsInserted, "cd"}, &diff{IsSame, "\n"}},
 				&diff{IsSame, "ef"},
 			},
-			"a\nb\ndc\nef",
-			"a\nb\ncd\nef",
-			"=\n\n<>\n=",
+			[]string{"a\nb\n", "dc\n", "ef"},
+			[]string{"a\nb\n", "cd\n", "ef"},
+			[]string{"=", "<>", "="},
 		},
 
 		{
@@ -61,13 +61,14 @@ func TestResultPrettyPrint(t *testing.T) {
 				&diff{IsInserted, "#include \"diff.h\"\n"},
 				Result{
 					&diff{IsSame, "#include \""},
-					&diff{IsDeleted, "old"}, &diff{IsInserted, "new"},
+					&diff{IsDeleted, "old"},
+					&diff{IsInserted, "new"},
 					&diff{IsSame, ".h\"\n"},
 				},
 			},
-			"\n#include \"old.h\"\n",
-			"#include \"diff.h\"\n#include \"new.h\"\n",
-			"+\n<>\n",
+			[]string{"", "#include \"old.h\"\n"},
+			[]string{"#include \"diff.h\"\n", "#include \"new.h\"\n"},
+			[]string{"+", "<>"},
 		},
 
 		{
@@ -78,22 +79,24 @@ func TestResultPrettyPrint(t *testing.T) {
 					&diff{IsInserted, "new"},
 					&diff{IsSame, ".h\"\n"},
 				},
-				&diff{IsInserted, "#include \"diff.h\"\n"}, &diff{IsInserted, "\n"},
+				&diff{IsInserted, "#include \"diff.h\"\n"},
+				&diff{IsInserted, "\n"},
 				&diff{IsDeleted, "char buf[64]\n"},
 			},
-			"#include \"old.h\"\n\n\nchar buf[64]\n",
-			"#include \"new.h\"\n#include \"diff.h\"\n\n\n",
-			"<>\n+\n+\n-\n",
+			[]string{"#include \"old.h\"\n", "", "", "char buf[64]\n"},
+			[]string{"#include \"new.h\"\n", "#include \"diff.h\"\n", "\n", ""},
+			[]string{"<>", "+", "+", "-"},
 		},
 	}
 
 	for _, tc := range testCases {
-		gota, gotb, gott := tc.in.PrettyPrint()
-		t.Logf("\n" + text.NewTable().SetMaxWidth(180).Rows([]string{tc.wanta, tc.wantt, tc.wantb}).Draw())
-		t.Logf("\n" + text.NewTable().SetMaxWidth(180).Rows([]string{gota, gott, gotb}).Draw())
-		verify.Equal(t, gota, tc.wanta, "Result of\n%#v failed (for 'a' side)", tc.in.GoString())
-		verify.Equal(t, gotb, tc.wantb, "Result of\n%#v failed (for 'b' side)", tc.in.GoString())
-		verify.Equal(t, gott, tc.wantt, "Result of  %#v failed (for 't' side)", tc.in.GoString())
+		gotL, gotR, gotT, _ := tc.in.PrettyPrint()
+
+		t.Logf("\n" + text.NewTable().SetMaxWidth(180).Col(tc.wantL, tc.wantT, tc.wantR).Draw())
+		t.Logf("\n" + text.NewTable().SetMaxWidth(180).Col(gotL, gotT, gotR).Draw())
+		verify.Equal(t, gotL, tc.wantL, "Result of\n%#v failed (for 'L' side)", tc.in.GoString())
+		verify.Equal(t, gotR, tc.wantR, "Result of\n%#v failed (for 'R' side)", tc.in.GoString())
+		verify.Equal(t, gotT, tc.wantT, "Result of  %#v failed (for 'T' side)", tc.in.GoString())
 		//XXX: sort out verify Equal args issue -> accept interface and not string
 	}
 }

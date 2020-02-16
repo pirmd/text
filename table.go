@@ -53,16 +53,46 @@ func (t *Table) SetGrid(sepV, sepC, sepH string) *Table {
 	return t
 }
 
-// Rows add a list of rows to the table
+// Rows adds a list of rows to the table. Rows trims any trailing new line.
 func (t *Table) Rows(rows ...[]string) *Table {
+	for _, row := range rows {
+		srow := []string{}
+		for _, cell := range row {
+			srow = append(srow, strings.TrimSuffix(cell, "\n"))
+		}
+		t.cells = append(t.cells, srow)
+	}
+
+	return t
+}
+
+// RawRows adds a list of rows to the table without triming any trailing new line.
+func (t *Table) RawRows(rows ...[]string) *Table {
 	t.cells = append(t.cells, rows...)
 	return t
 }
 
 // Col adds a list of columns to the table Col add col content at the end of
 // existing rows, meaning that if rows are not of the same size or if col add
-// more rows, results will not be an 'aligned' column
+// more rows, results will not be an 'aligned' column.
+// Col trims any cell trailing new line.
 func (t *Table) Col(col ...[]string) *Table {
+	for _, column := range col {
+		for i, cell := range column {
+			for row := len(t.cells); row <= i; row++ {
+				//columns features more rows than actually available in the
+				//table we complete by adding an empty row
+				t.cells = append(t.cells, []string{})
+			}
+			t.cells[i] = append(t.cells[i], strings.TrimSuffix(cell, "\n"))
+		}
+	}
+	return t
+}
+
+// RawCol adds a list of colums to the table but unlike 'Col' does not trim any
+// trailing new line.
+func (t *Table) RawCol(col ...[]string) *Table {
 	for _, column := range col {
 		for i, cell := range column {
 			for row := len(t.cells); row <= i; row++ {

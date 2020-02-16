@@ -14,73 +14,94 @@ const (
 )
 
 var (
-	// WithColor highlights differences in colors
+	// DefaultHighlighter is the highlither used by default by PrettyPrint if
+	// no specific highlighters are supplied. You can ovverride it as needed.
+	// It defaults to WithoutMissingContent.
+	DefaultHighlighter = WithoutMissingContent
+
+	// WithoutMissingContent highlights differences by hidding any missing part
+	// on left or right.
+	WithoutMissingContent = Highlighter{
+		Same:      func(dL, dR, dT string) (string, string, string) { return dL, dR, dT },
+		Deleted:   func(dL, dR, dT string) (string, string, string) { return dL, "", dT },
+		Inserted:  func(dL, dR, dT string) (string, string, string) { return "", dR, dT },
+		Different: func(dL, dR, dT string) (string, string, string) { return dL, dR, dT },
+	}
+
+	// WithColor highlights differences in colors: inserted are in red, deleted
+	// are in blue, missing content are cossed-out.
 	WithColor = Highlighter{
-		Same:     func(dL, dR string) (string, string) { return dL, dR },
-		Deleted:  func(dL, dR string) (string, string) { return ansi.SetBlue(dL), dR },
-		Inserted: func(dL, dR string) (string, string) { return dL, ansi.SetRed(dR) },
-		Type: func(dT Type, diffT string) string {
-			switch dT {
-			case IsInserted, IsDifferent:
-				return ansi.SetRedBG(ansi.SetWhite(diffT))
-			case IsDeleted:
-				return ansi.SetBlueBG(ansi.SetWhite(diffT))
-			}
-			return diffT
+		Same: func(dL, dR, dT string) (string, string, string) { return dL, dR, dT },
+		Deleted: func(dL, dR, dT string) (string, string, string) {
+			return ansi.SetBlue(dL), ansi.SetCrossedOut(dR), ansi.SetBlueBG(ansi.SetWhite(dT))
+		},
+		Inserted: func(dL, dR, dT string) (string, string, string) {
+			return ansi.SetCrossedOut(dL), ansi.SetRed(dR), ansi.SetRedBG(ansi.SetWhite(dT))
+		},
+		Different: func(dL, dR, dT string) (string, string, string) {
+			return ansi.SetRed(dL), ansi.SetRed(dR), ansi.SetRedBG(ansi.SetWhite(dT))
 		},
 	}
 
 	// WithNonPrintable ensures that non easily spotable differences are showed
 	// by aliasing non visible runes with visible equivalent ones.
 	WithNonPrintable = Highlighter{
-		Same:     func(dL, dR string) (string, string) { return showNonPrintable(dL), showNonPrintable(dR) },
-		Deleted:  func(dL, dR string) (string, string) { return showNonPrintable(dL), showNonPrintable(dR) },
-		Inserted: func(dL, dR string) (string, string) { return showNonPrintable(dL), showNonPrintable(dR) },
-		Type:     func(dT Type, diffT string) string { return diffT },
+		Same: func(dL, dR, dT string) (string, string, string) {
+			return showNonPrintable(dL), showNonPrintable(dR), dT
+		},
+		Deleted: func(dL, dR, dT string) (string, string, string) {
+			return showNonPrintable(dL), showNonPrintable(dR), dT
+		},
+		Inserted: func(dL, dR, dT string) (string, string, string) {
+			return showNonPrintable(dL), showNonPrintable(dR), dT
+		},
+		Different: func(dL, dR, dT string) (string, string, string) {
+			return showNonPrintable(dL), showNonPrintable(dR), dT
+		},
 	}
 
 	// WithSoftTabs replaces any tabs ('\t') by four consecutives spaces so
 	// that it does not voids any further text formatting (like showing diff in
 	// columns)
 	WithSoftTabs = Highlighter{
-		Same:     func(dL, dR string) (string, string) { return expandTabs(dL), expandTabs(dR) },
-		Deleted:  func(dL, dR string) (string, string) { return expandTabs(dL), expandTabs(dR) },
-		Inserted: func(dL, dR string) (string, string) { return expandTabs(dL), expandTabs(dR) },
-		Type:     func(dT Type, diffT string) string { return diffT },
+		Same:      func(dL, dR, dT string) (string, string, string) { return expandTabs(dL), expandTabs(dR), dT },
+		Deleted:   func(dL, dR, dT string) (string, string, string) { return expandTabs(dL), expandTabs(dR), dT },
+		Inserted:  func(dL, dR, dT string) (string, string, string) { return expandTabs(dL), expandTabs(dR), dT },
+		Different: func(dL, dR, dT string) (string, string, string) { return expandTabs(dL), expandTabs(dR), dT },
 	}
 )
 
 // Highlighter represents a set of functions to decorate a Diff when pretty
 // printing it.
 type Highlighter struct {
-	Same, Deleted, Inserted func(string, string) (string, string)
-	Type                    func(Type, string) string
+	Same, Deleted, Inserted, Different func(string, string, string) (string, string, string)
 }
 
 type highlighters []Highlighter
 
-func (h highlighters) formatLR(dL, dR string, dT Type) (string, string) {
-	diffL, diffR := dL, dR
+func newHighlighters(h ...Highlighter) highlighters {
+	if len(h) > 0 {
+		return highlighters(h)
+	}
+	return []Highlighter{DefaultHighlighter}
+}
+
+func (h highlighters) Format(delta Delta) (string, string, string) {
+	diffL, diffR, diffT := delta.Value(), delta.Value(), delta.Type().String()
 	for _, highlight := range h {
-		switch dT {
+		switch delta.Type() {
 		case IsSame:
-			diffL, diffR = highlight.Same(diffL, diffR)
+			diffL, diffR, diffT = highlight.Same(diffL, diffR, diffT)
 		case IsInserted:
-			diffL, diffR = highlight.Inserted(diffL, diffR)
+			diffL, diffR, diffT = highlight.Inserted(diffL, diffR, diffT)
 		case IsDeleted:
-			diffL, diffR = highlight.Deleted(diffL, diffR)
+			diffL, diffR, diffT = highlight.Deleted(diffL, diffR, diffT)
+		case IsDifferent:
+			diffL, diffR, diffT = highlight.Different(diffL, diffR, diffT)
 		}
 	}
 
-	return diffL, diffR
-}
-
-func (h highlighters) formatT(dT Type) string {
-	diffT := dT.String()
-	for _, highlight := range h {
-		diffT = highlight.Type(dT, diffT)
-	}
-	return diffT
+	return diffL, diffR, diffT
 }
 
 func showNonPrintable(s string) string {

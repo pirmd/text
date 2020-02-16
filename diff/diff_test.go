@@ -4,7 +4,6 @@ import (
 	"github.com/pirmd/verify"
 	"testing"
 
-	"github.com/pirmd/text"
 	"github.com/pirmd/text/diff"
 )
 
@@ -34,7 +33,7 @@ void main()
 		crash(to_dos_prompt);
 	}
 	else
-        system_memory = open("swp0001.swp", O_CREATE);
+	system_memory = open("swp0001.swp", O_CREATE);
 
 	while(!system_up_for_too_long())
 	{
@@ -78,7 +77,7 @@ void main()
 		crash(to_dos_prompt);
 	}
 	else
-        system_memory = open("swp0001.swp", O_CREATE);
+	system_memory = open("swp0001.swp", O_CREATE);
 
 	while(!system_up_for_too_long())
 	{
@@ -95,27 +94,27 @@ void main()
 		{
 			name: "JSON-like",
 			inL: `{ 
-				"title": "Alice's Adventures in Wonderland",
-				"authors": [
-				"Lewis Carroll"
-				],
-				"description": "This edition contains Alice's Adventures in Wonderland. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom.",
-				"pageCount": 132,
-				"language": "gb",
-			}`,
+	"title": "Alice's Adventures in Wonderland",
+	"authors": [
+	"Lewis Carroll"
+	],
+	"description": "This edition contains Alice's Adventures in Wonderland. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom.",
+	"pageCount": 132,
+	"language": "gb",
+}`,
 			inR: `{ 
-				"title": "Alice's Adventures in Wonderland & Through the Looking-glass",
-				"authors": [
-				"Lewis Carroll"
-				],
-				"description": "This edition contains Alice's Adventures in Wonderland and its sequel Through the Looking Glass. It is illustrated throughout by Sir John Tenniel, whose drawings for the books add so much to the enjoyment of them. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom. So too, are Carroll's delightful verses such as 'The Walrus and the Carpenter' and the inspired jargon of that masterly Wordsworthian parody, 'The Jabberwocky'.",
-				"pageCount": 272,
-				"categories": [
-				"Fiction"
-				],
-				"averageRating": 4.0,
-				"language": "en",
-			}`,
+	"title": "Alice's Adventures in Wonderland & Through the Looking-glass",
+	"authors": [
+	"Lewis Carroll"
+	],
+	"description": "This edition contains Alice's Adventures in Wonderland and its sequel Through the Looking Glass. It is illustrated throughout by Sir John Tenniel, whose drawings for the books add so much to the enjoyment of them. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom. So too, are Carroll's delightful verses such as 'The Walrus and the Carpenter' and the inspired jargon of that masterly Wordsworthian parody, 'The Jabberwocky'.",
+	"pageCount": 272,
+	"categories": [
+	"Fiction"
+	],
+	"averageRating": 4.0,
+	"language": "en",
+}`,
 		},
 
 		{
@@ -177,9 +176,8 @@ func TestLCSDiffByLines(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.LCS(tc.inL, tc.inR, diff.ByLines)
-			dL, dR, dt := d.PrettyPrint(diff.WithSoftTabs, diff.WithColor)
-			diffTable := text.NewTable().SetMaxWidth(120).Rows([]string{dL, dt, dR})
-			verify.MatchGolden(t, diffTable.String(), "LCS diff is not working as expected")
+			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
+			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
 		})
 	}
 }
@@ -188,9 +186,8 @@ func TestLCSDiffByLinesByWordsByRunes(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.LCS(tc.inL, tc.inR, diff.ByLines, diff.ByWords, diff.ByRunes)
-			dL, dR, dt := d.PrettyPrint(diff.WithSoftTabs, diff.WithColor)
-			diffTable := text.NewTable().SetMaxWidth(120).Rows([]string{dL, dt, dR})
-			verify.MatchGolden(t, diffTable.String(), "LCS diff is not working as expected")
+			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
+			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
 		})
 	}
 }
@@ -199,9 +196,8 @@ func TestPatienceDiffByLines(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.Patience(tc.inL, tc.inR, diff.ByLines)
-			dL, dR, dt := d.PrettyPrint(diff.WithSoftTabs, diff.WithColor)
-			diffTable := text.NewTable().SetMaxWidth(120).Rows([]string{dL, dt, dR})
-			verify.MatchGolden(t, diffTable.String(), "Patience diff is not working as expected")
+			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
+			verify.MatchGolden(t, diffTable, "Patience diff is not working as expected")
 		})
 	}
 }
@@ -209,10 +205,9 @@ func TestPatienceDiffByLines(t *testing.T) {
 func TestPatienceDiffByLinesByWordsByRunes(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			d := diff.Patience(tc.inL, tc.inR, diff.ByLines, diff.ByWords, diff.ByRunes)
-			dL, dR, dt := d.PrettyPrint(diff.WithSoftTabs, diff.WithColor)
-			diffTable := text.NewTable().SetMaxWidth(120).Rows([]string{dL, dt, dR})
-			verify.MatchGolden(t, diffTable.String(), "LCS diff is not working as expected")
+			d := diff.Patience(tc.inL, tc.inR, diff.ByLines, diff.ByWords)
+			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
+			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
 		})
 	}
 }

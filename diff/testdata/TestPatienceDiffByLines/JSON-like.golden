@@ -1,29 +1,43 @@
-{                                                          = {                                                         
-[34m                "title": "Alice's Adventures in           [0m [44m[37m-[39m[49m                                                           
-[34mWonderland",                                              [0m [41m[37m+[39m[49m [31m                "title": "Alice's Adventures in Wonderland[0m
-[34m[39m                                                           = [31m& Through the Looking-glass",                             [0m
-                "authors": [                               = [31m[39m                "authors": [                              
-                "Lewis Carroll"                            =                 "Lewis Carroll"                           
-                ],                                         [44m[37m-[39m[49m                 ],                                        
-[34m                "description": "This edition contains     [0m [44m[37m-[39m[49m                                                           
-[34mAlice's Adventures in Wonderland. Tweedledum and          [0m [44m[37m-[39m[49m                                                           
-[34mTweedledee, the Mad Hatter, the Cheshire Cat, the Red     [0m [41m[37m+[39m[49m                                                           
-[34mQueen and the White Rabbit all make their appearances, and[0m [41m[37m+[39m[49m [31m                "description": "This edition contains     [0m
-[34mare now familiar figures in writing, conversation and     [0m [41m[37m+[39m[49m [31mAlice's Adventures in Wonderland and its sequel Through   [0m
-[34midiom.",                                                  [0m [41m[37m+[39m[49m [31mthe Looking Glass. It is illustrated throughout by Sir    [0m
-[34m[39m[34m                "pageCount": 132,                         [0m [41m[37m+[39m[49m [31mJohn Tenniel, whose drawings for the books add so much to [0m
-[34m[39m[34m                "language": "gb",                         [0m [41m[37m+[39m[49m [31mthe enjoyment of them. Tweedledum and Tweedledee, the Mad [0m
-[34m[39m                                                           [41m[37m+[39m[49m [31mHatter, the Cheshire Cat, the Red Queen and the White     [0m
-                                                           = [31mRabbit all make their appearances, and are now familiar   [0m
-                                                             [31mfigures in writing, conversation and idiom. So too, are   [0m
-                                                             [31mCarroll's delightful verses such as 'The Walrus and the   [0m
-                                                             [31mCarpenter' and the inspired jargon of that masterly       [0m
-                                                             [31mWordsworthian parody, 'The Jabberwocky'.",                [0m
-                                                             [31m[39m[31m                "pageCount": 272,                         [0m
-            }                                                [31m[39m[31m                "categories": [                           [0m
-                                                             [31m[39m[31m                "Fiction"                                 [0m
-                                                             [31m[39m[31m                ],                                        [0m
-                                                             [31m[39m[31m                "averageRating": 4.0,                     [0m
-                                                             [31m[39m[31m                "language": "en",                         [0m
-                                                             [31m[39m            }                                             
-                                                                                                                       
+{                                      = {                                     
+[34m    "title": "Alice's Adventures in   [0m [44m[37m-[39m[49m                                       
+[34mWonderland",                          [0m                                         
+                                       [41m[37m+[39m[49m [31m    "title": "Alice's Adventures in   [0m
+                                         [31mWonderland & Through the              [0m
+                                         [31mLooking-glass",                       [0m
+    "authors": [                       =     "authors": [                      
+    "Lewis Carroll"                    =     "Lewis Carroll"                   
+    ],                                 =     ],                                
+[34m    "description": "This edition      [0m [44m[37m-[39m[49m                                       
+[34mcontains Alice's Adventures in        [0m                                         
+[34mWonderland. Tweedledum and Tweedledee,[0m                                         
+[34mthe Mad Hatter, the Cheshire Cat, the [0m                                         
+[34mRed Queen and the White Rabbit all    [0m                                         
+[34mmake their appearances, and are now   [0m                                         
+[34mfamiliar figures in writing,          [0m                                         
+[34mconversation and idiom.",             [0m                                         
+[34m    "pageCount": 132,                 [0m [44m[37m-[39m[49m                                       
+[34m    "language": "gb",                 [0m [44m[37m-[39m[49m                                       
+                                       [41m[37m+[39m[49m [31m    "description": "This edition      [0m
+                                         [31mcontains Alice's Adventures in        [0m
+                                         [31mWonderland and its sequel Through the [0m
+                                         [31mLooking Glass. It is illustrated      [0m
+                                         [31mthroughout by Sir John Tenniel, whose [0m
+                                         [31mdrawings for the books add so much to [0m
+                                         [31mthe enjoyment of them. Tweedledum and [0m
+                                         [31mTweedledee, the Mad Hatter, the       [0m
+                                         [31mCheshire Cat, the Red Queen and the   [0m
+                                         [31mWhite Rabbit all make their           [0m
+                                         [31mappearances, and are now familiar     [0m
+                                         [31mfigures in writing, conversation and  [0m
+                                         [31midiom. So too, are Carroll's          [0m
+                                         [31mdelightful verses such as 'The Walrus [0m
+                                         [31mand the Carpenter' and the inspired   [0m
+                                         [31mjargon of that masterly Wordsworthian [0m
+                                         [31mparody, 'The Jabberwocky'.",          [0m
+                                       [41m[37m+[39m[49m [31m    "pageCount": 272,                 [0m
+                                       [41m[37m+[39m[49m [31m    "categories": [                   [0m
+                                       [41m[37m+[39m[49m [31m    "Fiction"                         [0m
+                                       [41m[37m+[39m[49m [31m    ],                                [0m
+                                       [41m[37m+[39m[49m [31m    "averageRating": 4.0,             [0m
+                                       [41m[37m+[39m[49m [31m    "language": "en",                 [0m
+}                                      = }                                     

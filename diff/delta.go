@@ -3,6 +3,8 @@ package diff
 import (
 	"fmt"
 	"strings"
+
+	"github.com/pirmd/text"
 )
 
 // Type represents the differences's types that can be encountered
@@ -30,10 +32,14 @@ func (typ Type) String() string {
 type Delta interface {
 	// Type is the kind of difference for Delta
 	Type() Type
+	// Value is the Delta's actual text
+	Value() string
+	// PrettyPrint returns for each diff a formatted view of differences resp.
+	// for left string, right string, difference's type and marker.
+	PrettyPrint(...Highlighter) ([]string, []string, []string, string)
 
 	left() (string, bool)
 	right() (string, bool)
-	prettyPrint(highlighters) (string, string)
 }
 
 // Result gathers any diff results
@@ -49,25 +55,42 @@ func (r Result) Type() Type {
 	return cumulTypes(dT...)
 }
 
+// Value returns the difference's text of Result
+func (r Result) Value() string {
+	var diff string
+	for _, delta := range r {
+		diff += delta.Value()
+	}
+	return diff
+}
+
 // PrettyPrint translates a difference's result into a human (or machine)
 // readable text. It outputs a representation of the differences for the first
 // reference string, for the second one as well as a representation of the type
 // of difference.
 //
 // Output format depends on the selected Highlighter(s) if any.
-//
-// LIMITATION: whereas representation of left and right strings are working in
-// all cases, the representation of type of difference will provide tedious
-// output if difference was not computed by lines.
-func (r Result) PrettyPrint(h ...Highlighter) (dL string, dR string, dT string) {
+func (r Result) PrettyPrint(h ...Highlighter) (dL []string, dR []string, dT []string, dM string) {
 	for _, delta := range r {
-		diffL, diffR := delta.prettyPrint(h)
-		diffT := highlighters(h).formatT(delta.Type())
-		diffL, diffR, diffT = alignNumberOfLines(diffL, diffR, diffT)
-		dL, dR, dT = dL+diffL, dR+diffR, dT+diffT
+		diffL, diffR, _, diffM := delta.PrettyPrint(h...)
+		dL = append(dL, strings.Join(diffL, ""))
+		dR = append(dR, strings.Join(diffR, ""))
+		dT = append(dT, diffM)
 	}
-
+	_, _, dM = newHighlighters(h...).Format(r)
 	return
+}
+
+// PrintSideBySide prints result in a human readable format showing side by
+// side the left string, the right string and the differences between both.
+//
+// Output format depends on the selected Highlighter(s) if any. WithSoftTabs
+// highlighter is automatically applied to prevent voising the output and
+// doesn't need to be specified again.
+func (r Result) PrintSideBySide(h ...Highlighter) string {
+	hi := append([]Highlighter{WithSoftTabs}, h...)
+	dL, dR, dT, _ := r.PrettyPrint(hi...)
+	return text.NewTable().Col(dL, dT, dR).String()
 }
 
 // GoString represents a diff's Result in an easy to read format.
@@ -135,32 +158,23 @@ func (r Result) content() (dL []string, dR []string) {
 }
 
 // implements interface Delta so that we can stack different levels of Results
-func (r Result) left() (dL string, ok bool) {
+func (r Result) left() (dL string, exists bool) {
 	for _, delta := range r {
-		if diffL, exists := delta.left(); exists {
+		if diffL, has := delta.left(); has {
 			dL += diffL
-			ok = true
+			exists = true
 		}
 	}
 	return
 }
 
 // implements interface Delta so that we can stack different levels of Results
-func (r Result) right() (dR string, ok bool) {
+func (r Result) right() (dR string, exists bool) {
 	for _, delta := range r {
-		if diffR, exists := delta.right(); exists {
+		if diffR, has := delta.right(); has {
 			dR += diffR
-			ok = true
+			exists = true
 		}
-	}
-	return
-}
-
-// implements interface Delta so that we can stack different levels of Results
-func (r Result) prettyPrint(h highlighters) (dL string, dR string) {
-	for _, delta := range r {
-		diffL, diffR := delta.prettyPrint(h)
-		dL, dR = dL+diffL, dR+diffR
 	}
 	return
 }
@@ -196,6 +210,15 @@ func (d diff) Type() Type {
 	return d.operation
 }
 
+func (d diff) Value() string {
+	return d.content
+}
+
+func (d diff) PrettyPrint(h ...Highlighter) (dL []string, dR []string, dT []string, dM string) {
+	diffL, diffR, diffT := newHighlighters(h...).Format(d)
+	return []string{diffL}, []string{diffR}, []string{diffT}, diffT
+}
+
 func (d diff) GoString() string {
 	return fmt.Sprintf("(%2s) %#v", d.operation, d.content)
 }
@@ -216,12 +239,6 @@ func (d diff) right() (string, bool) {
 	return d.content, true
 }
 
-func (d diff) prettyPrint(h highlighters) (string, string) {
-	l, _ := d.left()
-	r, _ := d.right()
-	return h.formatLR(l, r, d.operation)
-}
-
 func cumulTypes(types ...Type) (t Type) {
 	for _, dT := range types {
 		switch {
@@ -237,29 +254,4 @@ func cumulTypes(types ...Type) (t Type) {
 		}
 	}
 	return
-}
-
-func alignNumberOfLines(dL, dR, dT string) (string, string, string) {
-	diffL, diffR, diffT := dL, dR, dT
-	nL, nR, nT := strings.Count(dL, "\n"), strings.Count(dR, "\n"), strings.Count(dT, "\n")
-
-	maxN := nL
-	if nR > maxN {
-		maxN = nR
-	}
-	if nT > maxN {
-		maxN = nT
-	}
-
-	if nL < maxN {
-		diffL += strings.Repeat("\n", maxN-nL)
-	}
-	if nR < maxN {
-		diffR += strings.Repeat("\n", maxN-nR)
-	}
-	if nT < maxN {
-		diffT += strings.Repeat("\n", maxN-nT)
-	}
-
-	return diffL, diffR, diffT
 }

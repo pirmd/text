@@ -129,7 +129,7 @@ func SetConceal(s string) string {
 	return Conceal + s + Reveal
 }
 
-// SetCrossedOut coresses out provided string
+// SetCrossedOut crosses out provided string
 func SetCrossedOut(s string) string {
 	return CrossedOut + s + NotCrossedOut
 }
