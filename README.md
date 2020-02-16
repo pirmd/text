@@ -34,10 +34,6 @@ func Example() {
 
 ```
 
-A slightly more complete example can be found in [testing file](style_test.go) or in 
-[clapp](https://github.com/pirmd/clapp) package's [help](https://github.com/pirmd/clapp/blob/master/help.go)
-or [manpage](https://github.com/pirmd/clapp/blob/master/manpage.go) files generation.
-
 ## INSTALLATION
 Everything should work fine using go standard commands (`build`, `get`,
 `install`...).
