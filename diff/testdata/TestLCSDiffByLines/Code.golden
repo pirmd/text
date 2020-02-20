@@ -1,35 +1,35 @@
 #include "win31.h"                     = #include "win31.h"                    
-[34m#include "notfullyworkingyet.h"       [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31m#include "win95.h"                    [0m
-                                       [41m[37m+[39m[49m [31m#include "stillnotfullyworking.h"     [0m
-                                       =                                       
-[34mchar make_prog_look_big[800000];      [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31mchar make_prog_look_big[1600000];     [0m
-                                       =                                       
+[34m#include "notfullyworkingyet.h"[0m        [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31m#include "win95.h"[0m                    
+ [41m[37m+[39m[49m [31m#include "stillnotfullyworking.h"[0m     
+ = 
+[34mchar make_prog_look_big[800000];[0m       [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31mchar make_prog_look_big[1600000];[0m     
+ = 
 void main()                            = void main()                           
 {                                      = {                                     
-[34m    display_copyright_message();      [0m [44m[37m-[39m[49m                                       
-[34m    basically_run_windows_3.1();      [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31m    if (fast_cpu())                   [0m
-                                       [41m[37m+[39m[49m [31m    {                                 [0m
-                                       [41m[37m+[39m[49m [31m        set_wait_states(lots);        [0m
-                                       [41m[37m+[39m[49m [31m        set_mouse(speed, very_slow);  [0m
-                                       [41m[37m+[39m[49m [31m    }                                 [0m
-                                       =                                       
-                                       [41m[37m+[39m[49m [31m    while(LESS_THAN_FOREVER)          [0m
-                                       [41m[37m+[39m[49m [31m    {                                 [0m
-                                       [41m[37m+[39m[49m [31m        display_copyright_message();  [0m
-                                       [41m[37m+[39m[49m [31m        simulate_important_action();  [0m
-                                       [41m[37m+[39m[49m [31m        basically_run_windows_3.1();  [0m
-                                       [41m[37m+[39m[49m [31m        make_think_we_are_busy();     [0m
-                                       [41m[37m+[39m[49m [31m    }                                 [0m
-                                       [41m[37m+[39m[49m [31m                                      [0m
+[34m    display_copyright_message();[0m       [44m[37m-[39m[49m 
+[34m    basically_run_windows_3.1();[0m       [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31m    if (fast_cpu())[0m                   
+ [41m[37m+[39m[49m [31m    {[0m                                 
+ [41m[37m+[39m[49m [31m        set_wait_states(lots);[0m        
+ [41m[37m+[39m[49m [31m        set_mouse(speed, very_slow);[0m  
+ [41m[37m+[39m[49m [31m    }[0m                                 
+ = 
+ [41m[37m+[39m[49m [31m    while(LESS_THAN_FOREVER)[0m          
+ [41m[37m+[39m[49m [31m    {[0m                                 
+ [41m[37m+[39m[49m [31m        display_copyright_message();[0m  
+ [41m[37m+[39m[49m [31m        simulate_important_action();[0m  
+ [41m[37m+[39m[49m [31m        basically_run_windows_3.1();[0m  
+ [41m[37m+[39m[49m [31m        make_think_we_are_busy();[0m     
+ [41m[37m+[39m[49m [31m    }[0m                                 
+ [41m[37m+[39m[49m [31m[0m                                      
     /* printf("Welcome to Windows      =     /* printf("Welcome to Windows     
 3.11"); */                               3.11"); */                            
-[34m    printf("Welcome to Windows 95");  [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31m    /* printf("Welcome to Windows     [0m
-                                         [31m95"); */                              [0m
-                                       [41m[37m+[39m[49m [31m    printf("Welcome to Windows 98");  [0m
+[34m    printf("Welcome to Windows 95");[0m   [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31m    /* printf("Welcome to Windows [0m    
+   [31m95"); */[0m                              
+ [41m[37m+[39m[49m [31m    printf("Welcome to Windows 98");[0m  
     if (system_ok_for_too_long())      =     if (system_ok_for_too_long())     
     {                                  =     {                                 
         bsod(random_err());            =         bsod(random_err());           
@@ -38,17 +38,17 @@ void main()                            = void main()
     else                               =     else                              
     system_memory =                    =     system_memory =                   
 open("swp0001.swp", O_CREATE);           open("swp0001.swp", O_CREATE);        
-                                       =                                       
+ = 
     while(!system_up_for_too_long())   =     while(!system_up_for_too_long())  
     {                                  =     {                                 
-[34m        sleep(15);                    [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31m        sleep(5);                     [0m
+[34m        sleep(15);[0m                     [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31m        sleep(5);[0m                     
         get_user_input();              =         get_user_input();             
-[34m        sleep(15);                    [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31m        sleep(5);                     [0m
+[34m        sleep(15);[0m                     [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31m        sleep(5);[0m                     
         act_on_user_input();           =         act_on_user_input();          
-[34m        sleep(15);                    [0m [44m[37m-[39m[49m                                       
-                                       [41m[37m+[39m[49m [31m        sleep(5);                     [0m
+[34m        sleep(15);[0m                     [44m[37m-[39m[49m 
+ [41m[37m+[39m[49m [31m        sleep(5);[0m                     
     }                                  =     }                                 
     create_general_protection_fault(); =     create_general_protection_fault();
 }                                      = }                                     

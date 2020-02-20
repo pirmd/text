@@ -120,13 +120,22 @@ func (t *Table) Captions(row ...string) *Table {
 // unreadable output if available table's width is too short compared to content
 // length.
 func (t *Table) Draw() string {
+	//TODO(pirmd): optimize this serie of string transformation (several
+	//split-join sequences.
 	maxColLen := colMaxLen(t.maxWidth, visualLen(t.sepV), t.cells)
 
 	rows := []string{}
 	for _, row := range t.cells {
 		col := []string{}
 		for i, cell := range row {
-			col = append(col, Justify(cell, maxColLen[i]))
+			// wrap cells, properly interrupting ANSI sequence at line
+			// boundaries, then fill lines to meet columns size
+			wc := wrap(cell, maxColLen[i])
+			interruptANSI(wc)
+			for j, l := range wc {
+				wc[j] = visualPad(l, maxColLen[i], ' ')
+			}
+			col = append(col, strings.Join(wc, "\n"))
 		}
 
 		rows = append(rows, columnize(t.sepV, col...))
@@ -222,7 +231,6 @@ func multilinesRow(row []string) [][]string {
 
 	for i, s := range row {
 		col := strings.Split(s, "\n")
-		interruptANSI(col)
 		colLen := maxLen(col)
 		emptyCol = append(emptyCol, fmt.Sprintf("%-*s", colLen, ""))
 

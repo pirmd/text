@@ -206,7 +206,7 @@ func TestPatienceDiffByLinesByWordsByRunes(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.Patience(tc.inL, tc.inR, diff.ByLines, diff.ByWords)
-			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
+			diffTable := d.PrintSideBySide(diff.WithColor)
 			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
 		})
 	}
