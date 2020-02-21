@@ -1,9 +1,8 @@
 package diff
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/pirmd/verify"
 
 	"github.com/pirmd/text"
 )
@@ -91,13 +90,11 @@ func TestResultPrettyPrint(t *testing.T) {
 
 	for _, tc := range testCases {
 		gotL, gotR, gotT, _ := tc.in.PrettyPrint()
-
-		t.Logf("\n" + text.NewTable().SetMaxWidth(180).Col(tc.wantL, tc.wantT, tc.wantR).Draw())
-		t.Logf("\n" + text.NewTable().SetMaxWidth(180).Col(gotL, gotT, gotR).Draw())
-		verify.Equal(t, gotL, tc.wantL, "Result of\n%#v failed (for 'L' side)", tc.in.GoString())
-		verify.Equal(t, gotR, tc.wantR, "Result of\n%#v failed (for 'R' side)", tc.in.GoString())
-		verify.Equal(t, gotT, tc.wantT, "Result of  %#v failed (for 'T' side)", tc.in.GoString())
-		//XXX: sort out verify Equal args issue -> accept interface and not string
+		if !reflect.DeepEqual(gotL, tc.wantL) || !reflect.DeepEqual(gotR, tc.wantR) || !reflect.DeepEqual(gotT, tc.wantT) {
+			t.Logf("Want:\n" + text.NewTable().SetMaxWidth(180).Col(tc.wantL, tc.wantT, tc.wantR).Draw())
+			t.Logf("Got :\n" + text.NewTable().SetMaxWidth(180).Col(gotL, gotT, gotR).Draw())
+			t.Errorf("Pretty printing\n %#v\n failed.", tc.in)
+		}
 	}
 }
 
@@ -117,6 +114,8 @@ func TestDifferentZones(t *testing.T) {
 
 	for _, tc := range testCases {
 		got := tc.in.differentZones()
-		verify.Equal(t, got, tc.want, "Identification of changed zones for %s failed", tc.in.GoString())
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("Identification of changed zones for %#v failed.\nWant: %v\nGot : %v.", tc.in, tc.want, got)
+		}
 	}
 }

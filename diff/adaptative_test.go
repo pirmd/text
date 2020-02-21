@@ -1,9 +1,8 @@
 package diff
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/pirmd/verify"
 )
 
 func TestAdaptativeDiff(t *testing.T) {
@@ -34,6 +33,8 @@ func TestAdaptativeDiff(t *testing.T) {
 
 	for _, tc := range testCases {
 		got := adaptative(diffLCS, tc.inL, tc.inR, ByLines, ByWords, ByRunes)
-		verify.Equal(t, got, tc.want, "Adaptative diff between\n%s\nand\n%s\nfailed.", tc.inL, tc.inR)
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("Adaptative diff between\n%s\nand\n%s\nfailed.\nWant: %#v\nGot : %#v.", tc.inL, tc.inR, tc.want, got)
+		}
 	}
 }

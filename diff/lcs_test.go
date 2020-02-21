@@ -1,9 +1,8 @@
 package diff
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/pirmd/verify"
 )
 
 func TestGetSameHead(t *testing.T) {
@@ -20,9 +19,9 @@ func TestGetSameHead(t *testing.T) {
 
 	for _, tc := range testCases {
 		gotl, gotr, gotd := getSameHead(tc.l, tc.r)
-		verify.Equal(t, gotl, tc.wantl, "Extracting same head failed for remaining l.")
-		verify.Equal(t, gotr, tc.wantr, "Extracting same head failed for remaining r.")
-		verify.Equal(t, gotd, tc.wantd, "Extracting same head failed for diff d.")
+		if !reflect.DeepEqual(gotl, tc.wantl) || !reflect.DeepEqual(gotr, tc.wantr) || !reflect.DeepEqual(gotd, tc.wantd) {
+			t.Errorf("Extracting same header from %v and %v failed.\nWant: %v %v %v\nGot : %v %v %v.", tc.l, tc.r, tc.wantl, tc.wantr, tc.wantd, gotl, gotr, gotd)
+		}
 	}
 }
 
@@ -40,9 +39,9 @@ func TestGetSameTail(t *testing.T) {
 
 	for _, tc := range testCases {
 		gotl, gotr, gotd := getSameTail(tc.l, tc.r)
-		verify.Equal(t, gotl, tc.wantl, "Extracting same tail failed for remaining l.")
-		verify.Equal(t, gotr, tc.wantr, "Extracting same tail failed for remaining r.")
-		verify.Equal(t, gotd, tc.wantd, "Extracting same tail failed for diff d.")
+		if !reflect.DeepEqual(gotl, tc.wantl) || !reflect.DeepEqual(gotr, tc.wantr) || !reflect.DeepEqual(gotd, tc.wantd) {
+			t.Errorf("Extracting same tail from %v and %v failed.\nWant: %v %v %v\nGot : %v %v %v.", tc.l, tc.r, tc.wantl, tc.wantr, tc.wantd, gotl, gotr, gotd)
+		}
 	}
 }
 
@@ -57,7 +56,9 @@ func TestMatrixLCS(t *testing.T) {
 
 	for _, tc := range testCases {
 		got := matrixLCS(tc.a, tc.b)
-		verify.Equal(t, got, tc.want, "LCS Matrix is incorrect:")
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("LCS Matrix is incorrect for %v vs %v.\n Want: %v.\nGot : %v.", tc.a, tc.b, tc.want, got)
+		}
 	}
 }
 
@@ -72,7 +73,9 @@ func TestSequenceLCS(t *testing.T) {
 
 	for _, tc := range testCases {
 		got := sequenceLCS(tc.a, tc.b, false)
-		verify.Equal(t, got, tc.want, "LCS sequence is incorrect")
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("LCS sequence is incorrect for %v vs %v.\n Want: %v.\nGot : %v.", tc.a, tc.b, tc.want, got)
+		}
 	}
 }
 
@@ -178,6 +181,8 @@ int main(int argc, char **argv)
 
 	for _, tc := range testCases {
 		got := VanillaLCS(ByLines(tc.l), ByLines(tc.r))
-		verify.Equal(t, got, tc.want, "Vanilla LCS diff is not as expected.")
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("Vanilla LCS diff between %v and %v failed.\nWant: %v\nGot : %v.", tc.l, tc.r, tc.want, got)
+		}
 	}
 }

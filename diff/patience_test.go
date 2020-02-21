@@ -1,9 +1,8 @@
 package diff
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/pirmd/verify"
 )
 
 func TestVanillaPatience(t *testing.T) {
@@ -108,6 +107,8 @@ int main(int argc, char **argv)
 
 	for _, tc := range testCases {
 		got := VanillaPatience(ByLines(tc.l), ByLines(tc.r))
-		verify.Equal(t, got, tc.want, "Patience diff is not as expected")
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("Patience diff between %v and %v failed.\nWant: %v\nGot : %v.", tc.l, tc.r, tc.want, got)
+		}
 	}
 }

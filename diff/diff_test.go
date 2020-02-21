@@ -1,8 +1,13 @@
 package diff_test
 
 import (
-	"github.com/pirmd/verify"
 	"testing"
+
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 
 	"github.com/pirmd/text/diff"
 )
@@ -177,7 +182,9 @@ func TestLCSDiffByLines(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.LCS(tc.inL, tc.inR, diff.ByLines)
 			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
-			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
+			if err := matchGolden(t.Name(), diffTable); err != nil {
+				t.Errorf("LCS diff is not working as expected. %v", err)
+			}
 		})
 	}
 }
@@ -187,7 +194,9 @@ func TestLCSDiffByLinesByWordsByRunes(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.LCS(tc.inL, tc.inR, diff.ByLines, diff.ByWords, diff.ByRunes)
 			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
-			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
+			if err := matchGolden(t.Name(), diffTable); err != nil {
+				t.Errorf("LCS diff is not working as expected. %v", err)
+			}
 		})
 	}
 }
@@ -197,7 +206,9 @@ func TestPatienceDiffByLines(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.Patience(tc.inL, tc.inR, diff.ByLines)
 			diffTable := d.PrintSideBySide(diff.WithColor, diff.WithoutMissingContent)
-			verify.MatchGolden(t, diffTable, "Patience diff is not working as expected")
+			if err := matchGolden(t.Name(), diffTable); err != nil {
+				t.Errorf("Patience diff is not working as expected. %v", err)
+			}
 		})
 	}
 }
@@ -207,7 +218,58 @@ func TestPatienceDiffByLinesByWordsByRunes(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			d := diff.Patience(tc.inL, tc.inR, diff.ByLines, diff.ByWords)
 			diffTable := d.PrintSideBySide(diff.WithColor)
-			verify.MatchGolden(t, diffTable, "LCS diff is not working as expected")
+			if err := matchGolden(t.Name(), diffTable); err != nil {
+				t.Errorf("LCS diff is not working as expected. %v", err)
+			}
 		})
 	}
+}
+
+var (
+	updateGolden = flag.Bool("test.golden-update", false, "update golden file with test result")
+	goldenDir    = flag.String("test.goldendir", "./testdata", "path to folder hosting golden files")
+)
+
+func matchGolden(name string, got string) error {
+	goldenPath := filepath.Join(*goldenDir, name+".golden")
+
+	if *updateGolden {
+		if err := updateGoldenFiles(goldenPath, []byte(got)); err != nil {
+			return err
+		}
+	}
+
+	want, err := readGolden(goldenPath)
+	if err != nil {
+		return err
+	}
+
+	if len(want) == 0 {
+		return fmt.Errorf("no existing or empty golden file.\nTest output is:\n%s", got)
+	}
+
+	if got != string(want) {
+		return fmt.Errorf("Got:\n%v\n\nWant :\n%v", got, string(want))
+	}
+	return nil
+}
+
+func readGolden(path string) ([]byte, error) {
+	want, err := ioutil.ReadFile(path)
+	if err != nil {
+		return []byte{}, fmt.Errorf("cannot read golden file %s: %v", path, err)
+	}
+	return want, nil
+}
+
+func updateGoldenFiles(path string, actual []byte) error {
+	if err := os.MkdirAll(filepath.Dir(path), 0777); err != nil {
+		return fmt.Errorf("cannot update golden file %s: %v", path, err)
+	}
+
+	if err := ioutil.WriteFile(path, actual, 0666); err != nil {
+		return fmt.Errorf("cannot update golden file %s: %v", path, err)
+	}
+
+	return nil
 }
