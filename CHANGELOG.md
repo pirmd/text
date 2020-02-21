@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2020-02-21
+## Modified
+- remove dependency to github.com/primd/verify to avoid further cyclic import issue
+- FIX bug when formatting table column that need interrupting ANSI formatting
+  at the end of each lines of a table cell (ANSI ofrmatting interruption need
+  to happen before padding a line with space to reach expected column width)
+
 ## [0.4.0] - 2020-02-16
 ## Added
 - remove broken diff algorithms and replace it by a brand new diff sub-module
