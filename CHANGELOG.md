@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2020-02-22
+## Modified
+- FIX bug in Table where empty columns where not properly managed.
+## Removed
+- Simplify Table API by deleting non used wrapper around NewTable.
+
 ## [0.5.0] - 2020-02-22
 ## Modified
 - Add a flag to select whether wrap - and functions based on wrap - should cut

@@ -138,14 +138,8 @@ func (t *Table) Draw() string {
 	for _, row := range t.cells {
 		col := []string{}
 		for i, cell := range row {
-			// wrap cells, properly interrupting ANSI sequence at line
-			// boundaries, then fill lines to meet columns size
-			wc := wrap(cell, maxColLen[i], !t.dontTruncateLongWords)
-			interruptANSI(wc)
-			for j, l := range wc {
-				wc[j] = visualPad(l, maxColLen[i], ' ')
-			}
-			col = append(col, strings.Join(wc, "\n"))
+			justifiedCell := justifyWithINterruptANSI(cell, maxColLen[i], !t.dontTruncateLongWords)
+			col = append(col, justifiedCell)
 		}
 
 		rows = append(rows, columnize(t.sepV, col...))
@@ -212,16 +206,6 @@ func (t *Table) addHorizontalGrid(rows []string, colLen []int) []string {
 	}
 
 	return rowsWithGrid
-}
-
-// DrawTable draws a table out of a list of rows
-func DrawTable(width int, sepV, sepC, sepH string, rows ...[]string) string {
-	return NewTable().SetMaxWidth(width).SetGrid(sepV, sepC, sepH).Rows(rows...).String()
-}
-
-// Columnize displays given texts as columns.
-func Columnize(col ...string) string {
-	return NewTable().Rows(col).String()
 }
 
 func columnize(sepV string, col ...string) (row string) {
@@ -326,4 +310,19 @@ func maxLen(col []string) int {
 		}
 	}
 	return length
+}
+
+// justifyWithINterruptANSI wraps cells, properly interrupting ANSI sequence at
+// line boundaries, then fill lines to meet columns size
+func justifyWithINterruptANSI(s string, sz int, truncateLongWords bool) string {
+	if len(s) == 0 {
+		return strings.Repeat(" ", sz)
+	}
+
+	ws := wrap(s, sz, truncateLongWords)
+	interruptANSI(ws)
+	for i, l := range ws {
+		ws[i] = visualPad(l, sz, ' ')
+	}
+	return strings.Join(ws, "\n")
 }

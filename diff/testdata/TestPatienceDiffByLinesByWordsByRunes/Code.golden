@@ -3,9 +3,9 @@
 #include                               [41m[37m<>[39m[49m #include                              
 "[34mnotfullyworkingyet[39m[9mstillnotfullyworkin[0m    "[9mnotfullyworkingyet[29m[31mstillnotfullyworkin[0m
 [9mg[29m.h"                                      [31mg[39m.h"                                  
- =  
+                                       =                                        
 char make_prog_look_big[[34m8[39m[9m1[29m[9m6[29m00000];     [41m[37m<>[39m[49m char make_prog_look_big[[9m8[29m[31m1[39m[31m6[39m00000];    
- =  
+                                       =                                        
 void main()                            =  void main()                           
 {                                      =  {                                     
 [9m    if (fast_cpu())[0m                    [41m[37m+[39m[49m  [31m    if (fast_cpu())[0m                   
@@ -21,7 +21,7 @@ void main()                            =  void main()
     [9m    [29mbasically_run_windows_3.1();   [41m[37m+[39m[49m      [31m    [39mbasically_run_windows_3.1();  
 [9m        make_think_we_are_busy();[0m      [41m[37m+[39m[49m  [31m        make_think_we_are_busy();[0m     
 [9m    }[0m                                  [41m[37m+[39m[49m  [31m    }[0m                                 
- =  
+                                       =                                        
     /* printf("Welcome to Windows      =      /* printf("Welcome to Windows     
 3.11"); */                                3.11"); */                            
 [9m    /* printf("Welcome to Windows [0m     [41m[37m+[39m[49m  [31m    /* printf("Welcome to Windows [0m    
@@ -35,7 +35,7 @@ void main()                            =  void main()
     else                               =      else                              
     system_memory =                    =      system_memory =                   
 open("swp0001.swp", O_CREATE);            open("swp0001.swp", O_CREATE);        
- =  
+                                       =                                        
     while(!system_up_for_too_long())   =      while(!system_up_for_too_long())  
     {                                  =      {                                 
         sleep([34m1[39m5);                     [44m[37m-[39m[49m          sleep([9m1[29m5);                    

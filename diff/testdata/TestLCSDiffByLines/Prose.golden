@@ -1,15 +1,15 @@
-[34mCeci est un test pour trouver une [0m     [44m[37m-[39m[49m 
-[34mbonne façon[0m                              
-[34mde représenter les diférences entre [0m   [44m[37m-[39m[49m 
-[34mdeux textes ou deux chaînes[0m              
- [41m[37m+[39m[49m [31mCeci est un test pour trouver une [0m    
-   [31m(très) bonne façon[0m                    
- [41m[37m+[39m[49m [31mde représenter les différences entre [0m 
-   [31mdeux textes ou deux chaînes[0m           
+[34mCeci est un test pour trouver une [0m     [44m[37m-[39m[49m                                       
+[34mbonne façon[0m                                                                    
+[34mde représenter les diférences entre [0m   [44m[37m-[39m[49m                                       
+[34mdeux textes ou deux chaînes[0m                                                    
+                                       [41m[37m+[39m[49m [31mCeci est un test pour trouver une [0m    
+                                         [31m(très) bonne façon[0m                    
+                                       [41m[37m+[39m[49m [31mde représenter les différences entre [0m 
+                                         [31mdeux textes ou deux chaînes[0m           
 de caractères.                         = de caractères.                        
- [41m[37m+[39m[49m [31m[0m                                      
- [41m[37m+[39m[49m [31mIl s'agirait ensuite de l'inclure dans[0m
-   [31mle package verify pour obtenir[0m        
- [41m[37m+[39m[49m [31mun outil de test.[0m                     
- = 
+                                       [41m[37m+[39m[49m [31m[0m                                      
+                                       [41m[37m+[39m[49m [31mIl s'agirait ensuite de l'inclure dans[0m
+                                         [31mle package verify pour obtenir[0m        
+                                       [41m[37m+[39m[49m [31mun outil de test.[0m                     
+                                       =                                       
 Happy end.                             = Happy end.                            
