@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
 Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2020-02-22
+## Modified
+- FIX a bug when wrapping line with "words" that are longer than the line limit
+  (flush was not properly done)
+
 ## [0.4.1] - 2020-02-21
 ## Modified
 - remove dependency to github.com/primd/verify to avoid further cyclic import issue

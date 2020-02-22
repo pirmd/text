@@ -2,7 +2,7 @@
 [9m#include "win95.h"[0m                     [41m[37m+[39m[49m  [31m#include "win95.h"[0m                    
 #include                               [41m[37m<>[39m[49m #include                              
 "[34mnotfullyworkingyet[39m[9mstillnotfullyworkin[0m    "[9mnotfullyworkingyet[29m[31mstillnotfullyworkin[0m
-[9m#include g[29m.h"                             [31m#include g[39m.h"                         
+[9mg[29m.h"                                      [31mg[39m.h"                                  
  =  
 char make_prog_look_big[[34m8[39m[9m1[29m[9m6[29m00000];     [41m[37m<>[39m[49m char make_prog_look_big[[9m8[29m[31m1[39m[31m6[39m00000];    
  =  

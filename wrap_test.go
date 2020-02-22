@@ -20,6 +20,11 @@ func TestWrap(t *testing.T) {
 		{"This \x1b[34mis a long sentence\x1b[0m", 10, "This \x1b[34mis a \nlong \nsentence\x1b[0m"},
 		{"Supercalifragilisticexpialidocious\nChim Chim Cher-ee", 10, "Supercalif\nragilistic\nexpialidoc\nious\nChim Chim \nCher-ee"},
 		{"description: This edition contains Alice's Adventures in Wonderland. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom.\nauthor: Lewis Caroll", 58, "description: This edition contains Alice's Adventures in \nWonderland. Tweedledum and Tweedledee, the Mad Hatter, the\nCheshire Cat, the Red Queen and the White Rabbit all make \ntheir appearances, and are now familiar figures in \nwriting, conversation and idiom.\nauthor: Lewis Caroll"},
+		{
+			"All details can be found in [![GoDoc](https://godoc.org/github.com/pirmd/style?status.svg)](https://godoc.org/github.com/pirmd/style)",
+			80,
+			"All details can be found in \n[![GoDoc](https://godoc.org/github.com/pirmd/style?status.svg)](https://godoc.or\ng/github.com/pirmd/style)",
+		},
 	}
 
 	for _, tc := range testCases {

@@ -118,9 +118,10 @@ func wrap(s string, limit int) (ws []string) {
 				// word is longer than the limit, we truncated it
 				if line != "" {
 					ws = append(ws, line)
+					line, linelen = "", 0
 				}
 				ws = append(ws, word)
-				word, wordlen = "" , runeWidth(c)
+				word, wordlen = "", runeWidth(c)
 			}
 			word += string(c)
 
