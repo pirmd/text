@@ -13,16 +13,18 @@ const (
 	MaxTableWidth = 80
 )
 
-// Table represents a table
+// Table represents a table.
 type Table struct {
-	maxWidth         int
-	sepV, sepC, sepH string
-	cells            [][]string
+	maxWidth              int
+	sepV, sepC, sepH      string
+	dontTruncateLongWords bool
+
+	cells [][]string
 }
 
 // NewTable returns a new empty table. New tables default to no grid with a
 // maximum width being the terminal size if it can be determined or
-// MaxTableWidth
+// MaxTableWidth.
 func NewTable() *Table {
 	if w, err := termsize.Width(); err == nil {
 		return &Table{
@@ -37,7 +39,7 @@ func NewTable() *Table {
 	}
 }
 
-// SetMaxWidth manually set the table maximum width
+// SetMaxWidth sets the table maximum width.
 func (t *Table) SetMaxWidth(w int) *Table {
 	t.maxWidth = w
 	return t
@@ -50,6 +52,14 @@ func (t *Table) SetMaxWidth(w int) *Table {
 // An empty separator means no separation at all.
 func (t *Table) SetGrid(sepV, sepC, sepH string) *Table {
 	t.sepV, t.sepC, t.sepH = sepV, sepC, sepH
+	return t
+}
+
+// DontTruncateLongWords prevents long words to be cut before words boundaries
+// to fit Table's column maximum width. it is not recommanded as it might void
+// table formatting.
+func (t *Table) DontTruncateLongWords() *Table {
+	t.dontTruncateLongWords = true
 	return t
 }
 
@@ -130,7 +140,7 @@ func (t *Table) Draw() string {
 		for i, cell := range row {
 			// wrap cells, properly interrupting ANSI sequence at line
 			// boundaries, then fill lines to meet columns size
-			wc := wrap(cell, maxColLen[i])
+			wc := wrap(cell, maxColLen[i], !t.dontTruncateLongWords)
 			interruptANSI(wc)
 			for j, l := range wc {
 				wc[j] = visualPad(l, maxColLen[i], ' ')

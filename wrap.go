@@ -26,10 +26,13 @@ func Indent(s string, tag, prefix string) string {
 }
 
 // Wrap wraps a text by ensuring that each of its line's "visible" length is
-// lower or equal to the provided limit. Wrap works at word limits (space). If
-// a word is encountered that is longer than the limit, it is truncated.
-func Wrap(txt string, limit int) string {
-	return strings.Join(wrap(txt, limit), "\n")
+// lower or equal to the provided limit. Wrap works with word limits being
+// spaces.
+//
+// If a "word" is encountered that is longer than the limit, it is truncated or
+// left as is depending of truncateLongWords flag.
+func Wrap(txt string, limit int, truncateLongWords bool) string {
+	return strings.Join(wrap(txt, limit, truncateLongWords), "\n")
 }
 
 // Tab wraps and indents the given text.
@@ -41,19 +44,19 @@ func Wrap(txt string, limit int) string {
 // Tab calculates the correct wraping limits taking indent's prefix length. It
 // does not work if prefix is made of tabs as indent's tag/prefix length is
 // unknown (like '\t').
-func Tab(s string, tag, prefix string, limit int) string {
+func Tab(s string, tag, prefix string, limit int, truncateLongWords bool) string {
 	lB, lP := visualLen(tag), visualLen(prefix)
 
 	var r string
 	switch {
 	case lB > lP:
 		prefix = visualPad(prefix, lB, ' ')
-		r = Wrap(s, limit-lB)
+		r = Wrap(s, limit-lB, truncateLongWords)
 	case lB < lP:
 		tag = visualTruncate(prefix, lP-lB) + tag
-		r = Wrap(s, limit-lP)
+		r = Wrap(s, limit-lP, truncateLongWords)
 	default:
-		r = Wrap(s, limit-lP)
+		r = Wrap(s, limit-lP, truncateLongWords)
 	}
 
 	return indent(r, tag, prefix)
@@ -75,7 +78,7 @@ func indent(s string, firstPrefix, prefix string) string {
 	return firstPrefix + indented
 }
 
-func wrap(s string, limit int) (ws []string) {
+func wrap(s string, limit int, truncateLongWords bool) (ws []string) {
 	var line, word string
 	var linelen, wordlen int
 
@@ -115,13 +118,16 @@ func wrap(s string, limit int) (ws []string) {
 
 		default:
 			if wordlen += runeWidth(c); wordlen > limit {
-				// word is longer than the limit, we truncated it
 				if line != "" {
 					ws = append(ws, line)
 					line, linelen = "", 0
 				}
-				ws = append(ws, word)
-				word, wordlen = "", runeWidth(c)
+
+				// word is longer than the limit, we truncated it
+				if truncateLongWords {
+					ws = append(ws, word)
+					word, wordlen = "", runeWidth(c)
+				}
 			}
 			word += string(c)
 

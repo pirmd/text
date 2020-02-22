@@ -22,12 +22,12 @@ func Truncate(s string, size int) string {
 
 // Justify wraps a text to the given maximum size and makes sure that
 // returned lines are of exact provided length by padding them as needed.
-func Justify(s string, sz int) string {
+func Justify(s string, sz int, truncateLongWords bool) string {
 	if len(s) == 0 {
 		return strings.Repeat(" ", sz)
 	}
 
-	ws := wrap(s, sz)
+	ws := wrap(s, sz, truncateLongWords)
 	for i, l := range ws {
 		ws[i] = visualPad(l, sz, ' ')
 	}

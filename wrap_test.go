@@ -28,7 +28,7 @@ func TestWrap(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Wrap(tc.in, tc.sz)
+		got := Wrap(tc.in, tc.sz, true)
 		if got != tc.out {
 			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}
@@ -59,7 +59,7 @@ func TestWrapAndIndent(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Tab(tc.inTxt, "", tc.inP, 40)
+		got := Tab(tc.inTxt, "", tc.inP, 40, true)
 		if got != tc.out {
 			t.Errorf("Indenting or/and wrapping failed.\nWanted:\n%#v\nGot   :\n%#v\n", tc.out, got)
 		}
@@ -111,7 +111,7 @@ func TestTabWithTag(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Tab(tc.inTxt, tc.inT, tc.inP, 40)
+		got := Tab(tc.inTxt, tc.inT, tc.inP, 40, true)
 		if got != tc.out {
 			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%#v\nGot   :\n%#v\n", tc.inT, tc.inP, tc.out, got)
 		}
@@ -174,6 +174,6 @@ func BenchmarkWrap(b *testing.B) {
 	in := strings.Repeat("\x1b[31mbonjour\x1b[m ", 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		Wrap(in, len(in)/20)
+		Wrap(in, len(in)/20, true)
 	}
 }
