@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 				&diff{IsSame, "{\n"},
 				&diff{IsDeleted, "    frobnitz(fact(10));\n"},
 				&diff{IsInserted, "    frobnitz(fib(10));\n"},
-				&diff{IsSame, "}\n"},
+				&diff{IsSame, "}"},
 			},
 		},
 	}

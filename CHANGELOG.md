@@ -1,8 +1,8 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
-Format is based on [Keep a Changelog] (https://keepachangelog.com/en/1.0.0/).
-Versionning adheres to [Semantic Versioning] (https://semver.org/spec/v2.0.0.html).
+## [0.5.2] - 2020.05.08
+## Modified
+- FIX bug in diff ByLines tokenizer that were adding uneeded '\n'.
 
 ## [0.5.1] - 2020-02-22
 ## Modified

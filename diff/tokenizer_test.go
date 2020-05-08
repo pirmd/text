@@ -10,12 +10,12 @@ func TestByLines(t *testing.T) {
 		in   string
 		want []string
 	}{
-		{"abc", []string{"abc\n"}},
-		{"abc\ncde", []string{"abc\n", "cde\n"}},
-		{"abc\n\ncde", []string{"abc\n", "\n", "cde\n"}},
+		{"abc", []string{"abc"}},
+		{"abc\ncde", []string{"abc\n", "cde"}},
+		{"abc\n\ncde", []string{"abc\n", "\n", "cde"}},
 		{"abc\ncde\n", []string{"abc\n", "cde\n", ""}},
-		{"import (\n\t\"strings\"\n\t\"path\"\n)", []string{"import (\n", "\t\"strings\"\n", "\t\"path\"\n", ")\n"}},
-		{"import (\n\t\"os\"\n\t\"strings\"\n\t\"path/filepath\"\n)", []string{"import (\n", "\t\"os\"\n", "\t\"strings\"\n", "\t\"path/filepath\"\n", ")\n"}},
+		{"import (\n\t\"strings\"\n\t\"path\"\n)", []string{"import (\n", "\t\"strings\"\n", "\t\"path\"\n", ")"}},
+		{"import (\n\t\"os\"\n\t\"strings\"\n\t\"path/filepath\"\n)", []string{"import (\n", "\t\"os\"\n", "\t\"strings\"\n", "\t\"path/filepath\"\n", ")"}},
 	}
 
 	for _, tc := range testCases {

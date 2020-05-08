@@ -26,7 +26,7 @@ func TestAdaptativeDiff(t *testing.T) {
 					&diff{IsSame, "\""},
 					&diff{IsSame, "\n"},
 				},
-				&diff{IsSame, ")\n"},
+				&diff{IsSame, ")"},
 			},
 		},
 	}
