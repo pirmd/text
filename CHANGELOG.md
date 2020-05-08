@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.5.2] - 2020.05.08
+## [0.5.3] - 2020-05-08
+## Modified
+- FIX bug when wrapping ANSI-formatted text into table columns.
+
+## [0.5.2] - 2020-05-08
 ## Modified
 - FIX bug in diff ByLines tokenizer that were adding uneeded '\n'.
 

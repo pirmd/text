@@ -74,21 +74,21 @@ func visualRepeat(s string, size int) string {
 }
 
 // interruptANSI interrupts at each line any ANSI SGR rendition and continue it
-// at the next line (usefull to work with text in column to avoid voiding
+// at the next line (useful to work with text in column to avoid voiding
 // neighbourgh text)
 func interruptANSI(s []string) {
 	var sgr ansi.Sequence
+	var prevEsc string
 
 	for i, line := range s {
-		curSGR := sgr
 		_ = ansi.Walk(line, func(c rune, esc string) error {
 			if c == -1 {
-				curSGR.Combine(esc)
+				sgr.Combine(esc)
 			}
 			return nil
 		})
-		s[i] = sgr.Esc() + s[i] + curSGR.Reset()
-		sgr = curSGR
+		s[i] = prevEsc + s[i] + sgr.Reset()
+		prevEsc = sgr.Esc()
 	}
 }
 

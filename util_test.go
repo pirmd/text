@@ -91,6 +91,10 @@ func TestInterruptANSI(t *testing.T) {
 	}{
 		{[]string{"This \x1b[34mis\x1b[0m a ", "long ", "sentence"}, []string{"This \x1b[34mis\x1b[0m a ", "long ", "sentence"}},
 		{[]string{"This \x1b[34mis a ", "long ", "sentence\x1b[0m"}, []string{"This \x1b[34mis a \x1b[0m", "\x1b[34mlong \x1b[0m", "\x1b[34msentence\x1b[0m"}},
+		{
+			[]string{"\x1b[34mX This is a long sentence", "in color.\x1b[39m\x1b[9mAnd an error\x1b[29m"},
+			[]string{"\x1b[34mX This is a long sentence\x1b[0m", "\x1b[34min color.\x1b[39m\x1b[9mAnd an error\x1b[29m"},
+		},
 	}
 
 	for _, tc := range testCases {
