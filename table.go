@@ -138,7 +138,7 @@ func (t *Table) Draw() string {
 	for _, row := range t.cells {
 		col := []string{}
 		for i, cell := range row {
-			justifiedCell := justifyWithINterruptANSI(cell, maxColLen[i], !t.dontTruncateLongWords)
+			justifiedCell := justifyWithInterruptANSI(cell, maxColLen[i], !t.dontTruncateLongWords)
 			col = append(col, justifiedCell)
 		}
 
@@ -312,9 +312,9 @@ func maxLen(col []string) int {
 	return length
 }
 
-// justifyWithINterruptANSI wraps cells, properly interrupting ANSI sequence at
+// justifyWithInterruptANSI wraps cells, properly interrupting ANSI sequence at
 // line boundaries, then fill lines to meet columns size
-func justifyWithINterruptANSI(s string, sz int, truncateLongWords bool) string {
+func justifyWithInterruptANSI(s string, sz int, truncateLongWords bool) string {
 	if len(s) == 0 {
 		return strings.Repeat(" ", sz)
 	}
