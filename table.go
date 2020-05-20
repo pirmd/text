@@ -130,6 +130,10 @@ func (t *Table) Captions(row ...string) *Table {
 // unreadable output if available table's width is too short compared to content
 // length.
 func (t *Table) Draw() string {
+	if len(t.cells) == 0 {
+		return ""
+	}
+
 	//TODO(pirmd): optimize this serie of string transformation (several
 	//split-join sequences.
 	maxColLen := colMaxLen(t.maxWidth, visualLen(t.sepV), t.cells)
@@ -254,6 +258,10 @@ func multilinesRow(row []string) [][]string {
 func colMaxLen(maxWidth int, sepLen int, cells [][]string) []int {
 	colLen := []int{}
 
+	if len(cells) == 0 {
+		return colLen
+	}
+
 	for _, row := range cells {
 		for i, cell := range row {
 			l := maxLen(strings.Split(cell, "\n"))
@@ -280,6 +288,10 @@ func findMaxColWidth(colLen []int, maxWidth int) int {
 	var fn func([]int, int) ([]int, int, int) //recursive function that gradually select columns that remains over size limits
 
 	fn = func(colLen []int, maxWidth int) (overLimit []int, width int, max int) {
+		if len(colLen) == 0 {
+			return
+		}
+
 		max, width = maxWidth/len(colLen), maxWidth
 
 		for _, l := range colLen {

@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.5.4] - 2020-05-20
+- FIX bug that panic when drawing an empty table.
+
 ## [0.5.3] - 2020-05-08
 ## Modified
 - FIX bug when wrapping ANSI-formatted text into table columns.
