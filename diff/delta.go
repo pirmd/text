@@ -85,7 +85,7 @@ func (r Result) PrettyPrint(h ...Highlighter) (dL []string, dR []string, dT []st
 // side the left string, the right string and the differences between both.
 //
 // Output format depends on the selected Highlighter(s) if any. WithSoftTabs
-// highlighter is automatically applied to prevent voising the output and
+// highlighter is automatically applied to prevent voiding the output and
 // doesn't need to be specified again.
 func (r Result) PrintSideBySide(h ...Highlighter) string {
 	hi := append([]Highlighter{WithSoftTabs}, h...)
@@ -157,7 +157,7 @@ func (r Result) content() (dL []string, dR []string) {
 	return
 }
 
-// implements interface Delta so that we can stack different levels of Results
+// left implements interface Delta so that we can stack different levels of Results
 func (r Result) left() (dL string, exists bool) {
 	for _, delta := range r {
 		if diffL, has := delta.left(); has {
@@ -168,7 +168,7 @@ func (r Result) left() (dL string, exists bool) {
 	return
 }
 
-// implements interface Delta so that we can stack different levels of Results
+// right implements interface Delta so that we can stack different levels of Results
 func (r Result) right() (dR string, exists bool) {
 	for _, delta := range r {
 		if diffR, has := delta.right(); has {
