@@ -42,7 +42,7 @@ func TestWalk(t *testing.T) {
 }
 
 func BenchmarkRemoveANSI(b *testing.B) {
-	in := strings.Repeat(SetRed("bonjour"), 20)
+	in := strings.Repeat(Red("bonjour"), 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		RemoveANSI(in)
@@ -50,7 +50,7 @@ func BenchmarkRemoveANSI(b *testing.B) {
 }
 
 func BenchmarkLen(b *testing.B) {
-	in := strings.Repeat(SetRed("bonjour"), 20)
+	in := strings.Repeat(Red("bonjour"), 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		Len(in)

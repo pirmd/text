@@ -323,18 +323,3 @@ func maxLen(col []string) int {
 	}
 	return length
 }
-
-// justifyWithInterruptANSI wraps cells, properly interrupting ANSI sequence at
-// line boundaries, then fill lines to meet columns size
-func justifyWithInterruptANSI(s string, sz int, truncateLongWords bool) string {
-	if len(s) == 0 {
-		return strings.Repeat(" ", sz)
-	}
-
-	ws := wrap(s, sz, truncateLongWords)
-	interruptANSI(ws)
-	for i, l := range ws {
-		ws[i] = visualPad(l, sz, ' ')
-	}
-	return strings.Join(ws, "\n")
-}

@@ -72,27 +72,27 @@ func TestCombine(t *testing.T) {
 		want Sequence
 	}{
 		{
-			[]string{Red, Bold},
+			[]string{RedOn, BoldOn},
 			Sequence{cRed, cBold},
 		},
 
 		{
-			[]string{Red, Green},
+			[]string{RedOn, GreenOn},
 			Sequence{cGreen},
 		},
 
 		{
-			[]string{Red, Bold, Reset},
+			[]string{RedOn, BoldOn, Reset},
 			Sequence{},
 		},
 
 		{
-			[]string{Red, Bold, Blue, Normal},
+			[]string{RedOn, BoldOn, BlueOn, Normal},
 			Sequence{cBlue},
 		},
 
 		{
-			[]string{Red, Bold, "\x1b[A", Blue, Normal},
+			[]string{RedOn, BoldOn, "\x1b[A", BlueOn, Normal},
 			Sequence{cBlue},
 		},
 	}

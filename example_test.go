@@ -12,7 +12,7 @@ func Example() {
 
 	tab.Rows(
 		[]string{"Column1", "Column2", "Column3"},
-		[]string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Any " + ansi.SetBold("formatted") + " string can be inserted too without beaking the table."},
+		[]string{"Basic column", "This one is here\nto demonstrate\nthat colums with several lines work too", "Any " + ansi.Bold("formatted") + " string can be inserted too without beaking the table."},
 		[]string{"", "This second row is here to test multi-lines rows format", "Also possibly a second chance to verify that multi-lines is working"},
 	)
 

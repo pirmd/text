@@ -1,72 +1,75 @@
 package ansi
 
-// ANSI escapes sequences for common Set Graphic Rendition.
+// ANSI escapes sequences for common  Graphic Rendition.
 const (
 	Reset = "\x1b[0m"
 
-	Bold       = "\x1b[1m"
-	Faint      = "\x1b[2m"
-	Italic     = "\x1b[3m"
-	Underline  = "\x1b[4m"
-	SlowBlink  = "\x1b[5m"
-	RapidBlink = "\x1b[6m"
-	Inverse    = "\x1b[7m"
-	Conceal    = "\x1b[8m"
-	CrossedOut = "\x1b[9m"
+	BoldOn       = "\x1b[1m"
+	FaintOn      = "\x1b[2m"
+	ItalicOn     = "\x1b[3m"
+	UnderlineOn  = "\x1b[4m"
+	SlowBlinkOn  = "\x1b[5m"
+	RapidBlinkOn = "\x1b[6m"
+	InverseOn    = "\x1b[7m"
+	ConcealOn    = "\x1b[8m"
+	CrossedOutOn = "\x1b[9m"
 
 	DoublyUnderlined = "\x1b[21m"
 
 	Normal        = "\x1b[22m"
+	BoldOff       = Normal
+	FaintOff      = Normal
 	ItalicOff     = "\x1b[23m"
 	UnderlineOff  = "\x1b[24m"
 	BlinkOff      = "\x1b[25m"
 	InverseOff    = "\x1b[27m"
-	Reveal        = "\x1b[28m"
-	NotCrossedOut = "\x1b[29m"
+	ConcealOff    = "\x1b[28m"
+	CrossedOutOff = "\x1b[29m"
 
-	Black     = "\x1b[30m"
-	Red       = "\x1b[31m"
-	Green     = "\x1b[32m"
-	Yellow    = "\x1b[33m"
-	Blue      = "\x1b[34m"
-	Magenta   = "\x1b[35m"
-	Cyan      = "\x1b[36m"
-	White     = "\x1b[37m"
+	BlackOn   = "\x1b[30m"
+	RedOn     = "\x1b[31m"
+	GreenOn   = "\x1b[32m"
+	YellowOn  = "\x1b[33m"
+	BlueOn    = "\x1b[34m"
+	MagentaOn = "\x1b[35m"
+	CyanOn    = "\x1b[36m"
+	WhiteOn   = "\x1b[37m"
 	DefaultFG = "\x1b[39m"
 
-	BlackBG   = "\x1b[40m"
-	RedBG     = "\x1b[41m"
-	GreenBG   = "\x1b[42m"
-	YellowBG  = "\x1b[43m"
-	BlueBG    = "\x1b[44m"
-	MagentaBG = "\x1b[45m"
-	CyanBG    = "\x1b[46m"
-	WhiteBG   = "\x1b[47m"
-	DefaultBG = "\x1b[49m"
+	BlackBGOn   = "\x1b[40m"
+	RedBGOn     = "\x1b[41m"
+	GreenBGOn   = "\x1b[42m"
+	YellowBGOn  = "\x1b[43m"
+	BlueBGOn    = "\x1b[44m"
+	MagentaBGOn = "\x1b[45m"
+	CyanBGOn    = "\x1b[46m"
+	WhiteBGOn   = "\x1b[47m"
+	DefaultBG   = "\x1b[49m"
 
-	Framed       = "\x1b[51m"
-	Encircled    = "\x1b[52m"
-	Overlined    = "\x1b[53m"
-	NotFramed    = "\x1b[54m"
-	NotOverlined = "\x1b[55m"
+	FramedOn     = "\x1b[51m"
+	EncircledOn  = "\x1b[52m"
+	OverlinedOn  = "\x1b[53m"
+	FramedOff    = "\x1b[54m"
+	EncircledOff = FramedOff
+	OverlinedOff = "\x1b[55m"
 
-	BrightBlack   = "\x1b[90m"
-	BrightRed     = "\x1b[91m"
-	BrightGreen   = "\x1b[92m"
-	BrightYellow  = "\x1b[93m"
-	BrightBlue    = "\x1b[94m"
-	BrightMagenta = "\x1b[95m"
-	BrightCyan    = "\x1b[96m"
-	BrightWhite   = "\x1b[97m"
+	BrightBlackOn   = "\x1b[90m"
+	BrightRedOn     = "\x1b[91m"
+	BrightGreenOn   = "\x1b[92m"
+	BrightYellowOn  = "\x1b[93m"
+	BrightBlueOn    = "\x1b[94m"
+	BrightMagentaOn = "\x1b[95m"
+	BrightCyanOn    = "\x1b[96m"
+	BrightWhiteOn   = "\x1b[97m"
 
-	BrightBlackBG   = "\x1b[100m"
-	BrightRedBG     = "\x1b[101m"
-	BrightGreenBG   = "\x1b[102m"
-	BrightYellowBG  = "\x1b[103m"
-	BrightBlueBG    = "\x1b[104m"
-	BrightMagentaBG = "\x1b[105m"
-	BrightCyanBG    = "\x1b[106m"
-	BrightWhiteBG   = "\x1b[107m"
+	BrightBlackBGOn   = "\x1b[100m"
+	BrightRedBGOn     = "\x1b[101m"
+	BrightGreenBGOn   = "\x1b[102m"
+	BrightYellowBGOn  = "\x1b[103m"
+	BrightBlueBGOn    = "\x1b[104m"
+	BrightMagentaBGOn = "\x1b[105m"
+	BrightCyanBGOn    = "\x1b[106m"
+	BrightWhiteBGOn   = "\x1b[107m"
 )
 
 // FGColor8bit sets the foreground color in 8bit colors palette (256 colors).
@@ -89,449 +92,449 @@ func BGColor24bit(r, g, b string) string {
 	return "\x1b[38;2;" + r + ";" + g + ";" + b + "m"
 }
 
-// SetBold sets provided string to Bold.
-func SetBold(s string) string {
+// Bold sets provided string to Bold.
+func Bold(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Bold + s + Normal
+	return BoldOn + s + BoldOff
 }
 
-// SetFaint decorates provided string with Faint style.
-func SetFaint(s string) string {
+// Faint decorates provided string with Faint style.
+func Faint(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Faint + s + Normal
+	return FaintOn + s + FaintOff
 }
 
-// SetItalic set provided string to Italic.
-func SetItalic(s string) string {
+// Italic set provided string to Italic.
+func Italic(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Italic + s + ItalicOff
+	return ItalicOn + s + ItalicOff
 }
 
-// SetUnderline underlines provided string.
-func SetUnderline(s string) string {
+// Underline underlines provided string.
+func Underline(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Underline + s + UnderlineOff
+	return UnderlineOn + s + UnderlineOff
 }
 
-// SetSlowBlink makes provided string to blink slowly.
-func SetSlowBlink(s string) string {
+// SlowBlink makes provided string to blink slowly.
+func SlowBlink(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return SlowBlink + s + BlinkOff
+	return SlowBlinkOn + s + BlinkOff
 }
 
-// SetRapidBlink makes provided string to blink rapidly.
-func SetRapidBlink(s string) string {
+// RapidBlink makes provided string to blink rapidly.
+func RapidBlink(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return RapidBlink + s + BlinkOff
+	return RapidBlinkOn + s + BlinkOff
 }
 
-// SetInverse inverts provided string colors.
-func SetInverse(s string) string {
+// Inverse inverts provided string colors.
+func Inverse(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Inverse + s + InverseOff
+	return InverseOn + s + InverseOff
 }
 
-// SetConceal conceals provided string.
-func SetConceal(s string) string {
+// Conceal conceals provided string.
+func Conceal(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Conceal + s + Reveal
+	return ConcealOn + s + ConcealOff
 }
 
-// SetCrossedOut crosses out provided string.
-func SetCrossedOut(s string) string {
+// CrossedOut crosses out provided string.
+func CrossedOut(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return CrossedOut + s + NotCrossedOut
+	return CrossedOutOn + s + CrossedOutOff
 }
 
-// SetBlack sets provided string foreground to black.
-func SetBlack(s string) string {
+// Black sets provided string foreground to black.
+func Black(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Black + s + DefaultFG
+	return BlackOn + s + DefaultFG
 }
 
-// SetRed sets provided string foreground to red.
-func SetRed(s string) string {
+// Red sets provided string foreground to red.
+func Red(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Red + s + DefaultFG
+	return RedOn + s + DefaultFG
 }
 
-// SetGreen sets provided string foreground to green.
-func SetGreen(s string) string {
+// Green sets provided string foreground to green.
+func Green(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Green + s + DefaultFG
+	return GreenOn + s + DefaultFG
 }
 
-// SetYellow sets provided string foreground to yellow.
-func SetYellow(s string) string {
+// Yellow sets provided string foreground to yellow.
+func Yellow(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Yellow + s + DefaultFG
+	return YellowOn + s + DefaultFG
 }
 
-// SetBlue sets provided string foreground to blue.
-func SetBlue(s string) string {
+// Blue sets provided string foreground to blue.
+func Blue(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Blue + s + DefaultFG
+	return BlueOn + s + DefaultFG
 }
 
-// SetMagenta sets provided string foreground to magenta.
-func SetMagenta(s string) string {
+// Magenta sets provided string foreground to magenta.
+func Magenta(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Magenta + s + DefaultFG
+	return MagentaOn + s + DefaultFG
 }
 
-// SetCyan sets provided string foreground to cyan.
-func SetCyan(s string) string {
+// Cyan sets provided string foreground to cyan.
+func Cyan(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Cyan + s + DefaultFG
+	return CyanOn + s + DefaultFG
 }
 
-// SetWhite sets provided string foreground to white.
-func SetWhite(s string) string {
+// White sets provided string foreground to white.
+func White(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return White + s + DefaultFG
+	return WhiteOn + s + DefaultFG
 }
 
-// SetBlackBG sets provided string background to black.
-func SetBlackBG(s string) string {
+// BlackBG sets provided string background to black.
+func BlackBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BlackBG + s + DefaultBG
+	return BlackBGOn + s + DefaultBG
 }
 
-// SetRedBG sets provided string background to red.
-func SetRedBG(s string) string {
+// RedBG sets provided string background to red.
+func RedBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return RedBG + s + DefaultBG
+	return RedBGOn + s + DefaultBG
 }
 
-// SetGreenBG sets provided string background to green.
-func SetGreenBG(s string) string {
+// GreenBG sets provided string background to green.
+func GreenBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return GreenBG + s + DefaultBG
+	return GreenBGOn + s + DefaultBG
 }
 
-// SetYellowBG sets provided string background to yellow.
-func SetYellowBG(s string) string {
+// YellowBG sets provided string background to yellow.
+func YellowBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return YellowBG + s + DefaultBG
+	return YellowBGOn + s + DefaultBG
 }
 
-// SetBlueBG sets provided string background to blue.
-func SetBlueBG(s string) string {
+// BlueBG sets provided string background to blue.
+func BlueBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BlueBG + s + DefaultBG
+	return BlueBGOn + s + DefaultBG
 }
 
-// SetMagentaBG sets provided string background to magenta.
-func SetMagentaBG(s string) string {
+// MagentaBG sets provided string background to magenta.
+func MagentaBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return MagentaBG + s + DefaultBG
+	return MagentaBGOn + s + DefaultBG
 }
 
-// SetCyanBG sets provided string background to cyan.
-func SetCyanBG(s string) string {
+// CyanBG sets provided string background to cyan.
+func CyanBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return CyanBG + s + DefaultBG
+	return CyanBGOn + s + DefaultBG
 }
 
-// SetWhiteBG sets provided string background to white.
-func SetWhiteBG(s string) string {
+// WhiteBG sets provided string background to white.
+func WhiteBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return WhiteBG + s + DefaultBG
+	return WhiteBGOn + s + DefaultBG
 }
 
-// SetFramed draws a frame around the provided string.
-func SetFramed(s string) string {
+// Framed draws a frame around the provided string.
+func Framed(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Framed + s + NotFramed
+	return FramedOn + s + FramedOff
 }
 
-// SetEncircled encircles provided string.
-func SetEncircled(s string) string {
+// Encircled encircles provided string.
+func Encircled(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Encircled + s + NotFramed
+	return EncircledOn + s + EncircledOff
 }
 
-// SetOverlined overlines provided string.
-func SetOverlined(s string) string {
+// Overlined overlines provided string.
+func Overlined(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return Overlined + s + NotOverlined
+	return OverlinedOn + s + OverlinedOff
 }
 
-// SetBrightBlack sets provided string foreground in bright black.
-func SetBrightBlack(s string) string {
+// BrightBlack sets provided string foreground in bright black.
+func BrightBlack(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightBlack + s + DefaultFG
+	return BrightBlackOn + s + DefaultFG
 }
 
-// SetBrightRed sets provided string foreground in bright red.
-func SetBrightRed(s string) string {
+// BrightRed sets provided string foreground in bright red.
+func BrightRed(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightRed + s + DefaultFG
+	return BrightRedOn + s + DefaultFG
 }
 
-// SetBrightGreen sets provided string foreground in bright green.
-func SetBrightGreen(s string) string {
+// BrightGreen sets provided string foreground in bright green.
+func BrightGreen(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightGreen + s + DefaultFG
+	return BrightGreenOn + s + DefaultFG
 }
 
-// SetBrightYellow sets provided string foreground in bright yellow.
-func SetBrightYellow(s string) string {
+// BrightYellow sets provided string foreground in bright yellow.
+func BrightYellow(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightYellow + s + DefaultFG
+	return BrightYellowOn + s + DefaultFG
 }
 
-// SetBrightBlue sets provided string foreground in bright blue.
-func SetBrightBlue(s string) string {
+// BrightBlue sets provided string foreground in bright blue.
+func BrightBlue(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightBlue + s + DefaultFG
+	return BrightBlueOn + s + DefaultFG
 }
 
-// SetBrightMagenta sets provided string foreground in bright magenta.
-func SetBrightMagenta(s string) string {
+// BrightMagenta sets provided string foreground in bright magenta.
+func BrightMagenta(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightMagenta + s + DefaultFG
+	return BrightMagentaOn + s + DefaultFG
 }
 
-// SetBrightCyan sets provided string foreground in bright cyan.
-func SetBrightCyan(s string) string {
+// BrightCyan sets provided string foreground in bright cyan.
+func BrightCyan(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightCyan + s + DefaultFG
+	return BrightCyanOn + s + DefaultFG
 }
 
-// SetBrightWhite sets provided string foreground in bright white.
-func SetBrightWhite(s string) string {
+// BrightWhite sets provided string foreground in bright white.
+func BrightWhite(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightWhite + s + DefaultFG
+	return BrightWhiteOn + s + DefaultFG
 }
 
-// SetBrightBlackBG sets provided string background in bright black.
-func SetBrightBlackBG(s string) string {
+// BrightBlackBG sets provided string background in bright black.
+func BrightBlackBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightBlackBG + s + DefaultBG
+	return BrightBlackBGOn + s + DefaultBG
 }
 
-// SetBrightRedBG sets provided string background in bright red.
-func SetBrightRedBG(s string) string {
+// BrightRedBG sets provided string background in bright red.
+func BrightRedBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightRedBG + s + DefaultBG
+	return BrightRedBGOn + s + DefaultBG
 }
 
-// SetBrightGreenBG sets provided string background in bright green.
-func SetBrightGreenBG(s string) string {
+// BrightGreenBG sets provided string background in bright green.
+func BrightGreenBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightGreenBG + s + DefaultBG
+	return BrightGreenBGOn + s + DefaultBG
 }
 
-// SetBrightYellowBG sets provided string background in bright yellow.
-func SetBrightYellowBG(s string) string {
+// BrightYellowBG sets provided string background in bright yellow.
+func BrightYellowBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightYellowBG + s + DefaultBG
+	return BrightYellowBGOn + s + DefaultBG
 }
 
-// SetBrightBlueBG sets provided string background in bright blue.
-func SetBrightBlueBG(s string) string {
+// BrightBlueBG sets provided string background in bright blue.
+func BrightBlueBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightBlueBG + s + DefaultBG
+	return BrightBlueBGOn + s + DefaultBG
 }
 
-// SetBrightMagentaBG sets provided string background in bright magenta.
-func SetBrightMagentaBG(s string) string {
+// BrightMagentaBG sets provided string background in bright magenta.
+func BrightMagentaBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightMagentaBG + s + DefaultBG
+	return BrightMagentaBGOn + s + DefaultBG
 }
 
-// SetBrightCyanBG sets provided string background in bright cyan.
-func SetBrightCyanBG(s string) string {
+// BrightCyanBG sets provided string background in bright cyan.
+func BrightCyanBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightCyanBG + s + DefaultBG
+	return BrightCyanBGOn + s + DefaultBG
 }
 
-// SetBrightWhiteBG sets provided string background in bright white.
-func SetBrightWhiteBG(s string) string {
+// BrightWhiteBG sets provided string background in bright white.
+func BrightWhiteBG(s string) string {
 	if s == "" {
 		return ""
 	}
 
-	return BrightWhiteBG + s + DefaultBG
+	return BrightWhiteBGOn + s + DefaultBG
 }
 
 // FuncMap provides a text/template FuncMap compatible mapping
 // to use 'ansi' functions within templates.
 func FuncMap() map[string]interface{} {
 	return map[string]interface{}{
-		"Bold":            SetBold,
-		"Faint":           SetFaint,
-		"Italic":          SetItalic,
-		"Underline":       SetUnderline,
-		"SlowBlink":       SetSlowBlink,
-		"RapidBlink":      SetRapidBlink,
-		"Inverse":         SetInverse,
-		"Conceal":         SetConceal,
-		"CrossedOut":      SetCrossedOut,
-		"Black":           SetBlack,
-		"Red":             SetRed,
-		"Green":           SetGreen,
-		"Yellow":          SetYellow,
-		"Blue":            SetBlue,
-		"Magenta":         SetMagenta,
-		"Cyan":            SetCyan,
-		"White":           SetWhite,
-		"BlackBG":         SetBlackBG,
-		"RedBG":           SetRedBG,
-		"GreenBG":         SetGreenBG,
-		"YellowBG":        SetYellowBG,
-		"BlueBG":          SetBlueBG,
-		"MagentaBG":       SetMagentaBG,
-		"CyanBG":          SetCyanBG,
-		"WhiteBG":         SetWhiteBG,
-		"Framed":          SetFramed,
-		"Encircled":       SetEncircled,
-		"Overlined":       SetOverlined,
-		"BrightBlack":     SetBrightBlack,
-		"BrightRed":       SetBrightRed,
-		"BrightGreen":     SetBrightGreen,
-		"BrightYellow":    SetBrightYellow,
-		"BrightBlue":      SetBrightBlue,
-		"BrightMagenta":   SetBrightMagenta,
-		"BrightCyan":      SetBrightCyan,
-		"BrightWhite":     SetBrightWhite,
-		"BrightBlackBG":   SetBrightBlackBG,
-		"BrightRedBG":     SetBrightRedBG,
-		"BrightGreenBG":   SetBrightGreenBG,
-		"BrightYellowBG":  SetBrightYellowBG,
-		"BrightBlueBG":    SetBrightBlueBG,
-		"BrightMagentaBG": SetBrightMagentaBG,
-		"BrightCyanBG":    SetBrightCyanBG,
-		"BrightWhiteBG":   SetBrightWhiteBG,
+		"Bold":            Bold,
+		"Faint":           Faint,
+		"Italic":          Italic,
+		"Underline":       Underline,
+		"SlowBlink":       SlowBlink,
+		"RapidBlink":      RapidBlink,
+		"Inverse":         Inverse,
+		"Conceal":         Conceal,
+		"CrossedOut":      CrossedOut,
+		"Black":           Black,
+		"Red":             Red,
+		"Green":           Green,
+		"Yellow":          Yellow,
+		"Blue":            Blue,
+		"Magenta":         Magenta,
+		"Cyan":            Cyan,
+		"White":           White,
+		"BlackBG":         BlackBG,
+		"RedBG":           RedBG,
+		"GreenBG":         GreenBG,
+		"YellowBG":        YellowBG,
+		"BlueBG":          BlueBG,
+		"MagentaBG":       MagentaBG,
+		"CyanBG":          CyanBG,
+		"WhiteBG":         WhiteBG,
+		"Framed":          Framed,
+		"Encircled":       Encircled,
+		"Overlined":       Overlined,
+		"BrightBlack":     BrightBlack,
+		"BrightRed":       BrightRed,
+		"BrightGreen":     BrightGreen,
+		"BrightYellow":    BrightYellow,
+		"BrightBlue":      BrightBlue,
+		"BrightMagenta":   BrightMagenta,
+		"BrightCyan":      BrightCyan,
+		"BrightWhite":     BrightWhite,
+		"BrightBlackBG":   BrightBlackBG,
+		"BrightRedBG":     BrightRedBG,
+		"BrightGreenBG":   BrightGreenBG,
+		"BrightYellowBG":  BrightYellowBG,
+		"BrightBlueBG":    BrightBlueBG,
+		"BrightMagentaBG": BrightMagentaBG,
+		"BrightCyanBG":    BrightCyanBG,
+		"BrightWhiteBG":   BrightWhiteBG,
 	}
 }

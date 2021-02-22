@@ -33,13 +33,13 @@ var (
 	WithColor = Highlighter{
 		Same: func(dL, dR, dT string) (string, string, string) { return dL, dR, dT },
 		Deleted: func(dL, dR, dT string) (string, string, string) {
-			return ansi.SetBlue(dL), ansi.SetCrossedOut(dR), ansi.SetBlueBG(ansi.SetWhite(dT))
+			return ansi.Blue(dL), ansi.CrossedOut(dR), ansi.BlueBG(ansi.White(dT))
 		},
 		Inserted: func(dL, dR, dT string) (string, string, string) {
-			return ansi.SetCrossedOut(dL), ansi.SetRed(dR), ansi.SetRedBG(ansi.SetWhite(dT))
+			return ansi.CrossedOut(dL), ansi.Red(dR), ansi.RedBG(ansi.White(dT))
 		},
 		Different: func(dL, dR, dT string) (string, string, string) {
-			return ansi.SetRed(dL), ansi.SetRed(dR), ansi.SetRedBG(ansi.SetWhite(dT))
+			return ansi.Red(dL), ansi.Red(dR), ansi.RedBG(ansi.White(dT))
 		},
 	}
 
