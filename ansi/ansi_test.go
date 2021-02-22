@@ -2,7 +2,6 @@ package ansi
 
 import (
 	"reflect"
-	"strings"
 	"testing"
 )
 
@@ -38,21 +37,5 @@ func TestWalk(t *testing.T) {
 		if !reflect.DeepEqual(gotSGR, tc.wantSGR) {
 			t.Errorf("Walk did not work as expected for %#v (SGR).\nWant: %v\nGot : %v.", tc.in, tc.wantSGR, gotSGR)
 		}
-	}
-}
-
-func BenchmarkRemoveANSI(b *testing.B) {
-	in := strings.Repeat(Red("bonjour"), 20)
-	b.ResetTimer()
-	for n := 0; n < b.N; n++ {
-		RemoveANSI(in)
-	}
-}
-
-func BenchmarkLen(b *testing.B) {
-	in := strings.Repeat(Red("bonjour"), 20)
-	b.ResetTimer()
-	for n := 0; n < b.N; n++ {
-		Len(in)
 	}
 }

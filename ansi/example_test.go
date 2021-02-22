@@ -14,16 +14,34 @@ func Example() {
 	//[32mHave [1mfun [22mwith [34mColors[0m
 }
 
-func ExampleLen() {
+func ExampleWalk() {
 	hello := ansi.Red("Bonjour") + " " + ansi.Bold("tout") + " le monde !"
-	fmt.Printf("Length is %d, visual length is %d", len(hello), ansi.Len(hello))
+
+	var visualen int
+	_ = ansi.Walk(hello, func(c rune, esc string) error {
+		if c > -1 {
+			visualen++
+		}
+		return nil
+	})
+
+	fmt.Printf("Length is %d, visual length is %d", len(hello), visualen)
 	//Output:
 	//Length is 42, visual length is 23
 }
 
-func ExampleRemoveANSI() {
+func ExampleWalk_second() {
 	hello := ansi.Red("Bonjour") + " " + ansi.Bold("tout") + " le monde !"
-	fmt.Println(ansi.RemoveANSI(hello))
+
+	var clean []rune
+	_ = ansi.Walk(hello, func(c rune, esc string) error {
+		if c > -1 {
+			clean = append(clean, c)
+		}
+		return nil
+	})
+
+	fmt.Println(string(clean))
 	//Output:
 	//Bonjour tout le monde !
 }

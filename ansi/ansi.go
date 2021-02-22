@@ -69,30 +69,3 @@ Loop:
 
 	return
 }
-
-// Len calculates the length of string ignoring any ANSI escape sequences.
-func Len(s string) int {
-	var l int
-	_ = Walk(s, func(c rune, esc string) error {
-		if c > -1 {
-			l++
-		}
-		return nil
-	})
-
-	return l
-}
-
-// RemoveANSI takes as input a string possibly containing ANSI escape sequence and
-// feedbacks a cleaned string.
-func RemoveANSI(s string) string {
-	var clean []rune
-	_ = Walk(s, func(c rune, esc string) error {
-		if c > -1 {
-			clean = append(clean, c)
-		}
-		return nil
-	})
-
-	return string(clean)
-}
