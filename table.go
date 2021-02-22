@@ -2,9 +2,10 @@ package text
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
-	"github.com/pirmd/style/termsize"
+	"golang.org/x/term"
 )
 
 const (
@@ -22,21 +23,22 @@ type Table struct {
 	cells [][]string
 }
 
-// NewTable returns a new empty table. New tables default to no grid with a
-// maximum width being the terminal size if it can be determined or
-// MaxTableWidth.
+// NewTable returns a new empty table, with no grid and a maximum width set-up
+// to the terminal width or to MaxTableWidth if output is not a termila or if
+// the terminal size cannot be determined.
 func NewTable() *Table {
-	if w, err := termsize.Width(); err == nil {
-		return &Table{
-			maxWidth: w,
-			sepV:     " ",
-		}
-	}
-
-	return &Table{
+	t := &Table{
 		maxWidth: MaxTableWidth,
 		sepV:     " ",
 	}
+
+	if fd := int(os.Stdout.Fd()); term.IsTerminal(fd) {
+		if w, _, err := term.GetSize(fd); err == nil {
+			t.SetMaxWidth(w)
+		}
+	}
+
+	return t
 }
 
 // SetMaxWidth sets the table maximum width.
@@ -56,7 +58,7 @@ func (t *Table) SetGrid(sepV, sepC, sepH string) *Table {
 }
 
 // DontTruncateLongWords prevents long words to be cut before words boundaries
-// to fit Table's column maximum width. it is not recommanded as it might void
+// to fit Table's column maximum width. It is not recommanded as it might void
 // table formatting.
 func (t *Table) DontTruncateLongWords() *Table {
 	t.dontTruncateLongWords = true
