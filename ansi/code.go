@@ -4,16 +4,13 @@ import (
 	"strings"
 )
 
-// Code represents an ANSI code
+// Code represents an ANSI code.
 type Code = string
 
 const (
-	// CSI: Control Sequence Introducer
 	cCSI = "\x1b["
 
-	// Select Graphic Rendition (SGR) Codes
-	cReset Code = "0"
-
+	cReset      Code = "0"
 	cBold       Code = "1"
 	cFaint      Code = "2"
 	cItalic     Code = "3"
@@ -81,7 +78,7 @@ const (
 )
 
 // isFGColor is true if the corresponding Code allows to modify fore-ground
-// colors
+// colors.
 func isFGColor(c Code) bool {
 	return c == cBlack || c == cRed || c == cGreen || c == cYellow || c == cBlue || c == cMagenta || c == cCyan || c == cWhite ||
 		c == cBrightBlack || c == cBrightRed || c == cBrightGreen || c == cBrightYellow || c == cBrightBlue || c == cBrightMagenta || c == cBrightCyan || c == cBrightWhite ||
@@ -89,7 +86,7 @@ func isFGColor(c Code) bool {
 }
 
 // isBGColor is true if the corresponding Code allows to modify back-ground
-// colors
+// colors.
 func isBGColor(c Code) bool {
 	return c == cBlackBG || c == cRedBG || c == cGreenBG || c == cYellowBG || c == cBlueBG || c == cMagentaBG || c == cCyanBG || c == cWhiteBG ||
 		c == cBrightBlackBG || c == cBrightRedBG || c == cBrightGreenBG || c == cBrightYellowBG || c == cBrightBlueBG || c == cBrightMagentaBG || c == cBrightCyanBG || c == cBrightWhiteBG ||
@@ -105,7 +102,7 @@ func isStyleOff(c Code) bool {
 		c == cDefaultBG || c == cDefaultFG
 }
 
-// isSuperseddedBy is true if the corresponding Code visual effect is supeseded
+// isSupersededBy is true if the corresponding Code visual effect is supeseded
 // by the new Code (for example: Bold is superseded by BoldOff or Normal or
 // Reset but not by Green).
 func isSupersededBy(ca, cb Code) bool {
@@ -124,7 +121,7 @@ func isSupersededBy(ca, cb Code) bool {
 		(cb == cNotFramed && (ca == cFramed || ca == cEncircled))
 }
 
-// Sequence is a slice of ansi.Codes
+// Sequence is a slice of ansi.Codes.
 type Sequence []Code
 
 // Combine adds a new ANSI SGR escape sequence. It deletes existing Codes that
@@ -146,7 +143,7 @@ func (seq Sequence) Esc() (s string) {
 	return
 }
 
-// Print decorates the provided string using the correspondig Code sequence.
+// Print decorates the provided string using the corresponding Code sequence.
 func (seq Sequence) Print(s string) string {
 	return seq.Esc() + s + cCSI + cReset + "m"
 }
@@ -180,7 +177,7 @@ func (seq *Sequence) add(c Code) {
 // format ESC[code;..;codem) parameters into a slice of ansi.Code.
 //
 // ParseSGR returns nil if supplied Escape Sequence does not look slike an SGR
-// sequence (does not start by '\x1b[' nor ends by 'm')
+// sequence (does not start by '\x1b[' nor ends by 'm').
 //
 // ParseSGR does not check for correctness of the supplied escape sequence.
 func ParseSGR(esc string) Sequence {
