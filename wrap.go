@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"github.com/pirmd/text/ansi"
+	"github.com/pirmd/text/internal/util"
 )
 
 // Indent inserts a name/bullet/number at the beginning of the string, then
@@ -13,13 +14,13 @@ import (
 // Tag is superposed to the indent prefix to obtain the first line prefix, if
 // tag length is greater than prefix, prefix is completed by trailing spaces.
 func Indent(s string, tag, prefix string) string {
-	lB, lP := visualLen(tag), visualLen(prefix)
+	lB, lP := util.VisualLen(tag), util.VisualLen(prefix)
 
 	switch {
 	case lB > lP:
-		prefix = visualPad(prefix, lB, ' ')
+		prefix = util.VisualPad(prefix, lB, ' ')
 	case lB < lP:
-		tag = visualTruncate(prefix, lP-lB) + tag
+		tag = util.VisualTruncate(prefix, lP-lB) + tag
 	}
 
 	return indent(s, tag, prefix)
@@ -45,15 +46,15 @@ func Wrap(txt string, limit int, truncateLongWords bool) string {
 // does not work if prefix is made of tabs as indent's tag/prefix length is
 // unknown (like '\t').
 func Tab(s string, tag, prefix string, limit int, truncateLongWords bool) string {
-	lB, lP := visualLen(tag), visualLen(prefix)
+	lB, lP := util.VisualLen(tag), util.VisualLen(prefix)
 
 	var r string
 	switch {
 	case lB > lP:
-		prefix = visualPad(prefix, lB, ' ')
+		prefix = util.VisualPad(prefix, lB, ' ')
 		r = Wrap(s, limit-lB, truncateLongWords)
 	case lB < lP:
-		tag = visualTruncate(prefix, lP-lB) + tag
+		tag = util.VisualTruncate(prefix, lP-lB) + tag
 		r = Wrap(s, limit-lP, truncateLongWords)
 	default:
 		r = Wrap(s, limit-lP, truncateLongWords)
@@ -79,6 +80,7 @@ func indent(s string, firstPrefix, prefix string) string {
 }
 
 func wrap(s string, limit int, truncateLongWords bool) (ws []string) {
+	//XXX: merge with Wrap (?)
 	var line, word string
 	var linelen, wordlen int
 
@@ -108,16 +110,16 @@ func wrap(s string, limit int, truncateLongWords bool) (ws []string) {
 			case l > limit:
 				ws = append(ws, line)
 				line = word + string(c)
-				linelen = wordlen + runeWidth(c)
+				linelen = wordlen + util.Runewidth(c)
 
 			default:
 				line += word + string(c)
-				linelen += wordlen + runeWidth(c)
+				linelen += wordlen + util.Runewidth(c)
 			}
 			word, wordlen = "", 0
 
 		default:
-			if wordlen += runeWidth(c); wordlen > limit {
+			if wordlen += util.Runewidth(c); wordlen > limit {
 				if line != "" {
 					ws = append(ws, line)
 					line, linelen = "", 0
@@ -126,7 +128,7 @@ func wrap(s string, limit int, truncateLongWords bool) (ws []string) {
 				// word is longer than the limit, we truncated it
 				if truncateLongWords {
 					ws = append(ws, word)
-					word, wordlen = "", runeWidth(c)
+					word, wordlen = "", util.Runewidth(c)
 				}
 			}
 			word += string(c)

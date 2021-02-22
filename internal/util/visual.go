@@ -1,19 +1,17 @@
-package text
+package util
 
 import (
-	"strings"
-
 	"github.com/mattn/go-runewidth"
 
 	"github.com/pirmd/text/ansi"
 )
 
-// visualLen calculates the length of string ignoring any ANSI escape sequences.
-func visualLen(s string) int {
+// VisualLen calculates the length of string ignoring any ANSI escape sequences.
+func VisualLen(s string) int {
 	var l int
 	_ = ansi.Walk(s, func(c rune, esc string) error {
 		if c > -1 {
-			l += runeWidth(c)
+			l += Runewidth(c)
 		}
 		return nil
 	})
@@ -21,18 +19,18 @@ func visualLen(s string) int {
 	return l
 }
 
-// visualTruncate truncates the string so that its "visible" length is lower or equal
+// VisualTruncate truncates the string so that its "visible" length is lower or equal
 // to the provided limit.
 // When needed, visualTruncate terminates the string by an ansi.Reset sequence
 // to inhibate any visual effects coming from the truncation step.
-func visualTruncate(s string, limit int) (trunc string) {
+func VisualTruncate(s string, limit int) (trunc string) {
 	var l int
 	var sgr ansi.Sequence
 
 	_ = ansi.Walk(s, func(c rune, esc string) error {
 		if c > -1 {
 			trunc += string(c)
-			l += runeWidth(c)
+			l += Runewidth(c)
 		}
 
 		if esc != "" {
@@ -50,20 +48,20 @@ func visualTruncate(s string, limit int) (trunc string) {
 	return trunc + sgr.Reset()
 }
 
-// visualPad completes a string with provided rune until its "visible" lentgh
+// VisualPad completes a string with provided rune until its "visible" lentgh
 // reaches the provided limit.  If the string visible size is already above
 // imit, Pad returns it as-is.
-func visualPad(s string, size int, padRune rune) string {
+func VisualPad(s string, size int, padRune rune) string {
 	var pad []rune
-	for i := visualLen(s); i < size; i++ {
+	for i := VisualLen(s); i < size; i++ {
 		pad = append(pad, padRune)
 	}
 	return s + string(pad)
 }
 
-// visualRepeat repeats s until given size is reached.
-func visualRepeat(s string, size int) string {
-	l := visualLen(s)
+// VisualRepeat repeats s until given size is reached.
+func VisualRepeat(s string, size int) string {
+	l := VisualLen(s)
 	r := s
 	for i := l; i <= size; i = i + l {
 		if i == size {
@@ -71,13 +69,13 @@ func visualRepeat(s string, size int) string {
 		}
 		r = r + s
 	}
-	return visualTruncate(r, size)
+	return VisualTruncate(r, size)
 }
 
-// interruptANSI interrupts at each line any ANSI SGR rendition and continues it
+// InterruptANSI interrupts at each line any ANSI SGR rendition and continues it
 // at the next line (useful to work with text in column to avoid voiding
 // neighbourgh text).
-func interruptANSI(s []string) {
+func InterruptANSI(s []string) {
 	var sgr ansi.Sequence
 	var prevEsc string
 
@@ -93,22 +91,7 @@ func interruptANSI(s []string) {
 	}
 }
 
-// justifyWithInterruptANSI wraps cells, properly interrupting ANSI sequence at
-// line boundaries, then fill lines to meet columns size
-func justifyWithInterruptANSI(s string, sz int, truncateLongWords bool) string {
-	if len(s) == 0 {
-		return strings.Repeat(" ", sz)
-	}
-
-	ws := wrap(s, sz, truncateLongWords)
-	interruptANSI(ws)
-	for i, l := range ws {
-		ws[i] = visualPad(l, sz, ' ')
-	}
-	return strings.Join(ws, "\n")
-}
-
-// runeWidth returns the visual width of a rune.
-func runeWidth(c rune) int {
+// Runewidth returns the visual width of a rune.
+func Runewidth(c rune) int {
 	return runewidth.RuneWidth(c)
 }

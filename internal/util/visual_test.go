@@ -1,4 +1,4 @@
-package text
+package util
 
 import (
 	"reflect"
@@ -18,7 +18,7 @@ func TestVisualLen(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := visualLen(tc.in)
+		got := VisualLen(tc.in)
 		if got != tc.out {
 			t.Errorf("Length of '%s' failed: got %d, wanted %d", string(tc.in), got, tc.out)
 		}
@@ -38,7 +38,7 @@ func TestVisualTruncate(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := visualTruncate(tc.in, tc.sz)
+		got := VisualTruncate(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual Truncate failed for %#v.\nWanted: %#v\nGot   : %#v\n", tc.in, tc.out, got)
 		}
@@ -57,7 +57,7 @@ func TestVisualPad(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := visualPad(tc.in, tc.sz, ' ')
+		got := VisualPad(tc.in, tc.sz, ' ')
 		if got != tc.out {
 			t.Errorf("visual Padding failed for '%s' (max %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
 		}
@@ -77,7 +77,7 @@ func TestVisualRepeat(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := visualRepeat(tc.in, tc.sz)
+		got := VisualRepeat(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual repeating failed for '%s' (up to %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
 		}
@@ -100,7 +100,7 @@ func TestInterruptANSI(t *testing.T) {
 	for _, tc := range testCases {
 		got := make([]string, len(tc.in))
 		copy(got, tc.in)
-		interruptANSI(got)
+		InterruptANSI(got)
 		if !reflect.DeepEqual(got, tc.out) {
 			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}
@@ -111,7 +111,7 @@ func BenchmarkVisualLen(b *testing.B) {
 	in := strings.Repeat("\x1b[31mbonjour\x1b[m", 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		visualLen(in)
+		VisualLen(in)
 	}
 }
 
@@ -119,6 +119,6 @@ func BenchmarkVisualTruncate(b *testing.B) {
 	in := strings.Repeat("\x1b[31mbonjour\x1b[m", 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		visualTruncate(in, len(in)/2)
+		VisualTruncate(in, len(in)/2)
 	}
 }

@@ -1,4 +1,4 @@
-package text
+package table
 
 import (
 	"fmt"
@@ -6,6 +6,9 @@ import (
 	"strings"
 
 	"golang.org/x/term"
+
+	"github.com/pirmd/text"
+	"github.com/pirmd/text/internal/util"
 )
 
 const (
@@ -23,10 +26,10 @@ type Table struct {
 	cells [][]string
 }
 
-// NewTable returns a new empty table, with no grid and a maximum width set-up
-// to the terminal width or to MaxTableWidth if output is not a termila or if
-// the terminal size cannot be determined.
-func NewTable() *Table {
+// New returns a new empty table, with no grid and a maximum width set-up to
+// the terminal width or to MaxTableWidth if output is not a terminal or if the
+// terminal size cannot be determined.
+func New() *Table {
 	t := &Table{
 		maxWidth: MaxTableWidth,
 		sepV:     " ",
@@ -138,7 +141,7 @@ func (t *Table) Draw() string {
 
 	//TODO(pirmd): optimize this serie of string transformation (several
 	//split-join sequences.
-	maxColLen := colMaxLen(t.maxWidth, visualLen(t.sepV), t.cells)
+	maxColLen := colMaxLen(t.maxWidth, util.VisualLen(t.sepV), t.cells)
 
 	rows := []string{}
 	for _, row := range t.cells {
@@ -166,7 +169,7 @@ func (t *Table) addHorizontalGrid(rows []string, colLen []int) []string {
 	if t.sepH != "" {
 		var sep []string
 		for _, l := range colLen {
-			sep = append(sep, visualRepeat(t.sepH, l))
+			sep = append(sep, util.VisualRepeat(t.sepH, l))
 		}
 
 		sepH = strings.Join(sep, t.sepV)
@@ -176,7 +179,7 @@ func (t *Table) addHorizontalGrid(rows []string, colLen []int) []string {
 	if t.sepC != "" {
 		var sep []string
 		for _, l := range colLen {
-			sep = append(sep, visualRepeat(t.sepC, l))
+			sep = append(sep, util.VisualRepeat(t.sepC, l))
 		}
 
 		sepC = strings.Join(sep, t.sepV)
@@ -319,9 +322,25 @@ func findMaxColWidth(colLen []int, maxWidth int) int {
 func maxLen(col []string) int {
 	var length int
 	for _, cell := range col {
-		if l := visualLen(cell); l > length {
+		if l := util.VisualLen(cell); l > length {
 			length = l
 		}
 	}
 	return length
+}
+
+// justifyWithInterruptANSI wraps cells, properly interrupting ANSI sequence at
+// line boundaries, then fill lines to meet columns size
+func justifyWithInterruptANSI(s string, sz int, truncateLongWords bool) string {
+	if len(s) == 0 {
+		return strings.Repeat(" ", sz)
+	}
+
+	ws := strings.Split(text.Wrap(s, sz, truncateLongWords), "\n")
+	//XXX: Improve-me: should I split at '\n' ?)
+	util.InterruptANSI(ws)
+	for i, l := range ws {
+		ws[i] = util.VisualPad(l, sz, ' ')
+	}
+	return strings.Join(ws, "\n")
 }

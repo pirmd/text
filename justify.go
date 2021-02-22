@@ -2,6 +2,8 @@ package text
 
 import (
 	"strings"
+
+	"github.com/pirmd/text/internal/util"
 )
 
 // ElipsisRune defines the rune that is append to truncated strings to
@@ -14,8 +16,8 @@ var ElipsisRune = '\u2026'
 //
 // Truncated strings are returned with ElipsisRune as their last rune.
 func Truncate(s string, size int) string {
-	if visualLen(s) > size {
-		return visualTruncate(s, size-1) + string(ElipsisRune)
+	if util.VisualLen(s) > size {
+		return util.VisualTruncate(s, size-1) + string(ElipsisRune)
 	}
 	return s
 }
@@ -29,7 +31,7 @@ func Justify(s string, sz int, truncateLongWords bool) string {
 
 	ws := wrap(s, sz, truncateLongWords)
 	for i, l := range ws {
-		ws[i] = visualPad(l, sz, ' ')
+		ws[i] = util.VisualPad(l, sz, ' ')
 	}
 	return strings.Join(ws, "\n")
 }
@@ -37,8 +39,8 @@ func Justify(s string, sz int, truncateLongWords bool) string {
 // ExactSize returns a string of the exact given size either by padding or
 // truncating it.
 func ExactSize(s string, size int) string {
-	if visualLen(s) > size {
-		return visualTruncate(s, size-1) + string(ElipsisRune)
+	if util.VisualLen(s) > size {
+		return util.VisualTruncate(s, size-1) + string(ElipsisRune)
 	}
-	return visualPad(s, size, ' ')
+	return util.VisualPad(s, size, ' ')
 }

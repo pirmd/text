@@ -1,14 +1,14 @@
-package text_test
+package table_test
 
 import (
 	"fmt"
 
-	"github.com/pirmd/text"
 	"github.com/pirmd/text/ansi"
+	"github.com/pirmd/text/table"
 )
 
 func Example() {
-	tab := text.NewTable().SetMaxWidth(80).SetGrid(" ", "-", " ")
+	tab := table.New().SetMaxWidth(80).SetGrid(" ", "-", " ")
 
 	tab.Rows(
 		[]string{"Column1", "Column2", "Column3"},

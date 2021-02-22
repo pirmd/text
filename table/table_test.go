@@ -1,4 +1,4 @@
-package text
+package table
 
 import (
 	"testing"
@@ -35,7 +35,7 @@ func TestTable(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", "", "").SetMaxWidth(24).Rows(tc.in...).String()
+		got := New().SetGrid("|", "", "").SetMaxWidth(24).Rows(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -53,7 +53,7 @@ func TestTableByCol(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", "", "").SetMaxWidth(24).Col(tc.in...).String()
+		got := New().SetGrid("|", "", "").SetMaxWidth(24).Col(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -75,7 +75,7 @@ func TestTableWithSepH(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", "", tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
+		got := New().SetGrid("|", "", tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
 		if got != tc.out {
 			t.Errorf("table failed for sep='%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.inH, tc.out, got)
 		}
@@ -99,7 +99,7 @@ func TestTableWithGrid(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := NewTable().SetGrid("|", tc.inC, tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
+		got := New().SetGrid("|", tc.inC, tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
 		if got != tc.out {
 			t.Errorf("table failed for sep_C='%s', sep_H='%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.inC, tc.inH, tc.out, got)
 		}
