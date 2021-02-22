@@ -91,221 +91,397 @@ func BGColor24bit(r, g, b string) string {
 
 // SetBold sets provided string to Bold.
 func SetBold(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Bold + s + Normal
 }
 
 // SetFaint decorates provided string with Faint style.
 func SetFaint(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Faint + s + Normal
 }
 
 // SetItalic set provided string to Italic.
 func SetItalic(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Italic + s + ItalicOff
 }
 
 // SetUnderline underlines provided string.
 func SetUnderline(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Underline + s + UnderlineOff
 }
 
 // SetSlowBlink makes provided string to blink slowly.
 func SetSlowBlink(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return SlowBlink + s + BlinkOff
 }
 
 // SetRapidBlink makes provided string to blink rapidly.
 func SetRapidBlink(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return RapidBlink + s + BlinkOff
 }
 
 // SetInverse inverts provided string colors.
 func SetInverse(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Inverse + s + InverseOff
 }
 
 // SetConceal conceals provided string.
 func SetConceal(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Conceal + s + Reveal
 }
 
 // SetCrossedOut crosses out provided string.
 func SetCrossedOut(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return CrossedOut + s + NotCrossedOut
 }
 
 // SetBlack sets provided string foreground to black.
 func SetBlack(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Black + s + DefaultFG
 }
 
 // SetRed sets provided string foreground to red.
 func SetRed(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Red + s + DefaultFG
 }
 
 // SetGreen sets provided string foreground to green.
 func SetGreen(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Green + s + DefaultFG
 }
 
 // SetYellow sets provided string foreground to yellow.
 func SetYellow(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Yellow + s + DefaultFG
 }
 
 // SetBlue sets provided string foreground to blue.
 func SetBlue(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Blue + s + DefaultFG
 }
 
 // SetMagenta sets provided string foreground to magenta.
 func SetMagenta(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Magenta + s + DefaultFG
 }
 
 // SetCyan sets provided string foreground to cyan.
 func SetCyan(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Cyan + s + DefaultFG
 }
 
 // SetWhite sets provided string foreground to white.
 func SetWhite(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return White + s + DefaultFG
 }
 
 // SetBlackBG sets provided string background to black.
 func SetBlackBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BlackBG + s + DefaultBG
 }
 
 // SetRedBG sets provided string background to red.
 func SetRedBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return RedBG + s + DefaultBG
 }
 
 // SetGreenBG sets provided string background to green.
 func SetGreenBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return GreenBG + s + DefaultBG
 }
 
 // SetYellowBG sets provided string background to yellow.
 func SetYellowBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return YellowBG + s + DefaultBG
 }
 
 // SetBlueBG sets provided string background to blue.
 func SetBlueBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BlueBG + s + DefaultBG
 }
 
 // SetMagentaBG sets provided string background to magenta.
 func SetMagentaBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return MagentaBG + s + DefaultBG
 }
 
 // SetCyanBG sets provided string background to cyan.
 func SetCyanBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return CyanBG + s + DefaultBG
 }
 
 // SetWhiteBG sets provided string background to white.
 func SetWhiteBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return WhiteBG + s + DefaultBG
 }
 
 // SetFramed draws a frame around the provided string.
 func SetFramed(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Framed + s + NotFramed
 }
 
 // SetEncircled encircles provided string.
 func SetEncircled(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Encircled + s + NotFramed
 }
 
 // SetOverlined overlines provided string.
 func SetOverlined(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return Overlined + s + NotOverlined
 }
 
 // SetBrightBlack sets provided string foreground in bright black.
 func SetBrightBlack(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightBlack + s + DefaultFG
 }
 
 // SetBrightRed sets provided string foreground in bright red.
 func SetBrightRed(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightRed + s + DefaultFG
 }
 
 // SetBrightGreen sets provided string foreground in bright green.
 func SetBrightGreen(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightGreen + s + DefaultFG
 }
 
 // SetBrightYellow sets provided string foreground in bright yellow.
 func SetBrightYellow(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightYellow + s + DefaultFG
 }
 
 // SetBrightBlue sets provided string foreground in bright blue.
 func SetBrightBlue(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightBlue + s + DefaultFG
 }
 
 // SetBrightMagenta sets provided string foreground in bright magenta.
 func SetBrightMagenta(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightMagenta + s + DefaultFG
 }
 
 // SetBrightCyan sets provided string foreground in bright cyan.
 func SetBrightCyan(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightCyan + s + DefaultFG
 }
 
 // SetBrightWhite sets provided string foreground in bright white.
 func SetBrightWhite(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightWhite + s + DefaultFG
 }
 
 // SetBrightBlackBG sets provided string background in bright black.
 func SetBrightBlackBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightBlackBG + s + DefaultBG
 }
 
 // SetBrightRedBG sets provided string background in bright red.
 func SetBrightRedBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightRedBG + s + DefaultBG
 }
 
 // SetBrightGreenBG sets provided string background in bright green.
 func SetBrightGreenBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightGreenBG + s + DefaultBG
 }
 
 // SetBrightYellowBG sets provided string background in bright yellow.
 func SetBrightYellowBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightYellowBG + s + DefaultBG
 }
 
 // SetBrightBlueBG sets provided string background in bright blue.
 func SetBrightBlueBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightBlueBG + s + DefaultBG
 }
 
 // SetBrightMagentaBG sets provided string background in bright magenta.
 func SetBrightMagentaBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightMagentaBG + s + DefaultBG
 }
 
 // SetBrightCyanBG sets provided string background in bright cyan.
 func SetBrightCyanBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightCyanBG + s + DefaultBG
 }
 
 // SetBrightWhiteBG sets provided string background in bright white.
 func SetBrightWhiteBG(s string) string {
+	if s == "" {
+		return ""
+	}
+
 	return BrightWhiteBG + s + DefaultBG
 }
 
