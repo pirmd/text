@@ -84,7 +84,7 @@ func TestVisualRepeat(t *testing.T) {
 	}
 }
 
-func TestInterruptANSI(t *testing.T) {
+func TestInterruptFormattingatEOL(t *testing.T) {
 	testCases := []struct {
 		in  []string
 		out []string
@@ -100,7 +100,41 @@ func TestInterruptANSI(t *testing.T) {
 	for _, tc := range testCases {
 		got := make([]string, len(tc.in))
 		copy(got, tc.in)
-		InterruptANSI(got)
+		InterruptFormattingAtEOL(got)
+		if !reflect.DeepEqual(got, tc.out) {
+			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
+		}
+	}
+}
+
+func TestVisualWrap(t *testing.T) {
+	testCases := []struct {
+		in  string
+		sz  int
+		out []string
+	}{
+		{"Coucou", 10, []string{"Coucou"}},
+		{"Coucou", 6, []string{"Coucou"}},
+		{"Coucou ", 6, []string{"Coucou"}},
+		{"Coucou\n", 8, []string{"Coucou", ""}},
+		{"This is a long sentence", 10, []string{"This is a ", "long ", "sentence"}},
+		{"This \x1b[34mis\x1b[0m a long sentence", 10, []string{"This \x1b[34mis\x1b[0m a ", "long ", "sentence"}},
+		{"This \x1b[34mis a long sentence\x1b[0m", 10, []string{"This \x1b[34mis a ", "long ", "sentence\x1b[0m"}},
+		{"Supercalifragilisticexpialidocious\nChim Chim Cher-ee", 10, []string{"Supercalif", "ragilistic", "expialidoc", "ious", "Chim Chim ", "Cher-ee"}},
+		{
+			"description: This edition contains Alice's Adventures in Wonderland. Tweedledum and Tweedledee, the Mad Hatter, the Cheshire Cat, the Red Queen and the White Rabbit all make their appearances, and are now familiar figures in writing, conversation and idiom.\nauthor: Lewis Caroll",
+			58,
+			[]string{"description: This edition contains Alice's Adventures in ", "Wonderland. Tweedledum and Tweedledee, the Mad Hatter, the", "Cheshire Cat, the Red Queen and the White Rabbit all make ", "their appearances, and are now familiar figures in ", "writing, conversation and idiom.", "author: Lewis Caroll"},
+		},
+		{
+			"All details can be found in [![GoDoc](https://godoc.org/github.com/pirmd/style?status.svg)](https://godoc.org/github.com/pirmd/style)",
+			80,
+			[]string{"All details can be found in ", "[![GoDoc](https://godoc.org/github.com/pirmd/style?status.svg)](https://godoc.or", "g/github.com/pirmd/style)"},
+		},
+	}
+
+	for _, tc := range testCases {
+		got := VisualWrap(tc.in, tc.sz, true)
 		if !reflect.DeepEqual(got, tc.out) {
 			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}

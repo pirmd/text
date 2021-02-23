@@ -1,38 +1,65 @@
 package table
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
 	"golang.org/x/term"
 
-	"github.com/pirmd/text"
 	"github.com/pirmd/text/internal/util"
 )
 
 const (
-	// MaxTableWidth defines the maximum size of a table It tries to get
-	// initialized by reading the terminal width or fall-back to 80
-	MaxTableWidth = 80
+	// DefaultMaxWidth defines the maximum size of a table It tries to get
+	// initialized by reading the terminal width or fall-back to 80.
+	DefaultMaxWidth = 80
 )
+
+// Grid represents a set of Table's grid decoration.
+type Grid struct {
+	// Columns is the separator pattern between two columns.
+	Columns string
+	// Header is the separator pattern between the header and the table's body.
+	// Default to BodyRows.
+	Header string
+	// BodyRows is the separator pattern between two consecutive table's body
+	// rows.
+	BodyRows string
+	// Footer is the separator pattern between the table's body and the footer.
+	// Default to BodyRows.
+	Footer string
+}
 
 // Table represents a table.
 type Table struct {
-	maxWidth              int
-	sepV, sepC, sepH      string
-	dontTruncateLongWords bool
+	// header contains the Table's header's row.
+	header []string
+	// body contains the Table"s body's rows.
+	body [][]string
+	// footer contains the Table's footer's row .
+	footer []string
 
-	cells [][]string
+	// maxWidth is the maximum allowed width of the Table.
+	// default to DefaultMaxWidth or to the terminal width if it can be
+	// determined at runtime.
+	maxWidth int
+	// colWidth contains the expected width of the Table's columns. If colWidth
+	// is empty it is automatically determined before drawing the table based
+	// on Table's maxWidth and on the actual maximum width of the rows'
+	// content.
+	colWidth []int
+
+	// sep contains the patterns to draw the Table's grid.
+	sep *Grid
 }
 
 // New returns a new empty table, with no grid and a maximum width set-up to
-// the terminal width or to MaxTableWidth if output is not a terminal or if the
+// the terminal width or to DefaultMaxWidth if output is not a terminal or if the
 // terminal size cannot be determined.
 func New() *Table {
 	t := &Table{
-		maxWidth: MaxTableWidth,
-		sepV:     " ",
+		maxWidth: DefaultMaxWidth,
+		sep:      &Grid{Columns: " "},
 	}
 
 	if fd := int(os.Stdout.Fd()); term.IsTerminal(fd) {
@@ -50,111 +77,57 @@ func (t *Table) SetMaxWidth(w int) *Table {
 	return t
 }
 
-// SetGrid defines the grid separators, respectively vertical separator between
-// columns and horizontal separating captions' row from table content (before
-// and after first row, after last row) and between rows.
-//
-// An empty separator means no separation at all.
-func (t *Table) SetGrid(sepV, sepC, sepH string) *Table {
-	t.sepV, t.sepC, t.sepH = sepV, sepC, sepH
+// SetColWidth sets the table's column width. If not set, Table will
+// auto-determined the column width based on Table's max width.
+func (t *Table) SetColWidth(w ...int) *Table {
+	t.colWidth = w
 	return t
 }
 
-// DontTruncateLongWords prevents long words to be cut before words boundaries
-// to fit Table's column maximum width. It is not recommanded as it might void
-// table formatting.
-func (t *Table) DontTruncateLongWords() *Table {
-	t.dontTruncateLongWords = true
+// SetGrid defines the grid separators.
+func (t *Table) SetGrid(sep *Grid) *Table {
+	t.sep = sep
 	return t
 }
 
-// Rows adds a list of rows to the table. Rows trims any trailing new line.
-func (t *Table) Rows(rows ...[]string) *Table {
+// SetHeader sets the Table's header (first row).
+func (t *Table) SetHeader(row ...string) *Table {
+	t.header = append([]string{}, row...)
+	return t
+}
+
+// SetFooter sets the Table's footer (last row).
+func (t *Table) SetFooter(row ...string) *Table {
+	t.footer = append([]string{}, row...)
+	return t
+}
+
+// AddRows adds a list of rows to the table's body.
+func (t *Table) AddRows(rows ...[]string) *Table {
 	for _, row := range rows {
 		srow := []string{}
 		for _, cell := range row {
 			srow = append(srow, strings.TrimSuffix(cell, "\n"))
 		}
-		t.cells = append(t.cells, srow)
+		t.body = append(t.body, srow)
 	}
 
 	return t
 }
 
-// RawRows adds a list of rows to the table without triming any trailing new line.
-func (t *Table) RawRows(rows ...[]string) *Table {
-	t.cells = append(t.cells, rows...)
-	return t
-}
-
-// Col adds a list of columns to the table Col add col content at the end of
-// existing rows, meaning that if rows are not of the same size or if col add
-// more rows, results will not be an 'aligned' column.
-// Col trims any cell trailing new line.
-func (t *Table) Col(col ...[]string) *Table {
-	for _, column := range col {
-		for i, cell := range column {
-			for row := len(t.cells); row <= i; row++ {
+// AddCol adds a list of columns to the table's body.
+func (t *Table) AddCol(columns ...[]string) *Table {
+	for _, col := range columns {
+		for i, cell := range col {
+			for row := len(t.body); row <= i; row++ {
 				//columns features more rows than actually available in the
 				//table we complete by adding an empty row
-				t.cells = append(t.cells, []string{})
+				t.body = append(t.body, []string{})
 			}
-			t.cells[i] = append(t.cells[i], strings.TrimSuffix(cell, "\n"))
+			t.body[i] = append(t.body[i], strings.TrimSuffix(cell, "\n"))
 		}
 	}
 	return t
-}
-
-// RawCol adds a list of colums to the table but unlike 'Col' does not trim any
-// trailing new line.
-func (t *Table) RawCol(col ...[]string) *Table {
-	for _, column := range col {
-		for i, cell := range column {
-			for row := len(t.cells); row <= i; row++ {
-				//columns features more rows than actually available in the
-				//table we complete by adding an empty row
-				t.cells = append(t.cells, []string{})
-			}
-			t.cells[i] = append(t.cells[i], cell)
-		}
-	}
-	return t
-}
-
-// Captions sets the columns' captions (first row) of the table
-func (t *Table) Captions(row ...string) *Table {
-	t.cells = append([][]string{row}, t.cells...)
-	return t
-}
-
-// Draw draws the table.
-// Columns length are determined in order to maximize the use of the table
-// maximum width Text is automatically wrapped to fit into the columns size.
-//
-// The algorithm that defines colums' size has limitation and will provide
-// unreadable output if available table's width is too short compared to content
-// length.
-func (t *Table) Draw() string {
-	if len(t.cells) == 0 {
-		return ""
-	}
-
-	//TODO(pirmd): optimize this serie of string transformation (several
-	//split-join sequences.
-	maxColLen := colMaxLen(t.maxWidth, util.VisualLen(t.sepV), t.cells)
-
-	rows := []string{}
-	for _, row := range t.cells {
-		col := []string{}
-		for i, cell := range row {
-			justifiedCell := justifyWithInterruptANSI(cell, maxColLen[i], !t.dontTruncateLongWords)
-			col = append(col, justifiedCell)
-		}
-
-		rows = append(rows, columnize(t.sepV, col...))
-	}
-
-	return strings.Join(t.addHorizontalGrid(rows, maxColLen), "\n")
 }
 
 // String returns a string representation of the table
@@ -162,185 +135,211 @@ func (t *Table) String() string {
 	return t.Draw()
 }
 
-func (t *Table) addHorizontalGrid(rows []string, colLen []int) []string {
-	var rowsWithGrid []string
-
-	var sepH string
-	if t.sepH != "" {
-		var sep []string
-		for _, l := range colLen {
-			sep = append(sep, util.VisualRepeat(t.sepH, l))
-		}
-
-		sepH = strings.Join(sep, t.sepV)
+// Draw actually draws the table.
+// Columns width are determined in order to maximize the use of the table
+// maximum width, cells' text is automatically wrapped to fit into the columns
+// size.
+func (t *Table) Draw() string {
+	if len(t.body) == 0 {
+		return ""
 	}
 
-	var sepC string
-	if t.sepC != "" {
-		var sep []string
-		for _, l := range colLen {
-			sep = append(sep, util.VisualRepeat(t.sepC, l))
-		}
+	t.autoColWidth()
 
-		sepC = strings.Join(sep, t.sepV)
+	sepRow := t.gridSeparation(t.sep.BodyRows)
+	sepHeader := t.gridSeparation(t.sep.Header)
+	if sepHeader == "" {
+		sepHeader = sepRow
+	}
+	sepFooter := t.gridSeparation(t.sep.Footer)
+	if sepFooter == "" {
+		sepFooter = sepRow
 	}
 
-	if t.sepH != "" {
-		if len(rows) > 2 {
-			for _, row := range rows[2:] {
-				rowsWithGrid = append(rowsWithGrid, sepH, row)
-			}
-		}
-	} else if len(rows) > 2 {
-		rowsWithGrid = append(rowsWithGrid, rows[2:]...)
-	}
+	lines := []string{}
+	if len(t.header) > 0 {
+		lines = append(lines, t.drawRow(t.header))
 
-	if t.sepC != "" {
-		if len(rows) > 1 {
-			rowsWithGrid = append([]string{sepC, rows[0], sepC, rows[1]}, rowsWithGrid...)
-			rowsWithGrid = append(rowsWithGrid, sepC)
-		} else {
-			rowsWithGrid = []string{sepC, rows[0], sepC}
-		}
-	} else {
-		if t.sepH != "" && len(rows) > 1 {
-			//Situation where we don't want any caption separation but ask for an
-			//horizontal separation
-			rowsWithGrid = append([]string{rows[0], sepH, rows[1]}, rowsWithGrid...)
-		} else if len(rows) > 1 {
-			rowsWithGrid = append(rows[0:2], rowsWithGrid...)
-		} else {
-			rowsWithGrid = append([]string{rows[0]}, rowsWithGrid...)
+		if sepHeader != "" {
+			lines = append(lines, sepHeader)
 		}
 	}
 
-	return rowsWithGrid
+	lastRow := len(t.body) - 1
+	for i, row := range t.body {
+		lines = append(lines, t.drawRow(row))
+
+		if i != lastRow && sepRow != "" {
+			lines = append(lines, sepRow)
+		}
+	}
+
+	if len(t.footer) > 0 {
+		if sepFooter != "" && len(lines) > 0 {
+			lines = append(lines, sepFooter)
+		}
+
+		lines = append(lines, t.drawRow(t.footer))
+	}
+
+	return strings.Join(lines, "\n")
 }
 
-func columnize(sepV string, col ...string) (row string) {
-	for i, r := range multilinesRow(col) {
-		if i == 0 {
-			row = strings.Join(r, sepV)
-		} else {
-			row += "\n" + strings.Join(r, sepV)
-		}
+func (t *Table) drawRow(row []string) string {
+	if len(row) == 0 {
+		return ""
 	}
-	return
+
+	paddedRow := t.padRow(row)
+
+	lines := make([]string, len(paddedRow))
+	for i := range paddedRow {
+		lines[i] = strings.Join(paddedRow[i], t.sep.Columns)
+	}
+	return strings.Join(lines, "\n")
 }
 
-func multilinesRow(row []string) [][]string {
-	var r [][]string
-	var emptyCol []string
+func (t *Table) padRow(row []string) [][]string {
+	paddedRow := [][]string{}
 
-	for i, s := range row {
-		col := strings.Split(s, "\n")
-		colLen := maxLen(col)
-		emptyCol = append(emptyCol, fmt.Sprintf("%-*s", colLen, ""))
+	for icol, cell := range row {
+		lines := columnize(cell, t.colWidth[icol])
 
-		for icol, scol := range col {
-			if icol >= len(r) {
-				//Text in current column has more lines than our current
-				//row. Create a new one filling other columns with blank
-				var newRow []string
-
-				for l := 0; l < i; l++ {
-					newRow = append(newRow, emptyCol[l])
-				}
-				r = append(r, newRow)
-			}
-
-			r[icol] = append(r[icol], scol)
+		for len(lines) > len(paddedRow) {
+			paddedRow = append(paddedRow, t.emptyLine())
 		}
 
-		for l := len(col); l < len(r); l++ {
-			r[l] = append(r[l], emptyCol[i])
+		for iline := range lines {
+			paddedRow[iline][icol] = lines[iline]
 		}
 	}
 
-	return r
+	return paddedRow
 }
 
-func colMaxLen(maxWidth int, sepLen int, cells [][]string) []int {
-	colLen := []int{}
+func (t *Table) emptyLine() []string {
+	l := make([]string, len(t.colWidth))
+	for i := range t.colWidth {
+		l[i] = strings.Repeat(" ", t.colWidth[i])
+	}
+	return l
+}
 
-	if len(cells) == 0 {
-		return colLen
+func (t *Table) gridSeparation(pattern string) string {
+	if pattern == "" {
+		return ""
 	}
 
-	for _, row := range cells {
+	sep := make([]string, len(t.colWidth))
+	for i := range t.colWidth {
+		sep[i] = util.VisualRepeat(pattern, t.colWidth[i])
+	}
+	return strings.Join(sep, t.sep.Columns)
+}
+
+// autoColWidth calculates the column's width of the Table based on the Table's
+// maxWidth and the cells maximum width.
+func (t *Table) autoColWidth() {
+	t.colWidth = make([]int, len(t.header))
+	for i, cell := range t.header {
+		l := cellWidth(cell)
+
+		if i >= len(t.colWidth) {
+			t.colWidth = append(t.colWidth, l)
+		} else if t.colWidth[i] <= l {
+			t.colWidth[i] = l
+		}
+	}
+
+	for _, row := range t.body {
 		for i, cell := range row {
-			l := maxLen(strings.Split(cell, "\n"))
+			l := cellWidth(cell)
 
-			if i >= len(colLen) {
-				colLen = append(colLen, l)
-			} else if colLen[i] <= l {
-				colLen[i] = l
+			if i >= len(t.colWidth) {
+				t.colWidth = append(t.colWidth, l)
+			} else if t.colWidth[i] <= l {
+				t.colWidth[i] = l
 			}
 		}
 	}
 
-	max := findMaxColWidth(colLen, maxWidth-(len(colLen)-1)*sepLen)
-	for i, l := range colLen {
-		if l > max {
-			colLen[i] = max
+	for i, cell := range t.footer {
+		l := cellWidth(cell)
+
+		if i >= len(t.colWidth) {
+			t.colWidth = append(t.colWidth, l)
+		} else if t.colWidth[i] <= l {
+			t.colWidth[i] = l
 		}
 	}
 
-	return colLen
+	maxUsableWidth := t.maxWidth - (len(t.colWidth)-1)*util.VisualLen(t.sep.Columns)
+	max := findWidthLimit(t.colWidth, maxUsableWidth)
+	for i, l := range t.colWidth {
+		if l > max {
+			t.colWidth[i] = max
+		}
+	}
 }
 
-func findMaxColWidth(colLen []int, maxWidth int) int {
-	var fn func([]int, int) ([]int, int, int) //recursive function that gradually select columns that remains over size limits
+// findWidthLimit uses an heuristic finding the best combination for the
+// column's width so that the total Table's width is close to its maxWidth
+// while keeping as much columns as possible close to their maximum width.
+func findWidthLimit(width []int, max int) int {
+	var fn func([]int, int) ([]int, int, int) //recursive function that gradually selects columns that remains over size limits
 
-	fn = func(colLen []int, maxWidth int) (overLimit []int, width int, max int) {
-		if len(colLen) == 0 {
+	fn = func(width []int, max int) (overLimit []int, w int, m int) {
+		if len(width) == 0 {
 			return
 		}
 
-		max, width = maxWidth/len(colLen), maxWidth
+		m, w = max/len(width), max
 
-		for _, l := range colLen {
-			if l > max {
+		for _, l := range width {
+			if l > m {
 				overLimit = append(overLimit, l)
 			} else {
-				width -= l
+				w -= l
 			}
 		}
 
-		if len(overLimit) > 0 && len(overLimit) < len(colLen) {
+		if len(overLimit) > 0 && len(overLimit) < len(width) {
 			//We have found new under-limits items, try again with remaining space
-			overLimit, width, max = fn(overLimit, width)
+			overLimit, w, m = fn(overLimit, w)
 		}
 
 		return
 	}
 
-	_, _, max := fn(colLen, maxWidth)
-	return max
+	_, _, m := fn(width, max)
+	return m
 }
 
-func maxLen(col []string) int {
+// cellWidth finds the width of a cell.
+func cellWidth(cell string) int {
 	var length int
-	for _, cell := range col {
-		if l := util.VisualLen(cell); l > length {
+	for _, line := range strings.Split(cell, "\n") {
+		if l := util.VisualLen(line); l > length {
 			length = l
 		}
 	}
 	return length
 }
 
-// justifyWithInterruptANSI wraps cells, properly interrupting ANSI sequence at
-// line boundaries, then fill lines to meet columns size
-func justifyWithInterruptANSI(s string, sz int, truncateLongWords bool) string {
+// columnize justifies a text and properly interrupt ANSI sequences at line
+// boundaries so that it can easily be combined with another text without
+// voiding the formatting.
+func columnize(s string, sz int) []string {
 	if len(s) == 0 {
-		return strings.Repeat(" ", sz)
+		return []string{strings.Repeat(" ", sz)}
 	}
 
-	ws := strings.Split(text.Wrap(s, sz, truncateLongWords), "\n")
-	//XXX: Improve-me: should I split at '\n' ?)
-	util.InterruptANSI(ws)
+	ws := util.VisualWrap(s, sz, true)
+
+	util.InterruptFormattingAtEOL(ws)
+
 	for i, l := range ws {
 		ws[i] = util.VisualPad(l, sz, ' ')
 	}
-	return strings.Join(ws, "\n")
+	return ws
 }

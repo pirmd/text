@@ -2,9 +2,7 @@ package text
 
 import (
 	"strings"
-	"unicode"
 
-	"github.com/pirmd/text/ansi"
 	"github.com/pirmd/text/internal/util"
 )
 
@@ -33,7 +31,7 @@ func Indent(s string, tag, prefix string) string {
 // If a "word" is encountered that is longer than the limit, it is truncated or
 // left as is depending of truncateLongWords flag.
 func Wrap(txt string, limit int, truncateLongWords bool) string {
-	return strings.Join(wrap(txt, limit, truncateLongWords), "\n")
+	return strings.Join(util.VisualWrap(txt, limit, truncateLongWords), "\n")
 }
 
 // Tab wraps and indents the given text.
@@ -77,81 +75,4 @@ func indent(s string, firstPrefix, prefix string) string {
 	}
 
 	return firstPrefix + indented
-}
-
-func wrap(s string, limit int, truncateLongWords bool) (ws []string) {
-	//XXX: merge with Wrap (?)
-	var line, word string
-	var linelen, wordlen int
-
-	_ = ansi.Walk(s, func(c rune, esc string) error {
-		switch {
-		case c == -1:
-			word += esc
-
-		case c == '\n':
-			if linelen+wordlen <= limit {
-				line += word
-			} else {
-				ws = append(ws, line)
-				line = word
-			}
-
-			ws = append(ws, line)
-			line, linelen = "", 0
-			word, wordlen = "", 0
-
-		case unicode.IsSpace(c):
-			switch l := linelen + wordlen; {
-			case l == limit:
-				ws = append(ws, line+word)
-				line, linelen = "", 0
-
-			case l > limit:
-				ws = append(ws, line)
-				line = word + string(c)
-				linelen = wordlen + util.Runewidth(c)
-
-			default:
-				line += word + string(c)
-				linelen += wordlen + util.Runewidth(c)
-			}
-			word, wordlen = "", 0
-
-		default:
-			if wordlen += util.Runewidth(c); wordlen > limit {
-				if line != "" {
-					ws = append(ws, line)
-					line, linelen = "", 0
-				}
-
-				// word is longer than the limit, we truncated it
-				if truncateLongWords {
-					ws = append(ws, word)
-					word, wordlen = "", util.Runewidth(c)
-				}
-			}
-			word += string(c)
-
-		}
-
-		return nil
-	})
-
-	switch l := linelen + wordlen; {
-	case l == 0 && strings.HasSuffix(s, "\n"):
-		ws = append(ws, "")
-	case l == 0:
-	case l > limit && linelen == 0:
-		ws = append(ws, word)
-	case l > limit:
-		if line != "" {
-			ws = append(ws, line)
-		}
-		ws = append(ws, word)
-	default:
-		ws = append(ws, line+word)
-	}
-
-	return
 }

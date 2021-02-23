@@ -90,7 +90,7 @@ func (r Result) PrettyPrint(h ...Highlighter) (dL []string, dR []string, dT []st
 func (r Result) PrintSideBySide(h ...Highlighter) string {
 	hi := append([]Highlighter{WithSoftTabs}, h...)
 	dL, dR, dT, _ := r.PrettyPrint(hi...)
-	return table.New().Col(dL, dT, dR).String()
+	return table.New().AddCol(dL, dT, dR).Draw()
 }
 
 // GoString represents a diff's Result in an easy to read format.

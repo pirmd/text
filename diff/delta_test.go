@@ -91,8 +91,8 @@ func TestResultPrettyPrint(t *testing.T) {
 	for _, tc := range testCases {
 		gotL, gotR, gotT, _ := tc.in.PrettyPrint()
 		if !reflect.DeepEqual(gotL, tc.wantL) || !reflect.DeepEqual(gotR, tc.wantR) || !reflect.DeepEqual(gotT, tc.wantT) {
-			t.Logf("Want:\n" + table.New().SetMaxWidth(180).Col(tc.wantL, tc.wantT, tc.wantR).Draw())
-			t.Logf("Got :\n" + table.New().SetMaxWidth(180).Col(gotL, gotT, gotR).Draw())
+			t.Logf("Want:\n" + table.New().SetMaxWidth(180).AddCol(tc.wantL, tc.wantT, tc.wantR).Draw())
+			t.Logf("Got :\n" + table.New().SetMaxWidth(180).AddCol(gotL, gotT, gotR).Draw())
 			t.Errorf("Pretty printing\n %#v\n failed.", tc.in)
 		}
 	}

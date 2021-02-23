@@ -4,23 +4,6 @@ import (
 	"testing"
 )
 
-func TestColumnize(t *testing.T) {
-	testCases := []struct {
-		in  []string
-		out string
-	}{
-		{[]string{"Col1", "Col2", "Col3"}, "Col1|Col2|Col3"},
-		{[]string{"Col1", "Col2\nCol2.1\nCol2.2", "Col3\nCol3.1"}, "Col1|Col2|Col3\n    |Col2.1|Col3.1\n    |Col2.2|      "},
-	}
-
-	for _, tc := range testCases {
-		got := columnize("|", tc.in...)
-		if got != tc.out {
-			t.Errorf("Columnize failed for %#v.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
-		}
-	}
-}
-
 func TestTable(t *testing.T) {
 	testCases := []struct {
 		in  [][]string
@@ -35,7 +18,7 @@ func TestTable(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid("|", "", "").SetMaxWidth(24).Rows(tc.in...).String()
+		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddRows(tc.in...).Draw()
 		if got != tc.out {
 			t.Errorf("table failed for '%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -53,55 +36,77 @@ func TestTableByCol(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid("|", "", "").SetMaxWidth(24).Col(tc.in...).String()
+		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddCol(tc.in...).Draw()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
 	}
 }
 
-func TestTableWithSepH(t *testing.T) {
-	testTable := [][]string{{"Col1.1", "Col1.2", "Col1.3"}, {"Col2.1", "Col2.2", "Col2.3"}}
-
-	testCases := []struct {
-		inT [][]string
-		inH string
-		out string
-	}{
-		{testTable, "", "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3"},
-		{testTable, "-", "Col1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3"},
-		{testTable, "-*", "Col1.1|Col1.2|Col1.3\n-*-*-*|-*-*-*|-*-*-*\nCol2.1|Col2.2|Col2.3"},
-		{testTable, "-**-", "Col1.1|Col1.2|Col1.3\n-**--*|-**--*|-**--*\nCol2.1|Col2.2|Col2.3"},
-	}
-
-	for _, tc := range testCases {
-		got := New().SetGrid("|", "", tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
-		if got != tc.out {
-			t.Errorf("table failed for sep='%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.inH, tc.out, got)
-		}
-	}
-}
-
 func TestTableWithGrid(t *testing.T) {
-	testTable := [][]string{{"Col1.1", "Col1.2", "Col1.3"}, {"Col2.1", "Col2.2", "Col2.3"}, {"Col3.1", "Col3.2", "Col3.3"}}
+	testTable := [][]string{{"Col1.1", "Col1.2", "Col1.3"}, {"Col2.1", "Col2.2", "Col2.3"}}
+	testTable2 := [][]string{{"Col1.1", "Col1.2", "Col1.3"}, {"Col2.1", "Col2.2", "Col2.3"}, {"Col3.1", "Col3.2", "Col3.3"}}
 
 	testCases := []struct {
-		inT      [][]string
-		inC, inH string
-		out      string
+		inTheader []string
+		inTbody   [][]string
+		inTfooter []string
+		inSep     *Grid
+		out       string
 	}{
-		{testTable, "", "", "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3\nCol3.1|Col3.2|Col3.3"},
-		{testTable, "-", "", "------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\nCol3.1|Col3.2|Col3.3\n------|------|------"},
-		{testTable, "", "-", "Col1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n------|------|------\nCol3.1|Col3.2|Col3.3"},
-		{testTable, "-", "=", "------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n======|======|======\nCol3.1|Col3.2|Col3.3\n------|------|------"},
-		{[][]string{{"Col1.1", "Col1.2", "Col1.3"}}, "-", "=", "------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------"},
-		{[][]string{{"Col1.1", "Col1.2", "Col1.3"}}, "", "=", "Col1.1|Col1.2|Col1.3"},
+		{
+			inTbody: testTable,
+			inSep:   &Grid{Columns: "|"},
+			out:     "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3",
+		},
+		{
+			inTbody: testTable,
+			inSep:   &Grid{Columns: "|", BodyRows: "-"},
+			out:     "Col1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3",
+		},
+		{
+			inTbody: testTable,
+			inSep:   &Grid{Columns: "|", BodyRows: "-**-"},
+			out:     "Col1.1|Col1.2|Col1.3\n-**--*|-**--*|-**--*\nCol2.1|Col2.2|Col2.3",
+		},
+		{
+			inTheader: []string{"A", "B", "C"},
+			inTbody:   testTable2,
+			inSep:     &Grid{Columns: "|"},
+			out:       "A     |B     |C     \nCol1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3\nCol3.1|Col3.2|Col3.3",
+		},
+		{
+			inTheader: []string{"A", "B", "C"},
+			inTbody:   testTable2,
+			inSep:     &Grid{Columns: "|", Header: "="},
+			out:       "A     |B     |C     \n======|======|======\nCol1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3\nCol3.1|Col3.2|Col3.3",
+		},
+		{
+			inTheader: []string{"A", "B", "C"},
+			inTbody:   testTable2,
+			inSep:     &Grid{Columns: "|", BodyRows: "-"},
+			out:       "A     |B     |C     \n------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n------|------|------\nCol3.1|Col3.2|Col3.3",
+		},
+		{
+			inTheader: []string{"A", "B", "C"},
+			inTbody:   testTable2,
+			inTfooter: []string{"", "S", "42"},
+			inSep:     &Grid{Columns: "|", BodyRows: "-"},
+			out:       "A     |B     |C     \n------|------|------\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n------|------|------\nCol3.1|Col3.2|Col3.3\n------|------|------\n      |S     |42    ",
+		},
+		{
+			inTheader: []string{"A", "B", "C"},
+			inTbody:   testTable2,
+			inTfooter: []string{"", "S", "42"},
+			inSep:     &Grid{Columns: "|", Header: "*", BodyRows: "-", Footer: "="},
+			out:       "A     |B     |C     \n******|******|******\nCol1.1|Col1.2|Col1.3\n------|------|------\nCol2.1|Col2.2|Col2.3\n------|------|------\nCol3.1|Col3.2|Col3.3\n======|======|======\n      |S     |42    ",
+		},
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid("|", tc.inC, tc.inH).SetMaxWidth(24).Rows(tc.inT...).String()
+		got := New().SetGrid(tc.inSep).SetMaxWidth(24).AddRows(tc.inTbody...).SetHeader(tc.inTheader...).SetFooter(tc.inTfooter...).Draw()
 		if got != tc.out {
-			t.Errorf("table failed for sep_C='%s', sep_H='%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.inC, tc.inH, tc.out, got)
+			t.Errorf("table failed for sep='%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.inSep, tc.out, got)
 		}
 	}
 }

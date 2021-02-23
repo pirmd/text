@@ -29,7 +29,7 @@ func Justify(s string, sz int, truncateLongWords bool) string {
 		return strings.Repeat(" ", sz)
 	}
 
-	ws := wrap(s, sz, truncateLongWords)
+	ws := util.VisualWrap(s, sz, truncateLongWords)
 	for i, l := range ws {
 		ws[i] = util.VisualPad(l, sz, ' ')
 	}
