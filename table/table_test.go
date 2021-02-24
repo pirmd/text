@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestTable(t *testing.T) {
+func TestTableAddRows(t *testing.T) {
 	testCases := []struct {
 		in  [][]string
 		out string
@@ -25,7 +25,7 @@ func TestTable(t *testing.T) {
 	}
 }
 
-func TestTableByCol(t *testing.T) {
+func TestTableAddCol(t *testing.T) {
 	testCases := []struct {
 		in  [][]string
 		out string
@@ -39,6 +39,27 @@ func TestTableByCol(t *testing.T) {
 		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddCol(tc.in...).Draw()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
+		}
+	}
+}
+
+func TestTableAddTabbedText(t *testing.T) {
+	testCases := []struct {
+		in  string
+		out string
+	}{
+		{"Col1.1\tCol1.2\tCol1.3\t\nCol2.1\tCol2.2\tCol2.3\t\n", "Col1.1|Col1.2|Col1.3\nCol2.1|Col2.2|Col2.3"},
+		{"Col1.1\tCol1.2\tCol1.3\t\nCol2.1\tCol2.2.1\nCol2.2.2\tCol2.3\t\n", "Col1.1|Col1.2  |Col1.3\nCol2.1|Col2.2.1|Col2.3\n      |Col2.2.2|      "},
+		{"Col1.1\tCol1.2\tCol1.3\t\nCol2.1\tCol2.2\nCol2.2.1\tCol2.3\t\n", "Col1.1|Col1.2  |Col1.3\nCol2.1|Col2.2  |Col2.3\n      |Col2.2.1|      "},
+		{"Col1.1\tCol1.2\tCol1.3\t\nCol2.1\tCol2.2.1 Col2.2.2\tCol2.3\t\n", "Col1.1|Col1.2    |Col1.3\nCol2.1|Col2.2.1  |Col2.3\n      |Col2.2.2  |      "},
+		{"\tCol1.2\tCol1.3\t\nCol2.1\tCol2.2.1 Col2.2.2\tCol2.3\t\n", "      |Col1.2    |Col1.3\nCol2.1|Col2.2.1  |Col2.3\n      |Col2.2.2  |      "},
+		{"\x1b[31mCol1\t\x1b[34mCol2\nCol2.1\x1b[0m\nCol2.2\tCol3\nCol3.1\t\n", "\x1b[31mCol1\x1b[0m|\x1b[34mCol2\x1b[0m  |Col3  \n    |\x1b[34mCol2.1\x1b[0m|Col3.1\n    |Col2.2|      "},
+	}
+
+	for _, tc := range testCases {
+		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddTabbedText(tc.in).Draw()
+		if got != tc.out {
+			t.Errorf("table failed for '%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
 	}
 }

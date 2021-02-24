@@ -130,6 +130,19 @@ func (t *Table) AddCol(columns ...[]string) *Table {
 	return t
 }
 
+// AddTabbedText adds to table's body text whose columns are separated by "\t"
+// and rows by "\t\n".
+func (t *Table) AddTabbedText(tabbedtext string) *Table {
+	lines := strings.Split(strings.TrimSuffix(tabbedtext, "\t\n"), "\t\n")
+
+	var rows [][]string
+	for _, row := range lines {
+		rows = append(rows, strings.Split(row, "\t"))
+	}
+
+	return t.AddRows(rows...)
+}
+
 // String returns a string representation of the table
 func (t *Table) String() string {
 	return t.Draw()
