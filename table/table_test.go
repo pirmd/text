@@ -18,7 +18,7 @@ func TestTableAddRows(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddRows(tc.in...).Draw()
+		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddRows(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -36,7 +36,7 @@ func TestTableAddCol(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddCol(tc.in...).Draw()
+		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddCol(tc.in...).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%s'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -57,7 +57,7 @@ func TestTableAddTabbedText(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddTabbedText(tc.in).Draw()
+		got := New().SetGrid(&Grid{Columns: "|"}).SetMaxWidth(24).AddTabbedText(tc.in).String()
 		if got != tc.out {
 			t.Errorf("table failed for '%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.in, tc.out, got)
 		}
@@ -125,7 +125,7 @@ func TestTableWithGrid(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := New().SetGrid(tc.inSep).SetMaxWidth(24).AddRows(tc.inTbody...).SetHeader(tc.inTheader...).SetFooter(tc.inTfooter...).Draw()
+		got := New().SetGrid(tc.inSep).SetMaxWidth(24).AddRows(tc.inTbody...).SetHeader(tc.inTheader...).SetFooter(tc.inTfooter...).String()
 		if got != tc.out {
 			t.Errorf("table failed for sep='%#v'.\nWanted:\n%s\nGot   :\n%s\n", tc.inSep, tc.out, got)
 		}

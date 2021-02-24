@@ -1,6 +1,8 @@
 package table
 
 import (
+	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -145,71 +147,106 @@ func (t *Table) AddTabbedText(tabbedtext string) *Table {
 
 // String returns a string representation of the table
 func (t *Table) String() string {
-	return t.Draw()
+	var s strings.Builder
+	t.WriteTo(&s)
+	return s.String()
 }
 
-// Draw actually draws the table.
-// Columns width are determined in order to maximize the use of the table
-// maximum width, cells' text is automatically wrapped to fit into the columns
-// size.
-func (t *Table) Draw() string {
-	if len(t.body) == 0 {
-		return ""
-	}
+// WriteTo actually draws the Table to an io.Writer.
+// Columns width, if not manually defined, is automatically determined to fit
+// Table maximum width Table's text is automatically wrapped to fit into the
+// columns size.
+func (t *Table) WriteTo(w io.Writer) (int64, error) {
+	var nbytes int
 
 	t.autoColWidth()
 
-	sepRow := t.gridSeparation(t.sep.BodyRows)
-	sepHeader := t.gridSeparation(t.sep.Header)
-	if sepHeader == "" {
-		sepHeader = sepRow
-	}
-	sepFooter := t.gridSeparation(t.sep.Footer)
-	if sepFooter == "" {
-		sepFooter = sepRow
-	}
+	sepHeader := t.buildSeparation(t.sep.Header)
+	sepRow := t.buildSeparation(t.sep.BodyRows)
+	sepFooter := t.buildSeparation(t.sep.Footer)
 
-	lines := []string{}
 	if len(t.header) > 0 {
-		lines = append(lines, t.drawRow(t.header))
+		n, err := t.writeRowTo(w, t.header)
+		nbytes += n
+		if err != nil {
+			return int64(nbytes), err
+		}
 
-		if sepHeader != "" {
-			lines = append(lines, sepHeader)
+		if len(t.body) > 0 {
+			n, err := t.writeSepTo(w, sepHeader)
+			nbytes += n
+			if err != nil {
+				return int64(nbytes), err
+			}
 		}
 	}
 
 	lastRow := len(t.body) - 1
 	for i, row := range t.body {
-		lines = append(lines, t.drawRow(row))
+		n, err := t.writeRowTo(w, row)
+		nbytes += n
+		if err != nil {
+			return int64(nbytes), err
+		}
 
-		if i != lastRow && sepRow != "" {
-			lines = append(lines, sepRow)
+		if i != lastRow {
+			n, err := t.writeSepTo(w, sepRow)
+			nbytes += n
+			if err != nil {
+				return int64(nbytes), err
+			}
 		}
 	}
 
 	if len(t.footer) > 0 {
-		if sepFooter != "" && len(lines) > 0 {
-			lines = append(lines, sepFooter)
+		if len(t.body) > 0 || len(t.header) > 0 {
+			n, err := t.writeSepTo(w, sepFooter)
+			nbytes += n
+			if err != nil {
+				return int64(nbytes), err
+			}
 		}
 
-		lines = append(lines, t.drawRow(t.footer))
+		n, err := t.writeRowTo(w, t.footer)
+		nbytes += n
+		if err != nil {
+			return int64(nbytes), err
+		}
 	}
 
-	return strings.Join(lines, "\n")
+	return int64(nbytes), nil
 }
 
-func (t *Table) drawRow(row []string) string {
-	if len(row) == 0 {
-		return ""
+func (t *Table) writeRowTo(w io.Writer, row []string) (int, error) {
+	var nbytes int
+
+	for i, subrow := range t.padRow(row) {
+		if i > 0 {
+			n, err := fmt.Fprint(w, "\n")
+			nbytes += n
+			if err != nil {
+				return nbytes, err
+			}
+		}
+
+		for j, cell := range subrow {
+			if j > 0 {
+				n, err := fmt.Fprint(w, t.sep.Columns)
+				nbytes += n
+				if err != nil {
+					return nbytes, err
+				}
+			}
+
+			n, err := fmt.Fprint(w, cell)
+			nbytes += n
+			if err != nil {
+				return nbytes, err
+			}
+		}
 	}
 
-	paddedRow := t.padRow(row)
-
-	lines := make([]string, len(paddedRow))
-	for i := range paddedRow {
-		lines[i] = strings.Join(paddedRow[i], t.sep.Columns)
-	}
-	return strings.Join(lines, "\n")
+	return nbytes, nil
 }
 
 func (t *Table) padRow(row []string) [][]string {
@@ -248,6 +285,33 @@ func (t *Table) gridSeparation(pattern string) string {
 		sep[i] = util.VisualRepeat(pattern, t.colWidth[i])
 	}
 	return strings.Join(sep, t.sep.Columns)
+}
+
+func (t *Table) writeSepTo(w io.Writer, sep string) (int, error) {
+	var nbytes int
+
+	n, err := fmt.Fprint(w, "\n")
+	nbytes += n
+	if err != nil {
+		return nbytes, err
+	}
+
+	if sep != "" {
+		n, err := fmt.Fprint(w, sep)
+		nbytes += n
+		if err != nil {
+			return nbytes, err
+		}
+
+		n, err = fmt.Fprint(w, "\n")
+		nbytes += n
+		if err != nil {
+			return nbytes, err
+		}
+	}
+
+	return nbytes, nil
+
 }
 
 // autoColWidth calculates the column's width of the Table based on the Table's
