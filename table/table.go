@@ -89,6 +89,12 @@ func (t *Table) SetColWidth(w ...int) *Table {
 // SetGrid defines the grid separators.
 func (t *Table) SetGrid(sep *Grid) *Table {
 	t.sep = sep
+	if t.sep.Header == "" {
+		t.sep.Header = t.sep.BodyRows
+	}
+	if t.sep.Footer == "" {
+		t.sep.Footer = t.sep.BodyRows
+	}
 	return t
 }
 
@@ -161,9 +167,9 @@ func (t *Table) WriteTo(w io.Writer) (int64, error) {
 
 	t.autoColWidth()
 
-	sepHeader := t.buildSeparation(t.sep.Header)
-	sepRow := t.buildSeparation(t.sep.BodyRows)
-	sepFooter := t.buildSeparation(t.sep.Footer)
+	sepHeader := t.buildSeparator(t.sep.Header)
+	sepRow := t.buildSeparator(t.sep.BodyRows)
+	sepFooter := t.buildSeparator(t.sep.Footer)
 
 	if len(t.header) > 0 {
 		n, err := t.writeRowTo(w, t.header)
@@ -275,7 +281,7 @@ func (t *Table) emptyLine() []string {
 	return l
 }
 
-func (t *Table) gridSeparation(pattern string) string {
+func (t *Table) buildSeparator(pattern string) string {
 	if pattern == "" {
 		return ""
 	}
@@ -284,6 +290,7 @@ func (t *Table) gridSeparation(pattern string) string {
 	for i := range t.colWidth {
 		sep[i] = util.VisualRepeat(pattern, t.colWidth[i])
 	}
+
 	return strings.Join(sep, t.sep.Columns)
 }
 
@@ -362,6 +369,12 @@ func (t *Table) autoColWidth() {
 // findWidthLimit uses an heuristic finding the best combination for the
 // column's width so that the total Table's width is close to its maxWidth
 // while keeping as much columns as possible close to their maximum width.
+// In a nutshell:
+// - allocate max width equally to all columns,
+// - get back the extra space not needed that much space,
+// - reallocate extra space to columns that need more space,
+// - rinse and repeat until either no space left or no columns above allocated
+// space.
 func findWidthLimit(width []int, max int) int {
 	var fn func([]int, int) ([]int, int, int) //recursive function that gradually selects columns that remains over size limits
 

@@ -13,9 +13,9 @@ var (
 
 // WalkFunc is the type of the function that is called while going through a
 // string that might contains ANSI escape Codes.
-// Walking occures either rune per rune if the rune does not belong to an ANSI
+// Walking occurs either rune per rune if the rune does not belong to an ANSI
 // escape sequence or ANSI escape sequence per ANSI escape sequence in the
-// other case. If WalkFunc is called for an ANSI EScape Scope, the curRune
+// other case. If WalkFunc is called for an ANSI Escape Scope, the curRune
 // argument will be -1.
 // If WalkFunc returns the ErrStopWalk error, Walk will interrupt the walk.
 type WalkFunc func(curRune rune, curSGREsc string) error
