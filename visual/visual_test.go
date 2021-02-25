@@ -120,7 +120,7 @@ func TestRepeat(t *testing.T) {
 	for _, tc := range testCases {
 		got := Repeat(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("visual repeating failed for '%s' (up to %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
+			t.Errorf("visual repeating failed for '%s' (up to %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
 		}
 	}
 }

@@ -85,16 +85,25 @@ func PadCenter(s string, pattern string, sz int) string {
 }
 
 // Repeat repeats s until given size is reached.
-func Repeat(s string, size int) string {
+func Repeat(s string, sz int) string {
 	l := Len(s)
-	r := s
-	for i := l; i <= size; i = i + l {
-		if i == size {
-			return r
-		}
-		r = r + s
+	if l >= sz {
+		return s
 	}
-	return Truncate(r, size)
+
+	var rs strings.Builder
+
+	var i int
+	for i <= sz {
+		rs.WriteString(s)
+		i += l
+	}
+
+	if i == sz {
+		return rs.String()
+	}
+
+	return Truncate(rs.String(), sz)
 }
 
 // Runewidth returns the visual width of a rune.
@@ -127,7 +136,7 @@ func InterruptFormattingAtEOL(s []string) {
 //
 // If a "word" is encountered that is longer than the limit, it is split in
 // chunks of 'limit' length.
-func Wrap(s string, limit int) (ws []string) {
+func Wrap(s string, sz int) (ws []string) {
 	var line, word string
 	var linelen, wordlen int
 
@@ -137,7 +146,7 @@ func Wrap(s string, limit int) (ws []string) {
 			word += esc
 
 		case c == '\n':
-			if linelen+wordlen <= limit {
+			if linelen+wordlen <= sz {
 				line += word
 			} else {
 				ws = append(ws, line)
@@ -150,11 +159,11 @@ func Wrap(s string, limit int) (ws []string) {
 
 		case unicode.IsSpace(c):
 			switch l := linelen + wordlen; {
-			case l == limit:
+			case l == sz:
 				ws = append(ws, line+word)
 				line, linelen = "", 0
 
-			case l > limit:
+			case l > sz:
 				ws = append(ws, line)
 				line = word + string(c)
 				linelen = wordlen + Runewidth(c)
@@ -166,13 +175,13 @@ func Wrap(s string, limit int) (ws []string) {
 			word, wordlen = "", 0
 
 		default:
-			if wordlen += Runewidth(c); wordlen > limit {
+			if wordlen += Runewidth(c); wordlen > sz {
 				if line != "" {
 					ws = append(ws, line)
 					line, linelen = "", 0
 				}
 
-				// word is longer than the limit, we split it at the current
+				// word is longer than the sz, we split it at the current
 				// position.
 				//TODO(pirmd): find some way to split word at more meaningful
 				//position (like at [()[]/.)
@@ -190,9 +199,9 @@ func Wrap(s string, limit int) (ws []string) {
 	case l == 0 && strings.HasSuffix(s, "\n"):
 		ws = append(ws, "")
 	case l == 0:
-	case l > limit && linelen == 0:
+	case l > sz && linelen == 0:
 		ws = append(ws, word)
-	case l > limit:
+	case l > sz:
 		if line != "" {
 			ws = append(ws, line)
 		}
