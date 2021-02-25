@@ -45,21 +45,62 @@ func TestTruncate(t *testing.T) {
 	}
 }
 
-func TestPad(t *testing.T) {
+func TestPadRight(t *testing.T) {
 	testCases := []struct {
 		in  string
 		sz  int
 		out string
 	}{
-		{"Coucou", 9, "Coucou   "},
-		{"\x1b[34mCoucou\x1b[0m", 9, "\x1b[34mCoucou\x1b[0m   "},
-		{"Coucou Coucou", 9, "Coucou Coucou"},
+		{"Coucou", 9, "Coucou***"},
+		{"\x1b[34mCoucou\x1b[0m", 9, "\x1b[34mCoucou\x1b[0m***"},
+		{"Coucou", 6, "Coucou"},
+		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
 	}
 
 	for _, tc := range testCases {
-		got := Pad(tc.in, tc.sz, ' ')
+		got := PadRight(tc.in, "*", tc.sz)
 		if got != tc.out {
-			t.Errorf("visual Padding failed for '%s' (max %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
+			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
+		}
+	}
+}
+
+func TestPadLeft(t *testing.T) {
+	testCases := []struct {
+		in  string
+		sz  int
+		out string
+	}{
+		{"Coucou", 9, "***Coucou"},
+		{"\x1b[34mCoucou\x1b[0m", 9, "***\x1b[34mCoucou\x1b[0m"},
+		{"Coucou", 6, "Coucou"},
+		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
+	}
+
+	for _, tc := range testCases {
+		got := PadLeft(tc.in, "*", tc.sz)
+		if got != tc.out {
+			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
+		}
+	}
+}
+
+func TestPadCenter(t *testing.T) {
+	testCases := []struct {
+		in  string
+		sz  int
+		out string
+	}{
+		{"Coucou", 9, "*Coucou**"},
+		{"\x1b[34mCoucou\x1b[0m", 9, "*\x1b[34mCoucou\x1b[0m**"},
+		{"Coucou", 6, "Coucou"},
+		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
+	}
+
+	for _, tc := range testCases {
+		got := PadCenter(tc.in, "*", tc.sz)
+		if got != tc.out {
+			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
 		}
 	}
 }

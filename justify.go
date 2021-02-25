@@ -31,7 +31,7 @@ func Justify(s string, sz int) string {
 
 	ws := visual.Wrap(s, sz)
 	for i, l := range ws {
-		ws[i] = visual.Pad(l, sz, ' ')
+		ws[i] = visual.PadRight(l, " ", sz)
 	}
 	return strings.Join(ws, "\n")
 }

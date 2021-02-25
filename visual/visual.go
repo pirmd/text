@@ -24,20 +24,21 @@ func Len(s string) int {
 
 // Truncate truncates the string so that its "visible" length is lower or equal
 // to the provided limit.
-// When needed, visualTruncate terminates the string by an ansi.Reset sequence
-// to inhibate any visual effects coming from the truncation step.
-func Truncate(s string, limit int) (trunc string) {
+// When needed, Truncate terminates the string by an ansi.Reset sequence
+// to inhibit any visual effects coming from the truncation step.
+func Truncate(s string, limit int) string {
+	var ts strings.Builder
 	var l int
 	var sgr ansi.Sequence
 
 	_ = ansi.Walk(s, func(c rune, esc string) error {
 		if c > -1 {
-			trunc += string(c)
+			ts.WriteRune(c)
 			l += Runewidth(c)
 		}
 
 		if esc != "" {
-			trunc += esc
+			ts.WriteString(esc)
 			sgr.Combine(esc)
 		}
 
@@ -48,18 +49,39 @@ func Truncate(s string, limit int) (trunc string) {
 		return nil
 	})
 
-	return trunc + sgr.Reset()
+	ts.WriteString(sgr.Reset())
+	return ts.String()
 }
 
-// Pad completes a string with provided rune until its "visible" lentgh
-// reaches the provided limit.  If the string visible size is already above
-// imit, Pad returns it as-is.
-func Pad(s string, size int, padRune rune) string {
-	var pad []rune
-	for i := Len(s); i < size; i++ {
-		pad = append(pad, padRune)
+// PadRight completes a string with provided pattern until its "visual" size
+// reaches the provided limit. If the string's "visual" size is already above
+// limit, PadRight returns it as-is.
+func PadRight(s string, pattern string, sz int) string {
+	if l := Len(s); l < sz {
+		return s + Repeat(pattern, sz-l)
 	}
-	return s + string(pad)
+	return s
+}
+
+// PadLeft prefixes a string with provided pattern until its "visual" size
+// reaches the provided limit. If the string's "visual" size is already above
+// limit, PadLeft returns it as-is.
+func PadLeft(s string, pattern string, sz int) string {
+	if l := Len(s); l < sz {
+		return Repeat(pattern, sz-l) + s
+	}
+	return s
+}
+
+// PadCenter equally prefixes and complete a string with provided pattern until
+// its "visual" size reaches the provided limit. If the string's "visual" size
+// is already above limit, PadCenter returns it as-is.
+func PadCenter(s string, pattern string, sz int) string {
+	if l := Len(s); l < sz {
+		right := (sz - l) / 2
+		return Repeat(pattern, right) + s + Repeat(pattern, (sz-l)-right)
+	}
+	return s
 }
 
 // Repeat repeats s until given size is reached.

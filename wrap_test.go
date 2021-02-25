@@ -113,7 +113,7 @@ func TestTabWithTag(t *testing.T) {
 	for _, tc := range testCases {
 		got := Tab(tc.inTxt, tc.inT, tc.inP, 40)
 		if got != tc.out {
-			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWanted:\n%#v\nGot   :\n%#v\n", tc.inT, tc.inP, tc.out, got)
+			t.Errorf("Inserting tag (tag='%s', indent='%s') failed.\nWant:\n%#v\nGot :\n%#v\n", tc.inT, tc.inP, tc.out, got)
 		}
 	}
 }

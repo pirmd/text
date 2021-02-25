@@ -16,7 +16,7 @@ func Indent(s string, tag, prefix string) string {
 
 	switch {
 	case lB > lP:
-		prefix = visual.Pad(prefix, lB, ' ')
+		prefix = visual.PadRight(prefix, " ", lB)
 	case lB < lP:
 		tag = visual.Truncate(prefix, lP-lB) + tag
 	}
@@ -49,7 +49,7 @@ func Tab(s string, tag, prefix string, limit int) string {
 	var r string
 	switch {
 	case lB > lP:
-		prefix = visual.Pad(prefix, lB, ' ')
+		prefix = visual.PadRight(prefix, " ", lB)
 		r = Wrap(s, limit-lB)
 	case lB < lP:
 		tag = visual.Truncate(prefix, lP-lB) + tag

@@ -432,7 +432,7 @@ func columnize(s string, sz int) []string {
 	visual.InterruptFormattingAtEOL(ws)
 
 	for i, l := range ws {
-		ws[i] = visual.Pad(l, sz, ' ')
+		ws[i] = visual.PadRight(l, " ", sz)
 	}
 	return ws
 }

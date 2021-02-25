@@ -41,7 +41,7 @@ func TestJustify(t *testing.T) {
 	for _, tc := range testCases {
 		got := Justify(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("Justify failed for %#v.\nWanted: %#v\nGot   : %#v\n", tc.in, tc.out, got)
+			t.Errorf("Justify to %d failed for %#v.\nWant: %#v\nGot : %#v\n", tc.sz, tc.in, tc.out, got)
 		}
 	}
 }
