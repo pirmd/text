@@ -56,26 +56,29 @@ type Table struct {
 }
 
 // New returns a new empty table, with no grid and a maximum width set-up to
-// the terminal width or to DefaultMaxWidth if output is not a terminal or if the
-// terminal size cannot be determined.
+// the terminal width to DefaultMaxWidth.
 func New() *Table {
-	t := &Table{
+	return &Table{
 		maxWidth: DefaultMaxWidth,
 		sep:      &Grid{Columns: " "},
 	}
-
-	if fd := int(os.Stdout.Fd()); term.IsTerminal(fd) {
-		if w, _, err := term.GetSize(fd); err == nil {
-			t.SetMaxWidth(w)
-		}
-	}
-
-	return t
 }
 
 // SetMaxWidth sets the table maximum width.
 func (t *Table) SetMaxWidth(w int) *Table {
 	t.maxWidth = w
+	return t
+}
+
+// SetTermWidth set Table's maximum width to the current terminal's width. Does
+// nothing if Terminal size cannot be determined (or it current output is not a
+// terminal)
+func (t *Table) SetTermWidth() *Table {
+	if fd := int(os.Stdout.Fd()); term.IsTerminal(fd) {
+		if w, _, err := term.GetSize(fd); err == nil {
+			t.SetMaxWidth(w)
+		}
+	}
 	return t
 }
 
