@@ -11,8 +11,16 @@ func TestWalk(t *testing.T) {
 		want    string
 		wantSGR Sequence
 	}{
-		{in: "\x1b[31mBonjour\x1b[m", want: "Bonjour", wantSGR: Sequence{}},
-		{in: "\x1b[31mBonjour\x1b[m, tout le \x1b[2mmonde !", want: "Bonjour, tout le monde !", wantSGR: Sequence{cFaint}},
+		{
+			in:      "\x1b[31mBonjour\x1b[m",
+			want:    "Bonjour",
+			wantSGR: Sequence{cReset},
+		},
+		{
+			in:      "\x1b[31mBonjour\x1b[m, tout le \x1b[2mmonde !",
+			want:    "Bonjour, tout le monde !",
+			wantSGR: Sequence{cReset, cFaint},
+		},
 	}
 
 	for _, tc := range testCases {

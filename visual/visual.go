@@ -9,7 +9,12 @@ import (
 	"github.com/pirmd/text/ansi"
 )
 
-// Len calculates the length of string ignoring any ANSI escape sequences.
+// Runewidth returns the visual width of a rune.
+func Runewidth(c rune) int {
+	return runewidth.RuneWidth(c)
+}
+
+// Len calculates the "visual" length of string.
 func Len(s string) int {
 	var l int
 	_ = ansi.Walk(s, func(c rune, esc string) error {
@@ -49,51 +54,49 @@ func Truncate(s string, limit int) string {
 		return nil
 	})
 
-	ts.WriteString(sgr.Reset())
+	ts.WriteString(sgr.Off())
 	return ts.String()
 }
 
-// PadRight completes a string with provided pattern until its "visual" size
+// PadRight completes a string with spaces until its "visual" size
 // reaches the provided limit. If the string's "visual" size is already above
 // limit, PadRight returns it as-is.
-func PadRight(s string, pattern string, sz int) string {
-	if l := Len(s); l < sz {
-		return s + Repeat(pattern, sz-l)
+func PadRight(s string, sz int) string {
+	ts, l := TrimSpace(s)
+	if l < sz {
+		return ts + strings.Repeat(" ", sz-l)
 	}
 	return s
 }
 
-// PadLeft prefixes a string with provided pattern until its "visual" size
+// PadLeft prefixes a string with spaces until its "visual" size
 // reaches the provided limit. If the string's "visual" size is already above
 // limit, PadLeft returns it as-is.
-func PadLeft(s string, pattern string, sz int) string {
-	if l := Len(s); l < sz {
-		return Repeat(pattern, sz-l) + s
+func PadLeft(s string, sz int) string {
+	ts, l := TrimSpace(s)
+	if l < sz {
+		return strings.Repeat(" ", sz-l) + ts
 	}
 	return s
 }
 
-// PadCenter equally prefixes and complete a string with provided pattern until
-// its "visual" size reaches the provided limit. If the string's "visual" size
-// is already above limit, PadCenter returns it as-is.
-func PadCenter(s string, pattern string, sz int) string {
-	if l := Len(s); l < sz {
+// PadCenter equally prefixes and complete a string with spaces until its
+// "visual" size reaches the provided limit. If the string's "visual" size is
+// already above limit, PadCenter returns it as-is.
+func PadCenter(s string, sz int) string {
+	ts, l := TrimSpace(s)
+	if l < sz {
 		right := (sz - l) / 2
-		return Repeat(pattern, right) + s + Repeat(pattern, (sz-l)-right)
+		return strings.Repeat(" ", right) + ts + strings.Repeat(" ", (sz-l)-right)
 	}
 	return s
 }
 
-// Repeat repeats s until given size is reached.
+// Repeat repeats s until given "visual" size is reached.
 func Repeat(s string, sz int) string {
-	l := Len(s)
-	if l >= sz {
-		return s
-	}
-
 	var rs strings.Builder
 
-	var i int
+	i, l := 0, Len(s)
 	for i <= sz {
 		rs.WriteString(s)
 		i += l
@@ -106,109 +109,155 @@ func Repeat(s string, sz int) string {
 	return Truncate(rs.String(), sz)
 }
 
-// Runewidth returns the visual width of a rune.
-func Runewidth(c rune) int {
-	return runewidth.RuneWidth(c)
-}
-
-// InterruptFormattingAtEOL interrupts at each line any ANSI SGR rendition and
-// continues it at the next line (useful to work with text in column to avoid
-// voiding neighbour text).
-func InterruptFormattingAtEOL(s []string) {
-	var sgr ansi.Sequence
-	var prevEsc string
-
-	for i, line := range s {
-		_ = ansi.Walk(line, func(c rune, esc string) error {
-			if c == -1 {
-				sgr.Combine(esc)
-			}
-			return nil
-		})
-		s[i] = prevEsc + s[i] + sgr.Reset()
-		prevEsc = sgr.Esc()
-	}
-}
-
-// Wrap wraps a text by ensuring that each of its line's "visible" length
-// is lower or equal to the provided limit. Wrap works with word limits being
-// spaces.
-//
-// If a "word" is encountered that is longer than the limit, it is split in
-// chunks of 'limit' length.
-func Wrap(s string, sz int) (ws []string) {
-	var line, word string
+// Cut cuts a string at end-of-line if the line "visual" length is shorter than
+// the given limit or at word boundary (space) to stay as close as possible
+// under the given limit.
+// Should a word exists that is longer than the limit, the word is split in
+// chunks of given limit.
+// If provided limit is zero or less than zero, Cut only acts at end-of-line.
+func Cut(s string, sz int) (chunks []string) {
+	var line strings.Builder
+	var word strings.Builder
 	var linelen, wordlen int
+
+	flushln := func() {
+		chunks = append(chunks, line.String())
+		line.Reset()
+		linelen = 0
+	}
+
+	flushwd := func() {
+		line.WriteString(word.String())
+		linelen += wordlen
+		word.Reset()
+		wordlen = 0
+	}
+
+	flushrune := func(c rune) {
+		word.WriteRune(c)
+		wordlen += Runewidth(c)
+	}
 
 	_ = ansi.Walk(s, func(c rune, esc string) error {
 		switch {
 		case c == -1:
-			word += esc
+			word.WriteString(esc)
 
 		case c == '\n':
-			if linelen+wordlen <= sz {
-				line += word
-			} else {
-				ws = append(ws, line)
-				line = word
+			if sz > 0 && linelen+wordlen > sz {
+				flushln()
 			}
-
-			ws = append(ws, line)
-			line, linelen = "", 0
-			word, wordlen = "", 0
+			flushwd()
+			flushln()
 
 		case unicode.IsSpace(c):
 			switch l := linelen + wordlen; {
-			case l == sz:
-				ws = append(ws, line+word)
-				line, linelen = "", 0
+			case sz > 0 && l == sz:
+				flushwd()
+				flushln()
 
-			case l > sz:
-				ws = append(ws, line)
-				line = word + string(c)
-				linelen = wordlen + Runewidth(c)
+			case sz > 0 && l > sz:
+				flushln()
+				flushrune(c)
+				flushwd()
 
 			default:
-				line += word + string(c)
-				linelen += wordlen + Runewidth(c)
+				flushrune(c)
+				flushwd()
 			}
-			word, wordlen = "", 0
 
 		default:
-			if wordlen += Runewidth(c); wordlen > sz {
-				if line != "" {
-					ws = append(ws, line)
-					line, linelen = "", 0
+			// word is longer than sz, we split it at the current position.
+			// TODO(pirmd): try to split at meaningful rune (like at ()[]/.)
+			if sz > 0 && wordlen+Runewidth(c) > sz {
+				if linelen > 0 {
+					flushln()
 				}
-
-				// word is longer than the sz, we split it at the current
-				// position.
-				//TODO(pirmd): find some way to split word at more meaningful
-				//position (like at [()[]/.)
-				ws = append(ws, word)
-				word, wordlen = "", Runewidth(c)
+				flushwd()
+				flushln()
 			}
-			word += string(c)
-
+			flushrune(c)
 		}
 
 		return nil
 	})
 
-	switch l := linelen + wordlen; {
-	case l == 0 && strings.HasSuffix(s, "\n"):
-		ws = append(ws, "")
-	case l == 0:
-	case l > sz && linelen == 0:
-		ws = append(ws, word)
-	case l > sz:
-		if line != "" {
-			ws = append(ws, line)
-		}
-		ws = append(ws, word)
-	default:
-		ws = append(ws, line+word)
+	if sz > 0 && linelen+wordlen > sz {
+		flushln()
 	}
+	flushwd()
+	flushln()
 
 	return
+}
+
+// TrimSpace  trims all leading and trailing white space (as defined by
+// Unicode). TrimSpace returns the trimmed strings as well as its "visual"
+// length.
+func TrimSpace(s string) (string, int) {
+	var trimmed strings.Builder
+	var spaceBuf strings.Builder
+	var spaceBufSGR ansi.Sequence
+	var l, buflen int
+
+	isLeadingSpaces := true
+	_ = ansi.Walk(s, func(c rune, esc string) error {
+		switch {
+		case c == -1:
+			spaceBuf.WriteString(esc)
+			spaceBufSGR.Combine(esc)
+
+		case unicode.IsSpace(c):
+			if !isLeadingSpaces {
+				spaceBuf.WriteRune(c)
+				buflen += Runewidth(c)
+			}
+
+		default:
+			isLeadingSpaces = false
+
+			trimmed.WriteString(spaceBuf.String())
+			l += buflen
+			spaceBuf.Reset()
+			buflen = 0
+			spaceBufSGR.Reset()
+
+			trimmed.WriteRune(c)
+			l += Runewidth(c)
+		}
+
+		return nil
+	})
+
+	trimmed.WriteString(spaceBufSGR.String())
+	return trimmed.String(), l
+}
+
+// TrimSuffix trims trailing rune r.
+func TrimSuffix(s string, r rune) string {
+	var trimmed strings.Builder
+	var buf strings.Builder
+	var bufSGR ansi.Sequence
+
+	_ = ansi.Walk(s, func(c rune, esc string) error {
+		switch {
+		case c == -1:
+			buf.WriteString(esc)
+			bufSGR.Combine(esc)
+
+		case c == r:
+			buf.WriteRune(c)
+
+		default:
+			trimmed.WriteString(buf.String())
+			buf.Reset()
+			bufSGR.Reset()
+
+			trimmed.WriteRune(c)
+		}
+
+		return nil
+	})
+	trimmed.WriteString(bufSGR.String())
+	return trimmed.String()
 }

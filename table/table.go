@@ -3,11 +3,9 @@ package table
 import (
 	"fmt"
 	"io"
-	"os"
 	"strings"
 
-	"golang.org/x/term"
-
+	"github.com/pirmd/text/ansi"
 	"github.com/pirmd/text/visual"
 )
 
@@ -70,18 +68,6 @@ func (t *Table) SetMaxWidth(w int) *Table {
 	return t
 }
 
-// SetTermWidth set Table's maximum width to the current terminal's width. Does
-// nothing if Terminal size cannot be determined (or it current output is not a
-// terminal)
-func (t *Table) SetTermWidth() *Table {
-	if fd := int(os.Stdout.Fd()); term.IsTerminal(fd) {
-		if w, _, err := term.GetSize(fd); err == nil {
-			t.SetMaxWidth(w)
-		}
-	}
-	return t
-}
-
 // SetColWidth sets the table's column width. If not set, Table will
 // auto-determined the column width based on Table's max width.
 func (t *Table) SetColWidth(w ...int) *Table {
@@ -115,43 +101,29 @@ func (t *Table) SetFooter(row ...string) *Table {
 
 // AddRows adds a list of rows to the table's body.
 func (t *Table) AddRows(rows ...[]string) *Table {
-	for _, row := range rows {
-		srow := []string{}
-		for _, cell := range row {
-			srow = append(srow, strings.TrimSuffix(cell, "\n"))
-		}
-		t.body = append(t.body, srow)
-	}
-
+	t.body = append(t.body, rows...)
 	return t
 }
 
 // AddCol adds a list of columns to the table's body.
 func (t *Table) AddCol(columns ...[]string) *Table {
-	for _, col := range columns {
-		for i, cell := range col {
-			for row := len(t.body); row <= i; row++ {
-				//columns features more rows than actually available in the
-				//table we complete by adding an empty row
-				t.body = append(t.body, []string{})
-			}
-			t.body[i] = append(t.body[i], strings.TrimSuffix(cell, "\n"))
-		}
-	}
-	return t
+	return t.AddRows(col2rows(columns)...)
 }
 
-// AddTabbedText adds to table's body text whose columns are separated by "\t"
+// AddTabbedText adds to table's body a text whose columns are separated by "\t"
 // and rows by "\t\n".
 func (t *Table) AddTabbedText(tabbedtext string) *Table {
-	lines := strings.Split(strings.TrimSuffix(tabbedtext, "\t\n"), "\t\n")
+	return t.AddTabbedRows(strings.Split(strings.TrimSuffix(tabbedtext, "\t\n"), "\t\n")...)
+}
 
-	var rows [][]string
-	for _, row := range lines {
-		rows = append(rows, strings.Split(row, "\t"))
+// AddTabbedRows adds to table's body a set of rows whose columns are separated
+// by "\t".
+func (t *Table) AddTabbedRows(tabbedrows ...string) *Table {
+	for _, row := range tabbedrows {
+		t.AddRows(strings.Split(strings.TrimRight(row, "\t\n"), "\t"))
 	}
 
-	return t.AddRows(rows...)
+	return t
 }
 
 // String returns a string representation of the table
@@ -259,29 +231,20 @@ func (t *Table) writeRowTo(w io.Writer, row []string) (int, error) {
 }
 
 func (t *Table) padRow(row []string) [][]string {
-	paddedRow := [][]string{}
-
-	for icol, cell := range row {
-		lines := columnize(cell, t.colWidth[icol])
-
-		for len(lines) > len(paddedRow) {
-			paddedRow = append(paddedRow, t.emptyLine())
-		}
-
-		for iline := range lines {
-			paddedRow[iline][icol] = lines[iline]
-		}
+	// iterate over t.colWidth in the cases where row has missing columns
+	subrows := make([][]string, len(t.colWidth))
+	for i := range row {
+		subrows[i] = visual.Cut(visual.TrimSuffix(row[i], '\n'), t.colWidth[i])
+		interruptFormattingAtEOL(subrows[i])
 	}
 
-	return paddedRow
-}
-
-func (t *Table) emptyLine() []string {
-	l := make([]string, len(t.colWidth))
-	for i := range t.colWidth {
-		l[i] = strings.Repeat(" ", t.colWidth[i])
+	paddedrows := col2rows(subrows)
+	for i := range paddedrows {
+		for j := range paddedrows[i] {
+			paddedrows[i][j] = visual.PadRight(paddedrows[i][j], t.colWidth[j])
+		}
 	}
-	return l
+	return paddedrows
 }
 
 func (t *Table) buildSeparator(pattern string) string {
@@ -408,7 +371,6 @@ func findWidthLimit(width []int, max int) int {
 	return m
 }
 
-// cellWidth finds the width of a cell.
 func cellWidth(cell string) int {
 	var length int
 	for _, line := range strings.Split(cell, "\n") {
@@ -419,20 +381,41 @@ func cellWidth(cell string) int {
 	return length
 }
 
-// columnize justifies a text and properly interrupt ANSI sequences at line
-// boundaries so that it can easily be combined with another text without
-// voiding the formatting.
-func columnize(s string, sz int) []string {
-	if len(s) == 0 {
-		return []string{strings.Repeat(" ", sz)}
+func col2rows(columns [][]string) (rows [][]string) {
+	for j, col := range columns {
+		for row := len(rows); row < len(col); row++ {
+			rows = append(rows, make([]string, len(columns)))
+		}
+
+		for i, cell := range col {
+			rows[i][j] = cell
+		}
 	}
+	return rows
+}
 
-	ws := visual.Wrap(s, sz)
+// interruptFormattingAtEOL interrupts at each line any ANSI SGR rendition and
+// continues it at the next line (useful to work with text in column to avoid
+// voiding neighbour text).
+func interruptFormattingAtEOL(s []string) {
+	var sgr ansi.Sequence
+	var prevEsc string
 
-	visual.InterruptFormattingAtEOL(ws)
+	for i, line := range s {
+		_ = ansi.Walk(line, func(c rune, esc string) error {
+			if c == -1 {
+				sgr.Combine(esc)
+			}
+			return nil
+		})
 
-	for i, l := range ws {
-		ws[i] = visual.PadRight(l, " ", sz)
+		s[i] = prevEsc + s[i] + sgr.Off()
+
+		if sgr.Off() != "" {
+			prevEsc = sgr.String()
+		} else {
+			prevEsc = ""
+		}
+
 	}
-	return ws
 }

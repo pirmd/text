@@ -95,11 +95,13 @@ func isBGColor(c Code) bool {
 
 // isStyleOff is true if the corresponding Code allows to set off graphic
 // renditions style like Bold, Underline, Faint and so on.
+// cReset is ignored here as they have a wider effect that might affect styling
+// directive out of the Sequence scope.
 func isStyleOff(c Code) bool {
-	return c == cReset || c == cBoldOff || c == cNormal || c == cItalicOff ||
+	return c == cBoldOff || c == cNormal || c == cItalicOff ||
 		c == cUnderlineOff || c == cBlinkOff || c == cInverseOff ||
 		c == cReveal || c == cNotCrossedOut || c == cNotFramed || c == cNotOverlined ||
-		c == cDefaultBG || c == cDefaultFG
+		c == cDefaultFG || c == cDefaultBG
 }
 
 // isSupersededBy is true if the corresponding Code visual effect is supeseded
@@ -134,8 +136,8 @@ func (seq *Sequence) Combine(esc string) {
 	}
 }
 
-// Esc returns the sequence's ANSI escape sequence.
-func (seq Sequence) Esc() (s string) {
+// String returns the sequence's ANSI escape sequence.
+func (seq Sequence) String() (s string) {
 	if len(seq) != 0 {
 		s = cCSI + strings.Join(seq, ";") + "m"
 	}
@@ -143,34 +145,54 @@ func (seq Sequence) Esc() (s string) {
 	return
 }
 
-// Print decorates the provided string using the corresponding Code sequence.
-func (seq Sequence) Print(s string) string {
-	return seq.Esc() + s + cCSI + cReset + "m"
-}
-
-// Reset returns ANSI Reset code that nullifies any graphic rendition defined
-// by sequence. If sequence is empty, returns an empty code.
-func (seq Sequence) Reset() string {
+// Off returns ANSI Reset code that nullifies any graphic rendition defined
+// by sequence. If sequence is empty or already ends with a cREset, returns an
+// empty string.
+func (seq Sequence) Off() string {
 	if len(seq) == 0 {
 		return ""
 	}
+
+	if seq[len(seq)-1] == cReset {
+		return ""
+	}
+
 	return Reset
+}
+
+// Print decorates the provided string using the corresponding Code sequence.
+func (seq Sequence) Print(s string) string {
+	if s == "" || len(seq) == 0 {
+		return s
+	}
+
+	return seq.String() + s + seq.Off()
+}
+
+// Reset resets the sequence.
+func (seq *Sequence) Reset() {
+	*seq = Sequence{}
 }
 
 func (seq *Sequence) add(c Code) {
 	if c == cReset {
-		*seq = Sequence{}
+		*seq = Sequence{cReset}
+		return
 	}
 
+	var hasSuperseded bool
 	for i := len(*seq) - 1; i >= 0; i-- {
 		if isSupersededBy((*seq)[i], c) {
 			*seq = append((*seq)[:i], (*seq)[i+1:]...)
+			hasSuperseded = true
 		}
 	}
 
-	if !isStyleOff(c) {
-		*seq = append(*seq, c)
+	if hasSuperseded && isStyleOff(c) {
+		return
 	}
+
+	*seq = append(*seq, c)
 }
 
 // ParseSGR parses an ANSI escape sequence  of SGR (Set Graphic Rendition,

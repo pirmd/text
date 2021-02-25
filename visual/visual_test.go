@@ -2,7 +2,6 @@ package visual
 
 import (
 	"reflect"
-	"strings"
 	"testing"
 )
 
@@ -51,14 +50,16 @@ func TestPadRight(t *testing.T) {
 		sz  int
 		out string
 	}{
-		{"Coucou", 9, "Coucou***"},
-		{"\x1b[34mCoucou\x1b[0m", 9, "\x1b[34mCoucou\x1b[0m***"},
+		{"Coucou", 9, "Coucou   "},
+		{"\x1b[34mCoucou\x1b[0m", 9, "\x1b[34mCoucou\x1b[0m   "},
 		{"Coucou", 6, "Coucou"},
+		{"\x1b[34mCoucou\x1b[0m", 6, "\x1b[34mCoucou\x1b[0m"},
 		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
+		{"", 3, "   "},
 	}
 
 	for _, tc := range testCases {
-		got := PadRight(tc.in, "*", tc.sz)
+		got := PadRight(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
 		}
@@ -71,16 +72,18 @@ func TestPadLeft(t *testing.T) {
 		sz  int
 		out string
 	}{
-		{"Coucou", 9, "***Coucou"},
-		{"\x1b[34mCoucou\x1b[0m", 9, "***\x1b[34mCoucou\x1b[0m"},
+		{"Coucou", 9, "   Coucou"},
+		{"\x1b[34mCoucou\x1b[0m", 9, "   \x1b[34mCoucou\x1b[0m"},
+		{"This \x1b[34mis\x1b[0m a long sentence", 30, "       This \x1b[34mis\x1b[0m a long sentence"},
 		{"Coucou", 6, "Coucou"},
 		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
+		{"", 3, "   "},
 	}
 
 	for _, tc := range testCases {
-		got := PadLeft(tc.in, "*", tc.sz)
+		got := PadLeft(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
+			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %#v\nGot : %#v\n", tc.in, tc.sz, tc.out, got)
 		}
 	}
 }
@@ -91,14 +94,18 @@ func TestPadCenter(t *testing.T) {
 		sz  int
 		out string
 	}{
-		{"Coucou", 9, "*Coucou**"},
-		{"\x1b[34mCoucou\x1b[0m", 9, "*\x1b[34mCoucou\x1b[0m**"},
+		{"Coucou", 10, "  Coucou  "},
+		{"Coucou ", 10, "  Coucou  "},
+		{"  Coucou ", 10, "  Coucou  "},
+		{"  Coucou ", 9, " Coucou  "},
+		{"\x1b[34mCoucou\x1b[0m", 9, " \x1b[34mCoucou\x1b[0m  "},
 		{"Coucou", 6, "Coucou"},
 		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
+		{"", 3, "   "},
 	}
 
 	for _, tc := range testCases {
-		got := PadCenter(tc.in, "*", tc.sz)
+		got := PadCenter(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
 		}
@@ -125,30 +132,7 @@ func TestRepeat(t *testing.T) {
 	}
 }
 
-func TestInterruptFormattingatEOL(t *testing.T) {
-	testCases := []struct {
-		in  []string
-		out []string
-	}{
-		{[]string{"This \x1b[34mis\x1b[0m a ", "long ", "sentence"}, []string{"This \x1b[34mis\x1b[0m a ", "long ", "sentence"}},
-		{[]string{"This \x1b[34mis a ", "long ", "sentence\x1b[0m"}, []string{"This \x1b[34mis a \x1b[0m", "\x1b[34mlong \x1b[0m", "\x1b[34msentence\x1b[0m"}},
-		{
-			[]string{"\x1b[34mX This is a long sentence", "in color.\x1b[39m\x1b[9mAnd an error\x1b[29m"},
-			[]string{"\x1b[34mX This is a long sentence\x1b[0m", "\x1b[34min color.\x1b[39m\x1b[9mAnd an error\x1b[29m"},
-		},
-	}
-
-	for _, tc := range testCases {
-		got := make([]string, len(tc.in))
-		copy(got, tc.in)
-		InterruptFormattingAtEOL(got)
-		if !reflect.DeepEqual(got, tc.out) {
-			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
-		}
-	}
-}
-
-func TestWrap(t *testing.T) {
+func TestCut(t *testing.T) {
 	testCases := []struct {
 		in  string
 		sz  int
@@ -156,8 +140,11 @@ func TestWrap(t *testing.T) {
 	}{
 		{"Coucou", 10, []string{"Coucou"}},
 		{"Coucou", 6, []string{"Coucou"}},
-		{"Coucou ", 6, []string{"Coucou"}},
+		{"Coucou\n", 6, []string{"Coucou", ""}},
+		{"Coucou ", 6, []string{"Coucou", ""}},
 		{"Coucou\n", 8, []string{"Coucou", ""}},
+		{"\x1b[34mCoucou\n\x1b[0m", 6, []string{"\x1b[34mCoucou", "\x1b[0m"}},
+		{"\x1b[34mCoucou\x1b[0m\n", 6, []string{"\x1b[34mCoucou\x1b[0m", ""}},
 		{"This is a long sentence", 10, []string{"This is a ", "long ", "sentence"}},
 		{"This \x1b[34mis\x1b[0m a long sentence", 10, []string{"This \x1b[34mis\x1b[0m a ", "long ", "sentence"}},
 		{"This \x1b[34mis a long sentence\x1b[0m", 10, []string{"This \x1b[34mis a ", "long ", "sentence\x1b[0m"}},
@@ -172,28 +159,61 @@ func TestWrap(t *testing.T) {
 			80,
 			[]string{"All details can be found in ", "[![GoDoc](https://godoc.org/github.com/pirmd/style?status.svg)](https://godoc.or", "g/github.com/pirmd/style)"},
 		},
+		{
+			"\x1b[34mWhatever goes upon two legs is an enemy.\n\x1b[39m",
+			80,
+			[]string{"\x1b[34mWhatever goes upon two legs is an enemy.", "\x1b[39m"},
+		},
 	}
 
 	for _, tc := range testCases {
-		got := Wrap(tc.in, tc.sz)
+		got := Cut(tc.in, tc.sz)
 		if !reflect.DeepEqual(got, tc.out) {
 			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}
 	}
 }
 
-func BenchmarkLen(b *testing.B) {
-	in := strings.Repeat("\x1b[31mbonjour\x1b[m", 20)
-	b.ResetTimer()
-	for n := 0; n < b.N; n++ {
-		Len(in)
+func TestTrimSpace(t *testing.T) {
+	testCases := []struct {
+		in   string
+		outS string
+		outL int
+	}{
+		{"Coucou", "Coucou", 6},
+		{"Coucou ", "Coucou", 6},
+		{"  Coucou \n", "Coucou", 6},
+		{"This \x1b[34mis\x1b[0m a long sentence", "This \x1b[34mis\x1b[0m a long sentence", 23},
+		{"\x1b[34m  Coucou c'est\x1b[0m nous!  \n", "\x1b[34mCoucou c'est\x1b[0m nous!", 18},
+		{" \x1b[34m Coucou c'est nous!\x1b[0m  \n", "\x1b[34mCoucou c'est nous!\x1b[0m", 18},
+		{"\x1b[34m  Coucou c'est nous!\n  \x1b[0m", "\x1b[34mCoucou c'est nous!\x1b[0m", 18},
+	}
+
+	for _, tc := range testCases {
+		gotS, gotL := TrimSpace(tc.in)
+		if gotS != tc.outS || gotL != tc.outL {
+			t.Errorf("Trim spaces failed for %#v.\nWant:\n'%#v' [len=%d]\nGot :\n'%#v' [len=%d]\n", tc.in, tc.outS, tc.outL, gotS, gotL)
+		}
 	}
 }
 
-func BenchmarkTruncate(b *testing.B) {
-	in := strings.Repeat("\x1b[31mbonjour\x1b[m", 20)
-	b.ResetTimer()
-	for n := 0; n < b.N; n++ {
-		Truncate(in, len(in)/2)
+func TestTrimSuffix(t *testing.T) {
+	testCases := []struct {
+		in  string
+		out string
+	}{
+		{"Coucou", "Coucou"},
+		{"Coucou \n", "Coucou "},
+		{"\x1b[34mCoucou\x1b[0m\n", "\x1b[34mCoucou\x1b[0m"},
+		{"\x1b[34mCoucou\n\x1b[0m", "\x1b[34mCoucou\x1b[0m"},
+		{"Coucou\nc'est\nnous\n", "Coucou\nc'est\nnous"},
+		{"Coucou\nc'est\x1b[34m\nnous\n\x1b[0m", "Coucou\nc'est\x1b[34m\nnous\x1b[0m"},
+	}
+
+	for _, tc := range testCases {
+		got := TrimSuffix(tc.in, '\n')
+		if got != tc.out {
+			t.Errorf("Trim EOL) failed for %#v.\nWant:\n'%#v'\nGot :\n'%#v'\n", tc.in, tc.out, got)
+		}
 	}
 }

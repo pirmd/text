@@ -45,7 +45,7 @@ func TestAdd(t *testing.T) {
 
 		{
 			[]Code{cRed, cBold, cReset},
-			Sequence{},
+			Sequence{cReset},
 		},
 
 		{
@@ -83,7 +83,7 @@ func TestCombine(t *testing.T) {
 
 		{
 			[]string{RedOn, BoldOn, Reset},
-			Sequence{},
+			Sequence{cReset},
 		},
 
 		{

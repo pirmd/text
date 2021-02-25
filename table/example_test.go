@@ -12,24 +12,57 @@ func Example() {
 
 	tab.SetHeader("Column1", "Column2", "Column3")
 	tab.AddRows(
-		[]string{"Basic column", "This one is here\nto demonstrate\nthat columns with several lines work too.", "Any " + ansi.Bold("formatted") + " string can be inserted too without breaking the table."},
-		[]string{"", "This second row is here to test multi-lines rows format.", "Also possibly a second chance to verify that multi-lines is working."},
+		[]string{"Basic column", "Multi-line row:\n- first line\nSecond line is working too.", "Any very and interesting long line is also going to be adequatly wrapped at column boundaries."},
+		[]string{"", "<- Empty columns are properly managed (as you can see on your left and right) ->", ""},
 	)
-	tab.SetFooter("", "Grand Total:", ansi.Bold(ansi.Green("42")))
+	tab.SetFooter("but whatever you'll put in your table,", "the answer will be:", "42")
 
 	fmt.Println(tab)
+	// Output:
+	// Column1                  | Column2                  | Column3
+	// ======================== | ======================== | ========================
+	// Basic column             | Multi-line row:          | Any very and interesting
+	//                          | - first line             | long line is also going
+	//                          | Second line is working   | to be adequatly wrapped
+	//                          | too.                     | at column boundaries.
+	// ------------------------ | ------------------------ | ------------------------
+	//                          | <- Empty columns are     |
+	//                          | properly managed (as you |
+	//                          | can see on your left and |
+	//                          | right) ->                |
+	// ======================== | ======================== | ========================
+	// but whatever you'll put  | the answer will be:      | 42
+	// in your table,           |                          |
+
+	// I'm not sure why but it seems this comment is needed or the test will fail.
 }
 
-//Output:
-//Column1      | Column2                         | Column3
-//============ | =============================== | ===============================
-//Basic column | This one is here                | Any [1mformatted[22m string can be
-//             | to demonstrate                  | inserted too without breaking
-//             | that columns with several lines | the table.
-//             | work too.                       |
-//------------ | ------------------------------- | -------------------------------
-//             | This second row is here to test | Also possibly a second chance
-//             | multi-lines rows format.        | to verify that multi-lines is
-//             |                                 | working.
-//============ | =============================== | ===============================
-//             | Grand Total:                    | [1m[32m42[39m[22m
+func Example_with_colors() {
+	tab := table.New().SetMaxWidth(80).SetGrid(&table.Grid{Columns: " | ", Header: ansi.Bold("-"), BodyRows: "-", Footer: ansi.Bold("-")})
+
+	tab.SetHeader("Let's put", "Some fun", "With colors")
+	tab.AddRows(
+		[]string{"Basic column", ansi.Green("Multi-line row:\n- first line\nSecond line is working too."), "Any very and " + ansi.Underline("interesting") + " long line is also going to be adequatly wrapped at column boundaries."},
+		[]string{"", ansi.Blue("<-") + " Empty columns are properly managed (as you can see on your left and right)" + ansi.Red("->"), ""},
+	)
+	tab.SetFooter("but whatever you'll put in your table,", "the answer will be:", ansi.Bold(ansi.Green("42")))
+
+	fmt.Println(tab)
+	// Output:
+	// Let's put                | Some fun                 | With colors
+	// [1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[0m | [1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[0m | [1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[0m
+	// Basic column             | [32mMulti-line row:[0m          | Any very and [4minteresting[24m
+	//                          | [32m- first line[0m             | long line is also going
+	//                          | [32mSecond line is working [0m  | to be adequatly wrapped
+	//                          | [32mtoo.[39m                     | at column boundaries.
+	// ------------------------ | ------------------------ | ------------------------
+	//                          | [34m<-[39m Empty columns are     |
+	//                          | properly managed (as you |
+	//                          | can see on your left and |
+	//                          | right)[31m->[39m                 |
+	// [1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[0m | [1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[0m | [1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[22m[1m-[0m
+	// but whatever you'll put  | the answer will be:      | [1m[32m42[39m[22m
+	// in your table,           |                          |
+
+	// I'm not sure why but it seems this comment is needed or the test will fail.
+}

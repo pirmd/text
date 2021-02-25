@@ -1,11 +1,11 @@
-Ceci est un test pour trouver une      [41m[37m+[39m[49m Ceci est un test pour trouver une     
+Ceci est un test pour trouver une      [41m[37m+[39;49m Ceci est un test pour trouver une     
 bonne façon                              [31m([39m[31mtrès[39m[31m)[39m[31m [39mbonne façon                    
-de représenter les diférences entre    [41m[37m+[39m[49m de représenter les dif[31mf[39mérences entre  
+de représenter les diférences entre    [41m[37m+[39;49m de représenter les dif[31mf[39mérences entre  
 deux textes ou deux chaînes              deux textes ou deux chaînes           
 de caractères.                         = de caractères.                        
-                                       [41m[37m+[39m[49m [31m[0m                                      
-                                       [41m[37m+[39m[49m [31mIl s'agirait ensuite de l'inclure dans[0m
-                                         [31mle package verify pour obtenir[0m        
-                                       [41m[37m+[39m[49m [31mun outil de test.[0m                     
+                                       [41m[37m+[39;49m                                       
+                                       [41m[37m+[39;49m [31mIl s'agirait ensuite de l'inclure dans[0m
+                                         [31mle package verify pour obtenir[39m        
+                                       [41m[37m+[39;49m [31mun outil de test.[39m                     
                                        =                                       
 Happy end.                             = Happy end.                            
