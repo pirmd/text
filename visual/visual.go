@@ -103,9 +103,9 @@ func InterruptFormattingAtEOL(s []string) {
 // is lower or equal to the provided limit. Wrap works with word limits being
 // spaces.
 //
-// If a "word" is encountered that is longer than the limit, it is truncated or
-// left as is depending of truncateLongWords flag.
-func Wrap(s string, limit int, truncateLongWords bool) (ws []string) {
+// If a "word" is encountered that is longer than the limit, it is split in
+// chunks of 'limit' length.
+func Wrap(s string, limit int) (ws []string) {
 	var line, word string
 	var linelen, wordlen int
 
@@ -150,11 +150,12 @@ func Wrap(s string, limit int, truncateLongWords bool) (ws []string) {
 					line, linelen = "", 0
 				}
 
-				// word is longer than the limit, we truncated it
-				if truncateLongWords {
-					ws = append(ws, word)
-					word, wordlen = "", Runewidth(c)
-				}
+				// word is longer than the limit, we split it at the current
+				// position.
+				//TODO(pirmd): find some way to split word at more meaningful
+				//position (like at [()[]/.)
+				ws = append(ws, word)
+				word, wordlen = "", Runewidth(c)
 			}
 			word += string(c)
 

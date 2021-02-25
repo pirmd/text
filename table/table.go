@@ -427,7 +427,7 @@ func columnize(s string, sz int) []string {
 		return []string{strings.Repeat(" ", sz)}
 	}
 
-	ws := visual.Wrap(s, sz, true)
+	ws := visual.Wrap(s, sz)
 
 	visual.InterruptFormattingAtEOL(ws)
 

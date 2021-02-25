@@ -134,7 +134,7 @@ func TestWrap(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Wrap(tc.in, tc.sz, true)
+		got := Wrap(tc.in, tc.sz)
 		if !reflect.DeepEqual(got, tc.out) {
 			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}

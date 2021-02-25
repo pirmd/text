@@ -28,10 +28,10 @@ func Indent(s string, tag, prefix string) string {
 // lower or equal to the provided limit. Wrap works with word limits being
 // spaces.
 //
-// If a "word" is encountered that is longer than the limit, it is truncated or
-// left as is depending of truncateLongWords flag.
-func Wrap(txt string, limit int, truncateLongWords bool) string {
-	return strings.Join(visual.Wrap(txt, limit, truncateLongWords), "\n")
+// If a "word" is encountered that is longer than the limit, it is split in
+// chunks of 'limit' length.
+func Wrap(txt string, limit int) string {
+	return strings.Join(visual.Wrap(txt, limit), "\n")
 }
 
 // Tab wraps and indents the given text.
@@ -43,19 +43,19 @@ func Wrap(txt string, limit int, truncateLongWords bool) string {
 // Tab calculates the correct wraping limits taking indent's prefix length. It
 // does not work if prefix is made of tabs as indent's tag/prefix length is
 // unknown (like '\t').
-func Tab(s string, tag, prefix string, limit int, truncateLongWords bool) string {
+func Tab(s string, tag, prefix string, limit int) string {
 	lB, lP := visual.Len(tag), visual.Len(prefix)
 
 	var r string
 	switch {
 	case lB > lP:
 		prefix = visual.Pad(prefix, lB, ' ')
-		r = Wrap(s, limit-lB, truncateLongWords)
+		r = Wrap(s, limit-lB)
 	case lB < lP:
 		tag = visual.Truncate(prefix, lP-lB) + tag
-		r = Wrap(s, limit-lP, truncateLongWords)
+		r = Wrap(s, limit-lP)
 	default:
-		r = Wrap(s, limit-lP, truncateLongWords)
+		r = Wrap(s, limit-lP)
 	}
 
 	return indent(r, tag, prefix)
