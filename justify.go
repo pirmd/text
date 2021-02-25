@@ -35,12 +35,3 @@ func Justify(s string, sz int) string {
 	}
 	return strings.Join(ws, "\n")
 }
-
-// ExactSize returns a string of the exact given size either by padding or
-// truncating it.
-func ExactSize(s string, size int) string {
-	if visual.Len(s) > size {
-		return visual.Truncate(s, size-1) + string(ElipsisRune)
-	}
-	return visual.Pad(s, size, ' ')
-}
