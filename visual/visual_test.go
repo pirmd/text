@@ -1,4 +1,4 @@
-package util
+package visual
 
 import (
 	"reflect"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestVisualLen(t *testing.T) {
+func TestLen(t *testing.T) {
 	testCases := []struct {
 		in  string
 		out int
@@ -18,14 +18,14 @@ func TestVisualLen(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := VisualLen(tc.in)
+		got := Len(tc.in)
 		if got != tc.out {
 			t.Errorf("Length of '%s' failed: got %d, wanted %d", string(tc.in), got, tc.out)
 		}
 	}
 }
 
-func TestVisualTruncate(t *testing.T) {
+func TestTruncate(t *testing.T) {
 	testCases := []struct {
 		in  string
 		sz  int
@@ -38,14 +38,14 @@ func TestVisualTruncate(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := VisualTruncate(tc.in, tc.sz)
+		got := Truncate(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual Truncate failed for %#v.\nWanted: %#v\nGot   : %#v\n", tc.in, tc.out, got)
 		}
 	}
 }
 
-func TestVisualPad(t *testing.T) {
+func TestPad(t *testing.T) {
 	testCases := []struct {
 		in  string
 		sz  int
@@ -57,14 +57,14 @@ func TestVisualPad(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := VisualPad(tc.in, tc.sz, ' ')
+		got := Pad(tc.in, tc.sz, ' ')
 		if got != tc.out {
 			t.Errorf("visual Padding failed for '%s' (max %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
 		}
 	}
 }
 
-func TestVisualRepeat(t *testing.T) {
+func TestRepeat(t *testing.T) {
 	testCases := []struct {
 		in  string
 		sz  int
@@ -77,7 +77,7 @@ func TestVisualRepeat(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := VisualRepeat(tc.in, tc.sz)
+		got := Repeat(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual repeating failed for '%s' (up to %d).\nWanted: %s\nGot   : %s\n", tc.in, tc.sz, tc.out, got)
 		}
@@ -107,7 +107,7 @@ func TestInterruptFormattingatEOL(t *testing.T) {
 	}
 }
 
-func TestVisualWrap(t *testing.T) {
+func TestWrap(t *testing.T) {
 	testCases := []struct {
 		in  string
 		sz  int
@@ -134,25 +134,25 @@ func TestVisualWrap(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := VisualWrap(tc.in, tc.sz, true)
+		got := Wrap(tc.in, tc.sz, true)
 		if !reflect.DeepEqual(got, tc.out) {
 			t.Errorf("Wrap failed for %#v.\nWanted:\n%#v\nGot   :\n%#v\n", tc.in, tc.out, got)
 		}
 	}
 }
 
-func BenchmarkVisualLen(b *testing.B) {
+func BenchmarkLen(b *testing.B) {
 	in := strings.Repeat("\x1b[31mbonjour\x1b[m", 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		VisualLen(in)
+		Len(in)
 	}
 }
 
-func BenchmarkVisualTruncate(b *testing.B) {
+func BenchmarkTruncate(b *testing.B) {
 	in := strings.Repeat("\x1b[31mbonjour\x1b[m", 20)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		VisualTruncate(in, len(in)/2)
+		Truncate(in, len(in)/2)
 	}
 }

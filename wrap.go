@@ -3,7 +3,7 @@ package text
 import (
 	"strings"
 
-	"github.com/pirmd/text/internal/util"
+	"github.com/pirmd/text/visual"
 )
 
 // Indent inserts a name/bullet/number at the beginning of the string, then
@@ -12,13 +12,13 @@ import (
 // Tag is superposed to the indent prefix to obtain the first line prefix, if
 // tag length is greater than prefix, prefix is completed by trailing spaces.
 func Indent(s string, tag, prefix string) string {
-	lB, lP := util.VisualLen(tag), util.VisualLen(prefix)
+	lB, lP := visual.Len(tag), visual.Len(prefix)
 
 	switch {
 	case lB > lP:
-		prefix = util.VisualPad(prefix, lB, ' ')
+		prefix = visual.Pad(prefix, lB, ' ')
 	case lB < lP:
-		tag = util.VisualTruncate(prefix, lP-lB) + tag
+		tag = visual.Truncate(prefix, lP-lB) + tag
 	}
 
 	return indent(s, tag, prefix)
@@ -31,7 +31,7 @@ func Indent(s string, tag, prefix string) string {
 // If a "word" is encountered that is longer than the limit, it is truncated or
 // left as is depending of truncateLongWords flag.
 func Wrap(txt string, limit int, truncateLongWords bool) string {
-	return strings.Join(util.VisualWrap(txt, limit, truncateLongWords), "\n")
+	return strings.Join(visual.Wrap(txt, limit, truncateLongWords), "\n")
 }
 
 // Tab wraps and indents the given text.
@@ -44,15 +44,15 @@ func Wrap(txt string, limit int, truncateLongWords bool) string {
 // does not work if prefix is made of tabs as indent's tag/prefix length is
 // unknown (like '\t').
 func Tab(s string, tag, prefix string, limit int, truncateLongWords bool) string {
-	lB, lP := util.VisualLen(tag), util.VisualLen(prefix)
+	lB, lP := visual.Len(tag), visual.Len(prefix)
 
 	var r string
 	switch {
 	case lB > lP:
-		prefix = util.VisualPad(prefix, lB, ' ')
+		prefix = visual.Pad(prefix, lB, ' ')
 		r = Wrap(s, limit-lB, truncateLongWords)
 	case lB < lP:
-		tag = util.VisualTruncate(prefix, lP-lB) + tag
+		tag = visual.Truncate(prefix, lP-lB) + tag
 		r = Wrap(s, limit-lP, truncateLongWords)
 	default:
 		r = Wrap(s, limit-lP, truncateLongWords)

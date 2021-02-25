@@ -8,7 +8,7 @@ import (
 
 	"golang.org/x/term"
 
-	"github.com/pirmd/text/internal/util"
+	"github.com/pirmd/text/visual"
 )
 
 const (
@@ -291,7 +291,7 @@ func (t *Table) buildSeparator(pattern string) string {
 
 	sep := make([]string, len(t.colWidth))
 	for i := range t.colWidth {
-		sep[i] = util.VisualRepeat(pattern, t.colWidth[i])
+		sep[i] = visual.Repeat(pattern, t.colWidth[i])
 	}
 
 	return strings.Join(sep, t.sep.Columns)
@@ -360,7 +360,7 @@ func (t *Table) autoColWidth() {
 		}
 	}
 
-	maxUsableWidth := t.maxWidth - (len(t.colWidth)-1)*util.VisualLen(t.sep.Columns)
+	maxUsableWidth := t.maxWidth - (len(t.colWidth)-1)*visual.Len(t.sep.Columns)
 	max := findWidthLimit(t.colWidth, maxUsableWidth)
 	for i, l := range t.colWidth {
 		if l > max {
@@ -412,7 +412,7 @@ func findWidthLimit(width []int, max int) int {
 func cellWidth(cell string) int {
 	var length int
 	for _, line := range strings.Split(cell, "\n") {
-		if l := util.VisualLen(line); l > length {
+		if l := visual.Len(line); l > length {
 			length = l
 		}
 	}
@@ -427,12 +427,12 @@ func columnize(s string, sz int) []string {
 		return []string{strings.Repeat(" ", sz)}
 	}
 
-	ws := util.VisualWrap(s, sz, true)
+	ws := visual.Wrap(s, sz, true)
 
-	util.InterruptFormattingAtEOL(ws)
+	visual.InterruptFormattingAtEOL(ws)
 
 	for i, l := range ws {
-		ws[i] = util.VisualPad(l, sz, ' ')
+		ws[i] = visual.Pad(l, sz, ' ')
 	}
 	return ws
 }

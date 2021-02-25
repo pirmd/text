@@ -1,4 +1,4 @@
-package util
+package visual
 
 import (
 	"strings"
@@ -9,8 +9,8 @@ import (
 	"github.com/pirmd/text/ansi"
 )
 
-// VisualLen calculates the length of string ignoring any ANSI escape sequences.
-func VisualLen(s string) int {
+// Len calculates the length of string ignoring any ANSI escape sequences.
+func Len(s string) int {
 	var l int
 	_ = ansi.Walk(s, func(c rune, esc string) error {
 		if c > -1 {
@@ -22,11 +22,11 @@ func VisualLen(s string) int {
 	return l
 }
 
-// VisualTruncate truncates the string so that its "visible" length is lower or equal
+// Truncate truncates the string so that its "visible" length is lower or equal
 // to the provided limit.
 // When needed, visualTruncate terminates the string by an ansi.Reset sequence
 // to inhibate any visual effects coming from the truncation step.
-func VisualTruncate(s string, limit int) (trunc string) {
+func Truncate(s string, limit int) (trunc string) {
 	var l int
 	var sgr ansi.Sequence
 
@@ -51,20 +51,20 @@ func VisualTruncate(s string, limit int) (trunc string) {
 	return trunc + sgr.Reset()
 }
 
-// VisualPad completes a string with provided rune until its "visible" lentgh
+// Pad completes a string with provided rune until its "visible" lentgh
 // reaches the provided limit.  If the string visible size is already above
 // imit, Pad returns it as-is.
-func VisualPad(s string, size int, padRune rune) string {
+func Pad(s string, size int, padRune rune) string {
 	var pad []rune
-	for i := VisualLen(s); i < size; i++ {
+	for i := Len(s); i < size; i++ {
 		pad = append(pad, padRune)
 	}
 	return s + string(pad)
 }
 
-// VisualRepeat repeats s until given size is reached.
-func VisualRepeat(s string, size int) string {
-	l := VisualLen(s)
+// Repeat repeats s until given size is reached.
+func Repeat(s string, size int) string {
+	l := Len(s)
 	r := s
 	for i := l; i <= size; i = i + l {
 		if i == size {
@@ -72,7 +72,7 @@ func VisualRepeat(s string, size int) string {
 		}
 		r = r + s
 	}
-	return VisualTruncate(r, size)
+	return Truncate(r, size)
 }
 
 // Runewidth returns the visual width of a rune.
@@ -99,13 +99,13 @@ func InterruptFormattingAtEOL(s []string) {
 	}
 }
 
-// VisualWrap wraps a text by ensuring that each of its line's "visible" length
+// Wrap wraps a text by ensuring that each of its line's "visible" length
 // is lower or equal to the provided limit. Wrap works with word limits being
 // spaces.
 //
 // If a "word" is encountered that is longer than the limit, it is truncated or
 // left as is depending of truncateLongWords flag.
-func VisualWrap(s string, limit int, truncateLongWords bool) (ws []string) {
+func Wrap(s string, limit int, truncateLongWords bool) (ws []string) {
 	var line, word string
 	var linelen, wordlen int
 
