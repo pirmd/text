@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.0] - 2021-02-05
+- Major refactor and rewrite of code that breaks API but hopefully simplify
+  code, add new features and solve some bugs.
+
 ## [0.5.4] - 2020-05-20
 - FIX bug that panic when drawing an empty table.
 
