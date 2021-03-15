@@ -116,79 +116,17 @@ func Repeat(s string, sz int) string {
 // chunks of given limit.
 // If provided limit is zero or less than zero, Cut only acts at end-of-line.
 func Cut(s string, sz int) (chunks []string) {
-	var line strings.Builder
-	var word strings.Builder
-	var linelen, wordlen int
+	return cut(s, sz, false)
+}
 
-	flushln := func() {
-		chunks = append(chunks, line.String())
-		line.Reset()
-		linelen = 0
-	}
-
-	flushwd := func() {
-		line.WriteString(word.String())
-		linelen += wordlen
-		word.Reset()
-		wordlen = 0
-	}
-
-	flushrune := func(c rune) {
-		word.WriteRune(c)
-		wordlen += Runewidth(c)
-	}
-
-	_ = ansi.Walk(s, func(c rune, esc string) error {
-		switch {
-		case c == -1:
-			word.WriteString(esc)
-
-		case c == '\n':
-			if sz > 0 && linelen+wordlen > sz {
-				flushln()
-			}
-			flushwd()
-			flushln()
-
-		case unicode.IsSpace(c):
-			switch l := linelen + wordlen; {
-			case sz > 0 && l == sz:
-				flushwd()
-				flushln()
-
-			case sz > 0 && l > sz:
-				flushln()
-				flushrune(c)
-				flushwd()
-
-			default:
-				flushrune(c)
-				flushwd()
-			}
-
-		default:
-			// word is longer than sz, we split it at the current position.
-			// TODO(pirmd): try to split at meaningful rune (like at ()[]/.)
-			if sz > 0 && wordlen+Runewidth(c) > sz {
-				if linelen > 0 {
-					flushln()
-				}
-				flushwd()
-				flushln()
-			}
-			flushrune(c)
-		}
-
-		return nil
-	})
-
-	if sz > 0 && linelen+wordlen > sz {
-		flushln()
-	}
-	flushwd()
-	flushln()
-
-	return
+// LazyCut cuts a string at end-of-line if the line "visual" length is shorter
+// than the given limit or at word boundary (space) to stay as close as
+// possible under the given limit.
+// Should a word exists that is longer than the limit, the word is not split to
+// fit into the given limit ans is kept as is.
+// If provided limit is zero or less than zero, Cut only acts at end-of-line.
+func LazyCut(s string, sz int) (chunks []string) {
+	return cut(s, sz, true)
 }
 
 // TrimSpace  trims all leading and trailing white space (as defined by
@@ -260,4 +198,83 @@ func TrimSuffix(s string, r rune) string {
 	})
 	trimmed.WriteString(bufSGR.String())
 	return trimmed.String()
+}
+
+func cut(s string, sz int, lazy bool) (chunks []string) {
+	var line strings.Builder
+	var word strings.Builder
+	var linelen, wordlen int
+
+	flushln := func() {
+		chunks = append(chunks, line.String())
+		line.Reset()
+		linelen = 0
+	}
+
+	flushwd := func() {
+		line.WriteString(word.String())
+		linelen += wordlen
+		word.Reset()
+		wordlen = 0
+	}
+
+	flushrune := func(c rune) {
+		word.WriteRune(c)
+		wordlen += Runewidth(c)
+	}
+
+	_ = ansi.Walk(s, func(c rune, esc string) error {
+		switch {
+		case c == -1:
+			word.WriteString(esc)
+
+		case c == '\n':
+			if sz > 0 && linelen+wordlen > sz {
+				flushln()
+			}
+			flushwd()
+			flushln()
+
+		case unicode.IsSpace(c):
+			switch l := linelen + wordlen; {
+			case sz > 0 && l == sz:
+				flushwd()
+				flushln()
+
+			case sz > 0 && l > sz:
+				flushln()
+				flushrune(c)
+				flushwd()
+
+			default:
+				flushrune(c)
+				flushwd()
+			}
+
+		default:
+			// word is longer than sz, we split it at the current position.
+			if sz > 0 && wordlen+Runewidth(c) > sz {
+				if linelen > 0 {
+					flushln()
+				}
+
+				if !lazy {
+					// TODO(pirmd): try to split at meaningful rune (like at ()[]/.)
+					flushwd()
+					flushln()
+				}
+			}
+			flushrune(c)
+		}
+
+		return nil
+	})
+
+	if sz > 0 && linelen+wordlen > sz {
+		flushln()
+	}
+	flushwd()
+	flushln()
+
+	return
 }

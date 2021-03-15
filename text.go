@@ -38,6 +38,16 @@ func Wrap(txt string, sz int) string {
 	return strings.Join(visual.Cut(txt, sz), "\n")
 }
 
+// LazyWrap wraps a text by ensuring that each of its line's "visual" length
+// is lower or equal to the provided limit. Wrap works with word limits being
+// spaces.
+//
+// If a "word" is encountered that is longer than the limit, it is not split in
+// chunks of 'limit' length and is kept as is.
+func LazyWrap(txt string, sz int) string {
+	return strings.Join(visual.LazyCut(txt, sz), "\n")
+}
+
 // Tab wraps and indents the given text.
 //
 // Tab will additionally add the given tag in front of the first line. Tag is
