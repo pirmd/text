@@ -75,6 +75,28 @@ func Tab(s string, tag, prefix string, sz int) string {
 	return indent(r, tag, prefix)
 }
 
+// LazyTab wraps and indents the given text.
+//
+// LazyTab operates like Tab but relies on LazyWrap and does not split long
+// words to fit the provided "visual" limit.
+func LazyTab(s string, tag, prefix string, sz int) string {
+	lT, lP := visual.Len(tag), visual.Len(prefix)
+
+	var r string
+	switch {
+	case lT > lP:
+		prefix = visual.PadRight(prefix, lT)
+		r = LazyWrap(s, sz-lT)
+	case lT < lP:
+		tag = visual.Truncate(prefix, lP-lT) + tag
+		r = LazyWrap(s, sz-lP)
+	default:
+		r = LazyWrap(s, sz-lP)
+	}
+
+	return indent(r, tag, prefix)
+}
+
 // Justify wraps a text to the given maximum size and makes sure that returned
 // lines are of exact provided size by wrapping and padding them as needed.
 func Justify(s string, sz int) string {

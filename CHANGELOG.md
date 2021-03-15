@@ -1,6 +1,9 @@
 # Changelog
 
-## [0.6.1] - 2021-0315
+## [0.6.2] - 2021-03-15
+- Add LazyTab extending LazyTab facilities to simplify API.
+
+## [0.6.1] - 2021-03-15
 - Add LazyWrap and visual.LazyCut to handle long words (like URL) waiting for a
   better solution for splitting such words.
 
