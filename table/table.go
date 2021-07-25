@@ -323,7 +323,7 @@ func (t *Table) autoColWidth() {
 		}
 	}
 
-	maxUsableWidth := t.maxWidth - (len(t.colWidth)-1)*visual.Len(t.sep.Columns)
+	maxUsableWidth := t.maxWidth - (len(t.colWidth)-1)*visual.Stringwidth(t.sep.Columns)
 	max := findWidthLimit(t.colWidth, maxUsableWidth)
 	for i, l := range t.colWidth {
 		if l > max {
@@ -374,7 +374,7 @@ func findWidthLimit(width []int, max int) int {
 func cellWidth(cell string) int {
 	var length int
 	for _, line := range strings.Split(cell, "\n") {
-		if l := visual.Len(line); l > length {
+		if l := visual.Stringwidth(line); l > length {
 			length = l
 		}
 	}

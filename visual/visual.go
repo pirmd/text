@@ -14,17 +14,21 @@ func Runewidth(c rune) int {
 	return runewidth.RuneWidth(c)
 }
 
-// Len calculates the "visual" length of string.
-func Len(s string) int {
-	var l int
-	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
-		if c > -1 {
-			l += Runewidth(c)
+// Width returns the "visual" width of a slice of bytes.
+func Width(p []byte) (w int) {
+	_ = ansi.Walk(p, func(n int, c rune, esc string) error {
+		if len(esc) == 0 {
+			w += Runewidth(c)
 		}
 		return nil
 	})
 
-	return l
+	return
+}
+
+// Stringwidth returns the "visual" width of string.
+func Stringwidth(s string) int {
+	return Width([]byte(s))
 }
 
 // Truncate truncates the string so that its "visible" length is lower or equal
@@ -96,7 +100,7 @@ func PadCenter(s string, sz int) string {
 func Repeat(s string, sz int) string {
 	var rs strings.Builder
 
-	i, l := 0, Len(s)
+	i, l := 0, Stringwidth(s)
 	for i <= sz {
 		rs.WriteString(s)
 		i += l

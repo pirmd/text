@@ -16,7 +16,7 @@ import (
 // Tag is superposed to the indent prefix to obtain the first line prefix, if
 // tag length is greater than prefix, prefix is completed by trailing spaces.
 func Indent(s string, tag, prefix string) string {
-	lT, lP := visual.Len(tag), visual.Len(prefix)
+	lT, lP := visual.Stringwidth(tag), visual.Stringwidth(prefix)
 
 	switch {
 	case lT > lP:
@@ -58,7 +58,7 @@ func LazyWrap(txt string, sz int) string {
 // does not work if prefix is made of tabs as indent's tag/prefix length is
 // unknown (like '\t').
 func Tab(s string, tag, prefix string, sz int) string {
-	lT, lP := visual.Len(tag), visual.Len(prefix)
+	lT, lP := visual.Stringwidth(tag), visual.Stringwidth(prefix)
 
 	var r string
 	switch {
@@ -80,7 +80,7 @@ func Tab(s string, tag, prefix string, sz int) string {
 // LazyTab operates like Tab but relies on LazyWrap and does not split long
 // words to fit the provided "visual" limit.
 func LazyTab(s string, tag, prefix string, sz int) string {
-	lT, lP := visual.Len(tag), visual.Len(prefix)
+	lT, lP := visual.Stringwidth(tag), visual.Stringwidth(prefix)
 
 	var r string
 	switch {

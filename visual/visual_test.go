@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestLen(t *testing.T) {
+func TestStringwidth(t *testing.T) {
 	testCases := []struct {
 		in  string
 		out int
@@ -17,7 +17,7 @@ func TestLen(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := Len(tc.in)
+		got := Stringwidth(tc.in)
 		if got != tc.out {
 			t.Errorf("Length of '%s' failed: got %d, wanted %d", string(tc.in), got, tc.out)
 		}
