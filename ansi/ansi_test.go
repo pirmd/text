@@ -26,7 +26,7 @@ func TestWalk(t *testing.T) {
 	for _, tc := range testCases {
 		var got string
 		var gotSGR Sequence
-		err := Walk(tc.in, func(curRune rune, curEsc string) error {
+		err := WalkString(tc.in, func(n int, curRune rune, curEsc string) error {
 			if curRune > 0 {
 				t.Logf("Walk gave a new rune: %s", string(curRune))
 				got += string(curRune)

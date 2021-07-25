@@ -17,7 +17,7 @@ func Runewidth(c rune) int {
 // Len calculates the "visual" length of string.
 func Len(s string) int {
 	var l int
-	_ = ansi.Walk(s, func(c rune, esc string) error {
+	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
 		if c > -1 {
 			l += Runewidth(c)
 		}
@@ -36,7 +36,7 @@ func Truncate(s string, limit int) string {
 	var l int
 	var sgr ansi.Sequence
 
-	_ = ansi.Walk(s, func(c rune, esc string) error {
+	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
 		if c > -1 {
 			ts.WriteRune(c)
 			l += Runewidth(c)
@@ -139,7 +139,7 @@ func TrimSpace(s string) (string, int) {
 	var l, buflen int
 
 	isLeadingSpaces := true
-	_ = ansi.Walk(s, func(c rune, esc string) error {
+	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
 		switch {
 		case c == -1:
 			spaceBuf.WriteString(esc)
@@ -177,7 +177,7 @@ func TrimSuffix(s string, r rune) string {
 	var buf strings.Builder
 	var bufSGR ansi.Sequence
 
-	_ = ansi.Walk(s, func(c rune, esc string) error {
+	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
 		switch {
 		case c == -1:
 			buf.WriteString(esc)
@@ -223,7 +223,7 @@ func cut(s string, sz int, lazy bool) (chunks []string) {
 		wordlen += Runewidth(c)
 	}
 
-	_ = ansi.Walk(s, func(c rune, esc string) error {
+	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
 		switch {
 		case c == -1:
 			word.WriteString(esc)

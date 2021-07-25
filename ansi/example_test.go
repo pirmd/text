@@ -14,11 +14,11 @@ func Example() {
 	//[32mHave [1mfun [22mwith [34mColors[0m
 }
 
-func ExampleWalk() {
+func ExampleWalkString() {
 	hello := ansi.Red("Bonjour") + " " + ansi.Bold("tout") + " le monde !"
 
 	var visualen int
-	_ = ansi.Walk(hello, func(c rune, esc string) error {
+	_ = ansi.WalkString(hello, func(n int, c rune, esc string) error {
 		if c > -1 {
 			visualen++
 		}
@@ -30,11 +30,11 @@ func ExampleWalk() {
 	//Length is 42, visual length is 23
 }
 
-func ExampleWalk_second() {
+func ExampleWalkString_second() {
 	hello := ansi.Red("Bonjour") + " " + ansi.Bold("tout") + " le monde !"
 
 	var clean []rune
-	_ = ansi.Walk(hello, func(c rune, esc string) error {
+	_ = ansi.WalkString(hello, func(n int, c rune, esc string) error {
 		if c > -1 {
 			clean = append(clean, c)
 		}

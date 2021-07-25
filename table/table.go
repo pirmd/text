@@ -402,7 +402,7 @@ func interruptFormattingAtEOL(s []string) {
 	var prevEsc string
 
 	for i, line := range s {
-		_ = ansi.Walk(line, func(c rune, esc string) error {
+		_ = ansi.WalkString(line, func(n int, c rune, esc string) error {
 			if c == -1 {
 				sgr.Combine(esc)
 			}
