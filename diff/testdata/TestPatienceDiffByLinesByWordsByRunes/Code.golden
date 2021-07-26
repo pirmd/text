@@ -1,8 +1,8 @@
 #include "win31.h"                     =  #include "win31.h"                    
 [9m#include "win95.h"[29m                     [41m[37m+[39;49m  [31m#include "win95.h"[39m                    
 #include                               [41m[37m<>[39;49m #include                              
-"[34mnotfullyworkingyet[39m[9mstillnotfullyworkin[0m    "[9mnotfullyworkingyet[29m[31mstillnotfullyworkin[0m
-[9mg[29m.h"                                      [31mg[39m.h"                                  
+"[34mnotfullyworkingyet[39m[9mstillnotfullyworking[29m    "[9mnotfullyworkingyet[29m[31mstillnotfullyworking[39m
+.h"                                       .h"                                   
                                        =                                        
 char make_prog_look_big[[34m8[39m[9m1[29m[9m6[29m00000];     [41m[37m<>[39;49m char make_prog_look_big[[9m8[29m[31m1[39m[31m6[39m00000];    
                                        =                                        
@@ -24,8 +24,8 @@ void main()                            =  void main()
                                        =                                        
 /* printf("Welcome to Windows          =  /* printf("Welcome to Windows         
 3.11"); */                                3.11"); */                            
-[9m/* printf("Welcome to Windows[0m          [41m[37m+[39;49m  [31m/* printf("Welcome to Windows[0m         
-[9m95"); */[29m                                  [31m95"); */[39m                              
+[9m/* printf("Welcome to Windows 95")[0m     [41m[37m+[39;49m  [31m/* printf("Welcome to Windows 95")[0m    
+[9m; */[29m                                      [31m; */[39m                                  
 printf("Welcome to Windows 9[34m5[39m[9m8[29m");      [41m[37m<>[39;49m printf("Welcome to Windows 9[9m5[29m[31m8[39m");     
 if (system_ok_for_too_long())          =  if (system_ok_for_too_long())         
 {                                      =  {                                     

@@ -34,8 +34,8 @@ func Indent(s string, tag, prefix string) string {
 //
 // If a "word" is encountered that is longer than the limit, it is split in
 // chunks of 'limit' length.
-func Wrap(txt string, sz int) string {
-	return strings.Join(visual.Cut(txt, sz), "\n")
+func Wrap(s string, sz int) string {
+	return wrap(s, visual.NewCutter(sz))
 }
 
 // LazyWrap wraps a text by ensuring that each of its line's "visual" length
@@ -44,8 +44,8 @@ func Wrap(txt string, sz int) string {
 //
 // If a "word" is encountered that is longer than the limit, it is not split in
 // chunks of 'limit' length and is kept as is.
-func LazyWrap(txt string, sz int) string {
-	return strings.Join(visual.LazyCut(txt, sz), "\n")
+func LazyWrap(s string, sz int) string {
+	return wrap(s, visual.NewLazyCutter(sz))
 }
 
 // Tab wraps and indents the given text.
@@ -207,4 +207,37 @@ func indent(s string, firstPrefix, prefix string) string {
 	}
 
 	return indented.String()
+}
+
+func wrap(s string, cutr *visual.Cutter) string {
+	out := new(strings.Builder)
+	in, _ := visual.TrimSpace([]byte(s))
+	line, cut := cutr.Split(in)
+
+	for line != nil {
+		if out.Len() > 0 {
+			out.WriteByte('\n')
+		}
+
+		l, _ := visual.TrimSpace(line)
+		out.Write(l)
+
+		in, _ = visual.TrimSpace(cut)
+		line, cut = cutr.Split(in)
+	}
+
+	if len(cut) > 0 {
+		if out.Len() > 0 {
+			out.WriteByte('\n')
+		}
+
+		in, _ = visual.TrimSpace(cut)
+		out.Write(in)
+	}
+
+	if strings.HasSuffix(s, "\n") {
+		out.WriteByte('\n')
+	}
+
+	return out.String()
 }

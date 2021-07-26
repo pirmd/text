@@ -27,8 +27,8 @@ void main()                            = void main()
 /* printf("Welcome to Windows          = /* printf("Welcome to Windows         
 3.11"); */                               3.11"); */                            
 [34mprintf("Welcome to Windows 95");[39m       [44m[37m-[39;49m                                       
-                                       [41m[37m+[39;49m [31m/* printf("Welcome to Windows[0m         
-                                         [31m95"); */[39m                              
+                                       [41m[37m+[39;49m [31m/* printf("Welcome to Windows 95")[0m    
+                                         [31m; */[39m                                  
                                        [41m[37m+[39;49m [31mprintf("Welcome to Windows 98");[39m      
 if (system_ok_for_too_long())          = if (system_ok_for_too_long())         
 {                                      = {                                     

@@ -168,6 +168,7 @@ No animal shall sleep in a bed.
 No animal shall drink alcohol.
 No animal shall kill any other animal.
 All animals are equal.`,
+
 			inR: `Four legs good, two legs better.
 No animal shall sleep in a bed without sheets.
 No animal shall drink alcohol to excess.

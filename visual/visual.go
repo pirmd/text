@@ -40,13 +40,13 @@ func Truncate(s string, limit int) string {
 	var l int
 	var sgr ansi.Sequence
 
-	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
+	_ = ansi.WalkString(s, func(advance int, c rune, esc string) error {
 		if c > -1 {
 			ts.WriteRune(c)
 			l += Runewidth(c)
 		}
 
-		if esc != "" {
+		if len(esc) > 0 {
 			ts.WriteString(esc)
 			sgr.Combine(esc)
 		}
@@ -66,7 +66,7 @@ func Truncate(s string, limit int) string {
 // reaches the provided limit. If the string's "visual" size is already above
 // limit, PadRight returns it as-is.
 func PadRight(s string, sz int) string {
-	ts, l := TrimSpace(s)
+	ts, l := TrimSpaceString(s)
 	if l < sz {
 		return ts + strings.Repeat(" ", sz-l)
 	}
@@ -77,7 +77,7 @@ func PadRight(s string, sz int) string {
 // reaches the provided limit. If the string's "visual" size is already above
 // limit, PadLeft returns it as-is.
 func PadLeft(s string, sz int) string {
-	ts, l := TrimSpace(s)
+	ts, l := TrimSpaceString(s)
 	if l < sz {
 		return strings.Repeat(" ", sz-l) + ts
 	}
@@ -88,7 +88,7 @@ func PadLeft(s string, sz int) string {
 // "visual" size reaches the provided limit. If the string's "visual" size is
 // already above limit, PadCenter returns it as-is.
 func PadCenter(s string, sz int) string {
-	ts, l := TrimSpace(s)
+	ts, l := TrimSpaceString(s)
 	if l < sz {
 		right := (sz - l) / 2
 		return strings.Repeat(" ", right) + ts + strings.Repeat(" ", (sz-l)-right)
@@ -113,39 +113,19 @@ func Repeat(s string, sz int) string {
 	return Truncate(rs.String(), sz)
 }
 
-// Cut cuts a string at end-of-line if the line "visual" length is shorter than
-// the given limit or at word boundary (space) to stay as close as possible
-// under the given limit.
-// Should a word exists that is longer than the limit, the word is split in
-// chunks of given limit.
-// If provided limit is zero or less than zero, Cut only acts at end-of-line.
-func Cut(s string, sz int) (chunks []string) {
-	return cut(s, sz, false)
-}
-
-// LazyCut cuts a string at end-of-line if the line "visual" length is shorter
-// than the given limit or at word boundary (space) to stay as close as
-// possible under the given limit.
-// Should a word exists that is longer than the limit, the word is not split to
-// fit into the given limit ans is kept as is.
-// If provided limit is zero or less than zero, Cut only acts at end-of-line.
-func LazyCut(s string, sz int) (chunks []string) {
-	return cut(s, sz, true)
-}
-
-// TrimSpace  trims all leading and trailing white space (as defined by
-// Unicode). TrimSpace returns the trimmed strings as well as its "visual"
-// length.
-func TrimSpace(s string) (string, int) {
+// TrimSpace  trims all leading and trailing space (as defined by Unicode) from
+// a slice of bytes.
+// TrimSpace returns also the "visual" width of trimmed slice.
+func TrimSpace(s []byte) ([]byte, int) {
 	var trimmed strings.Builder
 	var spaceBuf strings.Builder
 	var spaceBufSGR ansi.Sequence
 	var l, buflen int
 
 	isLeadingSpaces := true
-	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
+	_ = ansi.Walk(s, func(advance int, c rune, esc string) error {
 		switch {
-		case c == -1:
+		case len(esc) > 0:
 			spaceBuf.WriteString(esc)
 			spaceBufSGR.Combine(esc)
 
@@ -172,7 +152,15 @@ func TrimSpace(s string) (string, int) {
 	})
 
 	trimmed.WriteString(spaceBufSGR.String())
-	return trimmed.String(), l
+	return []byte(trimmed.String()), l
+}
+
+// TrimSpaceString trims all leading and trailing spaces (as defined by
+// Unicode) from a string.
+// TrimSpaceString returns also the "visual" width of trimmed string.
+func TrimSpaceString(s string) (string, int) {
+	out, sz := TrimSpace([]byte(s))
+	return string(out), sz
 }
 
 // TrimSuffix trims trailing rune r.
@@ -181,9 +169,9 @@ func TrimSuffix(s string, r rune) string {
 	var buf strings.Builder
 	var bufSGR ansi.Sequence
 
-	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
+	_ = ansi.WalkString(s, func(advance int, c rune, esc string) error {
 		switch {
-		case c == -1:
+		case len(esc) > 0:
 			buf.WriteString(esc)
 			bufSGR.Combine(esc)
 
@@ -204,81 +192,37 @@ func TrimSuffix(s string, r rune) string {
 	return trimmed.String()
 }
 
-func cut(s string, sz int, lazy bool) (chunks []string) {
-	var line strings.Builder
-	var word strings.Builder
-	var linelen, wordlen int
+// Cut cuts a string at end-of-line if the line "visual" length is shorter than
+// the given limit or at word boundary (space) to stay as close as possible
+// under the given limit.
+// Should a word exists that is longer than the limit, the word is split in
+// pieces.
+// If provided limit is zero or less than zero, Cut only acts at end-of-line.
+func Cut(s string, sz int) (chunks []string) {
+	return cut(s, NewCutter(sz))
+}
 
-	flushln := func() {
-		chunks = append(chunks, line.String())
-		line.Reset()
-		linelen = 0
+// LazyCut cuts a string at end-of-line if the line "visual" length is shorter
+// than the given limit or at word boundary (space) to stay as close as
+// possible under the given limit.
+// Should a word exists that is longer than the limit, the word is not split to
+// fit into the given limit ans is kept as is.
+// If provided limit is zero or less than zero, Cut only acts at end-of-line.
+func LazyCut(s string, sz int) (chunks []string) {
+	return cut(s, NewLazyCutter(sz))
+}
+
+func cut(s string, cutr *Cutter) (chunks []string) {
+	line, cut := cutr.Split([]byte(s))
+
+	for line != nil {
+		chunks = append(chunks, string(line))
+		line, cut = cutr.Split(cut)
 	}
 
-	flushwd := func() {
-		line.WriteString(word.String())
-		linelen += wordlen
-		word.Reset()
-		wordlen = 0
+	if len(cut) > 0 {
+		chunks = append(chunks, string(cut))
 	}
-
-	flushrune := func(c rune) {
-		word.WriteRune(c)
-		wordlen += Runewidth(c)
-	}
-
-	_ = ansi.WalkString(s, func(n int, c rune, esc string) error {
-		switch {
-		case c == -1:
-			word.WriteString(esc)
-
-		case c == '\n':
-			if sz > 0 && linelen+wordlen > sz {
-				flushln()
-			}
-			flushwd()
-			flushln()
-
-		case unicode.IsSpace(c):
-			switch l := linelen + wordlen; {
-			case sz > 0 && l == sz:
-				flushwd()
-				flushln()
-
-			case sz > 0 && l > sz:
-				flushln()
-				flushrune(c)
-				flushwd()
-
-			default:
-				flushrune(c)
-				flushwd()
-			}
-
-		default:
-			// word is longer than sz, we split it at the current position.
-			if sz > 0 && wordlen+Runewidth(c) > sz {
-				if linelen > 0 {
-					flushln()
-				}
-
-				if !lazy {
-					// TODO(pirmd): try to split at meaningful rune (like at ()[]/.)
-					flushwd()
-					flushln()
-				}
-			}
-			flushrune(c)
-		}
-
-		return nil
-	})
-
-	if sz > 0 && linelen+wordlen > sz {
-		flushln()
-	}
-	flushwd()
-	flushln()
 
 	return
 }

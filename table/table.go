@@ -230,11 +230,16 @@ func (t *Table) writeRowTo(w io.Writer, row []string) (int, error) {
 	return nbytes, nil
 }
 
+// padRow splits a row into a slice of cells. Each cells is right-aligned,
+// padded to fit table's column width ans any trailing new line is trimmed.
 func (t *Table) padRow(row []string) [][]string {
 	// iterate over t.colWidth in the cases where row has missing columns
 	subrows := make([][]string, len(t.colWidth))
 	for i := range row {
-		subrows[i] = visual.Cut(visual.TrimSuffix(row[i], '\n'), t.colWidth[i])
+		subrows[i] = visual.Cut(row[i], t.colWidth[i])
+		for j := range subrows[i] {
+			subrows[i][j] = visual.TrimSuffix(subrows[i][j], '\n')
+		}
 		interruptFormattingAtEOL(subrows[i])
 	}
 
