@@ -44,74 +44,6 @@ func TestTruncate(t *testing.T) {
 	}
 }
 
-func TestPadRight(t *testing.T) {
-	testCases := []struct {
-		in  string
-		sz  int
-		out string
-	}{
-		{"Coucou", 9, "Coucou   "},
-		{"\x1b[34mCoucou\x1b[0m", 9, "\x1b[34mCoucou\x1b[0m   "},
-		{"Coucou", 6, "Coucou"},
-		{"\x1b[34mCoucou\x1b[0m", 6, "\x1b[34mCoucou\x1b[0m"},
-		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
-		{"", 3, "   "},
-	}
-
-	for _, tc := range testCases {
-		got := PadRight(tc.in, tc.sz)
-		if got != tc.out {
-			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
-		}
-	}
-}
-
-func TestPadLeft(t *testing.T) {
-	testCases := []struct {
-		in  string
-		sz  int
-		out string
-	}{
-		{"Coucou", 9, "   Coucou"},
-		{"\x1b[34mCoucou\x1b[0m", 9, "   \x1b[34mCoucou\x1b[0m"},
-		{"This \x1b[34mis\x1b[0m a long sentence", 30, "       This \x1b[34mis\x1b[0m a long sentence"},
-		{"Coucou", 6, "Coucou"},
-		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
-		{"", 3, "   "},
-	}
-
-	for _, tc := range testCases {
-		got := PadLeft(tc.in, tc.sz)
-		if got != tc.out {
-			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %#v\nGot : %#v\n", tc.in, tc.sz, tc.out, got)
-		}
-	}
-}
-
-func TestPadCenter(t *testing.T) {
-	testCases := []struct {
-		in  string
-		sz  int
-		out string
-	}{
-		{"Coucou", 10, "  Coucou  "},
-		{"Coucou ", 10, "  Coucou  "},
-		{"  Coucou ", 10, "  Coucou  "},
-		{"  Coucou ", 9, " Coucou  "},
-		{"\x1b[34mCoucou\x1b[0m", 9, " \x1b[34mCoucou\x1b[0m  "},
-		{"Coucou", 6, "Coucou"},
-		{"Coucou, c'est nous", 9, "Coucou, c'est nous"},
-		{"", 3, "   "},
-	}
-
-	for _, tc := range testCases {
-		got := PadCenter(tc.in, tc.sz)
-		if got != tc.out {
-			t.Errorf("visual Padding failed for '%s' (max %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
-		}
-	}
-}
-
 func TestRepeat(t *testing.T) {
 	testCases := []struct {
 		in  string
@@ -128,50 +60,6 @@ func TestRepeat(t *testing.T) {
 		got := Repeat(tc.in, tc.sz)
 		if got != tc.out {
 			t.Errorf("visual repeating failed for '%s' (up to %d).\nWant: %s\nGot : %s\n", tc.in, tc.sz, tc.out, got)
-		}
-	}
-}
-
-func TestTrimSpaceString(t *testing.T) {
-	testCases := []struct {
-		in   string
-		outS string
-		outL int
-	}{
-		{"Coucou", "Coucou", 6},
-		{"Coucou ", "Coucou", 6},
-		{"  Coucou \n", "Coucou", 6},
-		{"This \x1b[34mis\x1b[0m a long sentence", "This \x1b[34mis\x1b[0m a long sentence", 23},
-		{"\x1b[34m  Coucou c'est\x1b[0m nous!  \n", "\x1b[34mCoucou c'est\x1b[0m nous!", 18},
-		{" \x1b[34m Coucou c'est nous!\x1b[0m  \n", "\x1b[34mCoucou c'est nous!\x1b[0m", 18},
-		{"\x1b[34m  Coucou c'est nous!\n  \x1b[0m", "\x1b[34mCoucou c'est nous!\x1b[0m", 18},
-	}
-
-	for _, tc := range testCases {
-		gotS, gotL := TrimSpaceString(tc.in)
-		if gotS != tc.outS || gotL != tc.outL {
-			t.Errorf("Trim spaces failed for %#v.\nWant:\n'%#v' [len=%d]\nGot :\n'%#v' [len=%d]\n", tc.in, tc.outS, tc.outL, gotS, gotL)
-		}
-	}
-}
-
-func TestTrimSuffix(t *testing.T) {
-	testCases := []struct {
-		in  string
-		out string
-	}{
-		{"Coucou", "Coucou"},
-		{"Coucou \n", "Coucou "},
-		{"\x1b[34mCoucou\x1b[0m\n", "\x1b[34mCoucou\x1b[0m"},
-		{"\x1b[34mCoucou\n\x1b[0m", "\x1b[34mCoucou\x1b[0m"},
-		{"Coucou\nc'est\nnous\n", "Coucou\nc'est\nnous"},
-		{"Coucou\nc'est\x1b[34m\nnous\n\x1b[0m", "Coucou\nc'est\x1b[34m\nnous\x1b[0m"},
-	}
-
-	for _, tc := range testCases {
-		got := TrimSuffix(tc.in, '\n')
-		if got != tc.out {
-			t.Errorf("Trim EOL) failed for %#v.\nWant:\n'%#v'\nGot :\n'%#v'\n", tc.in, tc.out, got)
 		}
 	}
 }

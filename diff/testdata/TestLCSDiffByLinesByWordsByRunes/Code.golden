@@ -6,43 +6,43 @@ char make_prog_look_big[[34m8[39m00000];       [41m[37m<>[39;49m char make_
                                        =                                        
 void main()                            =  void main()                           
 {                                      =  {                                     
-[34mdisplay_copyright_message();[39m           [44m[37m-[39;49m                                        
-[34mbasically_run_windows_3.1();[39m           [44m[37m-[39;49m                                        
-                                       [41m[37m+[39;49m  [31mif (fast_cpu())[39m                       
-                                       [41m[37m+[39;49m  [31m{[39m                                     
-                                       [41m[37m+[39;49m  [31mset_wait_states(lots);[39m                
-                                       [41m[37m+[39;49m  [31mset_mouse(speed, very_slow);[39m          
-                                       [41m[37m+[39;49m  [31m}[39m                                     
+[34m    display_copyright_message();[39m       [44m[37m-[39;49m                                        
+[34m    basically_run_windows_3.1();[39m       [44m[37m-[39;49m                                        
+                                       [41m[37m+[39;49m  [31m    if (fast_cpu())[39m                   
+                                       [41m[37m+[39;49m  [31m    {[39m                                 
+                                       [41m[37m+[39;49m  [31m        set_wait_states(lots);[39m        
+                                       [41m[37m+[39;49m  [31m        set_mouse(speed, very_slow);[39m  
+                                       [41m[37m+[39;49m  [31m    }[39m                                 
                                        =                                        
-                                       [41m[37m+[39;49m  [31mwhile(LESS_THAN_FOREVER)[39m              
-                                       [41m[37m+[39;49m  [31m{[39m                                     
-                                       [41m[37m+[39;49m  [31mdisplay_copyright_message();[39m          
-                                       [41m[37m+[39;49m  [31msimulate_important_action();[39m          
-                                       [41m[37m+[39;49m  [31mbasically_run_windows_3.1();[39m          
-                                       [41m[37m+[39;49m  [31mmake_think_we_are_busy();[39m             
-                                       [41m[37m+[39;49m  [31m}[39m                                     
+                                       [41m[37m+[39;49m  [31m    while(LESS_THAN_FOREVER)[39m          
+                                       [41m[37m+[39;49m  [31m    {[39m                                 
+                                       [41m[37m+[39;49m  [31m        display_copyright_message();[39m  
+                                       [41m[37m+[39;49m  [31m        simulate_important_action();[39m  
+                                       [41m[37m+[39;49m  [31m        basically_run_windows_3.1();[39m  
+                                       [41m[37m+[39;49m  [31m        make_think_we_are_busy();[39m     
+                                       [41m[37m+[39;49m  [31m    }[39m                                 
                                        [41m[37m+[39;49m                                        
-/* printf("Welcome to Windows          =  /* printf("Welcome to Windows         
+    /* printf("Welcome to Windows      =      /* printf("Welcome to Windows     
 3.11"); */                                3.11"); */                            
-                                       [41m[37m+[39;49m  [31m/* printf("Welcome to Windows 95")[0m    
+                                       [41m[37m+[39;49m  [31m    /* printf("Welcome to Windows 95")[0m
                                           [31m; */[39m                                  
-printf("Welcome to Windows 9[34m5[39m");       [41m[37m<>[39;49m printf("Welcome to Windows 9[31m8[39m");      
-if (system_ok_for_too_long())          =  if (system_ok_for_too_long())         
-{                                      =  {                                     
-bsod(random_err());                    =  bsod(random_err());                   
-crash(to_dos_prompt);                  =  crash(to_dos_prompt);                 
-}                                      =  }                                     
-else                                   =  else                                  
-system_memory =                        =  system_memory =                       
+    printf("Welcome to Windows 9[34m5[39m");   [41m[37m<>[39;49m     printf("Welcome to Windows 9[31m8[39m");  
+    if (system_ok_for_too_long())      =      if (system_ok_for_too_long())     
+    {                                  =      {                                 
+        bsod(random_err());            =          bsod(random_err());           
+        crash(to_dos_prompt);          =          crash(to_dos_prompt);         
+    }                                  =      }                                 
+    else                               =      else                              
+    system_memory =                    =      system_memory =                   
 open("swp0001.swp", O_CREATE);            open("swp0001.swp", O_CREATE);        
                                        =                                        
-while(!system_up_for_too_long())       =  while(!system_up_for_too_long())      
-{                                      =  {                                     
-sleep([34m1[39m5);                             [44m[37m-[39;49m  sleep(5);                             
-get_user_input();                      =  get_user_input();                     
-sleep([34m1[39m5);                             [44m[37m-[39;49m  sleep(5);                             
-act_on_user_input();                   =  act_on_user_input();                  
-sleep([34m1[39m5);                             [44m[37m-[39;49m  sleep(5);                             
-}                                      =  }                                     
-create_general_protection_fault();     =  create_general_protection_fault();    
+    while(!system_up_for_too_long())   =      while(!system_up_for_too_long())  
+    {                                  =      {                                 
+        sleep([34m1[39m5);                     [44m[37m-[39;49m          sleep(5);                     
+        get_user_input();              =          get_user_input();             
+        sleep([34m1[39m5);                     [44m[37m-[39;49m          sleep(5);                     
+        act_on_user_input();           =          act_on_user_input();          
+        sleep([34m1[39m5);                     [44m[37m-[39;49m          sleep(5);                     
+    }                                  =      }                                 
+    create_general_protection_fault(); =      create_general_protection_fault();
 }                                      =  }                                     

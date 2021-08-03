@@ -20,7 +20,7 @@ func Indent(s string, tag, prefix string) string {
 
 	switch {
 	case lT > lP:
-		prefix = visual.PadRight(prefix, lT)
+		prefix = string(visual.PadRight([]byte(prefix), lT))
 	case lT < lP:
 		tag = visual.Truncate(prefix, lP-lT) + tag
 	}
@@ -63,7 +63,7 @@ func Tab(s string, tag, prefix string, sz int) string {
 	var r string
 	switch {
 	case lT > lP:
-		prefix = visual.PadRight(prefix, lT)
+		prefix = string(visual.PadRight([]byte(prefix), lT))
 		r = Wrap(s, sz-lT)
 	case lT < lP:
 		tag = visual.Truncate(prefix, lP-lT) + tag
@@ -85,7 +85,7 @@ func LazyTab(s string, tag, prefix string, sz int) string {
 	var r string
 	switch {
 	case lT > lP:
-		prefix = visual.PadRight(prefix, lT)
+		prefix = string(visual.PadRight([]byte(prefix), lT))
 		r = LazyWrap(s, sz-lT)
 	case lT < lP:
 		tag = visual.Truncate(prefix, lP-lT) + tag
@@ -112,7 +112,8 @@ func Left(s string, sz int) string {
 
 	ws := visual.Cut(s, sz)
 	for i, l := range ws {
-		ws[i] = visual.PadRight(l, sz)
+		l = string(visual.TrimLeadingSpace([]byte(l)))
+		ws[i] = string(visual.PadRight([]byte(l), sz))
 	}
 	return strings.Join(ws, "\n")
 }
@@ -126,7 +127,8 @@ func Right(s string, sz int) string {
 
 	ws := visual.Cut(s, sz)
 	for i, l := range ws {
-		ws[i] = visual.PadLeft(l, sz)
+		l = string(visual.TrimTrailingSpace([]byte(l)))
+		ws[i] = string(visual.PadLeft([]byte(l), sz))
 	}
 	return strings.Join(ws, "\n")
 }
@@ -140,7 +142,7 @@ func Center(s string, sz int) string {
 
 	ws := visual.Cut(s, sz)
 	for i, l := range ws {
-		ws[i] = visual.PadCenter(l, sz)
+		ws[i] = string(visual.PadCenter([]byte(l), sz))
 	}
 	return strings.Join(ws, "\n")
 }
@@ -211,7 +213,7 @@ func indent(s string, firstPrefix, prefix string) string {
 
 func wrap(s string, cutr *visual.Cutter) string {
 	out := new(strings.Builder)
-	in, _ := visual.TrimSpace([]byte(s))
+	in := visual.TrimSpace([]byte(s))
 	line, cut := cutr.Split(in)
 
 	for line != nil {
@@ -219,10 +221,10 @@ func wrap(s string, cutr *visual.Cutter) string {
 			out.WriteByte('\n')
 		}
 
-		l, _ := visual.TrimSpace(line)
+		l := visual.TrimSpace(line)
 		out.Write(l)
 
-		in, _ = visual.TrimSpace(cut)
+		in = visual.TrimSpace(cut)
 		line, cut = cutr.Split(in)
 	}
 
@@ -231,7 +233,7 @@ func wrap(s string, cutr *visual.Cutter) string {
 			out.WriteByte('\n')
 		}
 
-		in, _ = visual.TrimSpace(cut)
+		in = visual.TrimSpace(cut)
 		out.Write(in)
 	}
 

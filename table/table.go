@@ -238,7 +238,7 @@ func (t *Table) padRow(row []string) [][]string {
 	for i := range row {
 		subrows[i] = visual.Cut(row[i], t.colWidth[i])
 		for j := range subrows[i] {
-			subrows[i][j] = visual.TrimSuffix(subrows[i][j], '\n')
+			subrows[i][j] = string(visual.TrimSuffix([]byte(subrows[i][j]), '\n'))
 		}
 		interruptFormattingAtEOL(subrows[i])
 	}
@@ -246,7 +246,7 @@ func (t *Table) padRow(row []string) [][]string {
 	paddedrows := col2rows(subrows)
 	for i := range paddedrows {
 		for j := range paddedrows[i] {
-			paddedrows[i][j] = visual.PadRight(paddedrows[i][j], t.colWidth[j])
+			paddedrows[i][j] = string(visual.PadRight([]byte(paddedrows[i][j]), t.colWidth[j]))
 		}
 	}
 	return paddedrows

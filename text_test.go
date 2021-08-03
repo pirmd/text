@@ -261,7 +261,7 @@ func TestRigth(t *testing.T) {
 	for _, tc := range testCases {
 		got := Right(tc.in, tc.sz)
 		if got != tc.out {
-			t.Errorf("Align right failed for '%s' (max %d).\nWant:\n%v\nGot :\n%v\n", tc.in, tc.sz, tc.out, got)
+			t.Errorf("Align right failed for '%s' (max %d).\nWant:\n'%v'\nGot :\n'%v'\n", tc.in, tc.sz, tc.out, got)
 		}
 	}
 }

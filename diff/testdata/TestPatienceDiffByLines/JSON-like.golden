@@ -1,23 +1,23 @@
 {                                      = {                                     
-[34m"title": "Alice's Adventures in[0m        [44m[37m-[39;49m                                       
+[34m    "title": "Alice's Adventures in[0m    [44m[37m-[39;49m                                       
 [34mWonderland",[39m                                                                   
-                                       [41m[37m+[39;49m [31m"title": "Alice's Adventures in[0m       
+                                       [41m[37m+[39;49m [31m    "title": "Alice's Adventures in[0m   
                                          [31mWonderland & Through the Looking-[0m     
                                          [31mglass",[39m                               
-"authors": [                           = "authors": [                          
-"Lewis Carroll"                        = "Lewis Carroll"                       
-],                                     = ],                                    
-[34m"description": "This edition[0m           [44m[37m-[39;49m                                       
+    "authors": [                       =     "authors": [                      
+    "Lewis Carroll"                    =     "Lewis Carroll"                   
+    ],                                 =     ],                                
+[34m    "description": "This edition[0m       [44m[37m-[39;49m                                       
 [34mcontains Alice's Adventures in[0m                                                 
 [34mWonderland. Tweedledum and Tweedledee,[0m                                         
-[34mthe Mad Hatter, the Cheshire Cat, the[0m                                          
-[34mRed Queen and the White Rabbit all[0m                                             
+[34m the Mad Hatter, the Cheshire Cat, the[0m                                         
+[34m Red Queen and the White Rabbit all[0m                                            
 [34mmake their appearances, and are now[0m                                            
 [34mfamiliar figures in writing,[0m                                                   
 [34mconversation and idiom.",[39m                                                      
-[34m"pageCount": 132,[39m                      [44m[37m-[39;49m                                       
-[34m"language": "gb",[39m                      [44m[37m-[39;49m                                       
-                                       [41m[37m+[39;49m [31m"description": "This edition[0m          
+[34m    "pageCount": 132,[39m                  [44m[37m-[39;49m                                       
+[34m    "language": "gb",[39m                  [44m[37m-[39;49m                                       
+                                       [41m[37m+[39;49m [31m    "description": "This edition[0m      
                                          [31mcontains Alice's Adventures in[0m        
                                          [31mWonderland and its sequel Through the[0m 
                                          [31mLooking Glass. It is illustrated[0m      
@@ -34,10 +34,10 @@
                                          [31mand the Carpenter' and the inspired[0m   
                                          [31mjargon of that masterly Wordsworthian[0m 
                                          [31mparody, 'The Jabberwocky'.",[39m          
-                                       [41m[37m+[39;49m [31m"pageCount": 272,[39m                     
-                                       [41m[37m+[39;49m [31m"categories": [[39m                       
-                                       [41m[37m+[39;49m [31m"Fiction"[39m                             
-                                       [41m[37m+[39;49m [31m],[39m                                    
-                                       [41m[37m+[39;49m [31m"averageRating": 4.0,[39m                 
-                                       [41m[37m+[39;49m [31m"language": "en",[39m                     
+                                       [41m[37m+[39;49m [31m    "pageCount": 272,[39m                 
+                                       [41m[37m+[39;49m [31m    "categories": [[39m                   
+                                       [41m[37m+[39;49m [31m    "Fiction"[39m                         
+                                       [41m[37m+[39;49m [31m    ],[39m                                
+                                       [41m[37m+[39;49m [31m    "averageRating": 4.0,[39m             
+                                       [41m[37m+[39;49m [31m    "language": "en",[39m                 
 }                                      = }                                     
