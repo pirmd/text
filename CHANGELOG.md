@@ -1,4 +1,8 @@
 # Changelog
+## [0.7.0] - 2023-02-26
+- Update dependencies to latest version, solving golang.org/x/text security
+  issue (CVE-2021-38561)
+- Add new API to format text to an io.Writer
 
 ## [0.6.2] - 2021-03-15
 - Add LazyTab extending LazyTab facilities to simplify API.
